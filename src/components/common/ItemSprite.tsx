@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { Icons } from '@pkmn/img';
 
 interface ItemSpriteProps {
   item: string;
@@ -8,11 +7,14 @@ interface ItemSpriteProps {
 
 export function ItemSprite({ item, className = '' }: ItemSpriteProps) {
   const spriteUrl = useMemo(() => {
-    const iconData = Icons.getItem(item);
-    return iconData?.url || '';
+    const baseUrl = 'https://play.pokemonshowdown.com/sprites/itemicons';
+    
+    const formattedItem = item.toLowerCase().replace(/[^a-z0-9]+/g, '');
+    
+    return `${baseUrl}/${formattedItem}.png`;
   }, [item]);
 
-  if (!spriteUrl) return null;
+  if (!item) return null;
 
   return (
     <img
@@ -20,6 +22,12 @@ export function ItemSprite({ item, className = '' }: ItemSpriteProps) {
       alt={item}
       className={className}
       loading="lazy"
+      width={24}
+      height={24}
+      onError={(e) => {
+        // Hide the image if it fails to load
+        (e.target as HTMLImageElement).style.display = 'none';
+      }}
     />
   );
 }
