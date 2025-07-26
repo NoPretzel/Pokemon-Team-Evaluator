@@ -1,7 +1,9 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import './globals.css';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { theme } from './theme';
 
 export const metadata = {
   title: 'Pokemon Team Evaluator',
@@ -19,7 +21,7 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="light" />
       </head>
       <body suppressHydrationWarning>
-        <MantineProvider defaultColorScheme="light">
+        <MantineProvider theme={theme} defaultColorScheme="light">
           <Notifications />
           {children}
         </MantineProvider>
