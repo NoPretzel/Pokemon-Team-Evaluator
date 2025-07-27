@@ -10,8 +10,10 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/.next
     environment:
       - REDIS_URL=redis://redis:6379
+      - WATCHPACK_POLLING=true
     depends_on:
       - redis
     command: >

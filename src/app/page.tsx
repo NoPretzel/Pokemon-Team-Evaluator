@@ -1,15 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Stack, Title, Text, Center } from '@mantine/core';
 import { TeamImporter } from '@/components/TeamImporter';
 import { TeamDisplay } from '@/components/TeamDisplay';
+import { TeamArchetype } from '@/components/TeamEvaluator/TeamArchetype';
 import { Team } from '@/types';
 import { FormatId } from '@/lib/pokemon/formats';
+import { analyzeTeam } from '@/lib/analysis/archetype-analyzer';
+import { TeamAnalysis } from '@/types/analysis';
 
 export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<FormatId>('gen9ou');
   const [team, setTeam] = useState<Team | null>(null);
+  const [teamAnalysis, setTeamAnalysis] = useState<TeamAnalysis | null>(null);
+
+  useEffect(() => {
+    if (team && team.pokemon.length > 0) {
+      const analysis = analyzeTeam(team);
+      setTeamAnalysis(analysis);
+    } else {
+      setTeamAnalysis(null);
+    }
+  }, [team]);
 
   return (
     <Container size="xl" py="xl">
@@ -32,10 +45,16 @@ export default function Home() {
         />
         
         {team && (
-          <TeamDisplay 
-            team={team} 
-            format={selectedFormat}
-          />
+          <>
+            <TeamDisplay 
+              team={team} 
+              format={selectedFormat}
+            />
+            
+            {teamAnalysis && (
+              <TeamArchetype analysis={teamAnalysis} />
+            )}
+          </>
         )}
       </Stack>
     </Container>
