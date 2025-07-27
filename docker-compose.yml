@@ -14,6 +14,15 @@ services:
       - REDIS_URL=redis://redis:6379
     depends_on:
       - redis
+    command: >
+      sh -c "
+        echo 'Waiting for Redis...' &&
+        sleep 5 &&
+        echo 'Updating usage stats...' &&
+        npm run update-stats || echo 'Stats update failed, continuing...' &&
+        echo 'Starting development server...' &&
+        npm run dev
+      "
 
   redis:
     image: redis:7-alpine
@@ -21,6 +30,7 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    command: redis-server --appendonly yes
 
 volumes:
   redis-data:

@@ -7,7 +7,7 @@ export const FORMATS = {
   gen9ubers: { name: 'Ubers', generation: 9 },
   gen9lc: { name: 'LC', generation: 9 },
   gen9monotype: { name: 'Monotype', generation: 9 },
-  gen9doubles: { name: 'Doubles OU', generation: 9 },
+  gen9doublesou: { name: 'Doubles OU', generation: 9 },
   gen9vgc2024: { name: 'VGC 2024', generation: 9 },
 } as const;
 

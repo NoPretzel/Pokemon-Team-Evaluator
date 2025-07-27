@@ -44,3 +44,31 @@ export interface EvaluationResult {
     missing: string[];
   };
 }
+
+export interface UsageStats {
+  format: string;
+  month: string;
+  totalBattles: number;
+  pokemon: PokemonUsage[];
+  lastUpdated: string;
+}
+
+export interface PokemonUsage {
+  rank: number;
+  name: string;
+  usage: number;
+  raw: number;
+  rawPercent: number;
+  real: number;
+  realPercent: number;
+  abilities: Record<string, number>;
+  items: Record<string, number>;
+  spreads: Record<string, number>;
+  moves: Record<string, number>;
+  teammates: Record<string, number>;
+  checksAndCounters: Record<string, [number, number]>;
+}
+
+export interface FormatUsageStats {
+  [format: string]: UsageStats;
+}

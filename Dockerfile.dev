@@ -1,6 +1,9 @@
-FROM node:latest-alpine
+FROM node:20-alpine
 
 WORKDIR /app
+
+RUN npm install -g ts-node typescript
+RUN npm install -g tsconfig-paths
 
 COPY package*.json ./
 RUN npm install
