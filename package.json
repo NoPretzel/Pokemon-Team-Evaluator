@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "update-stats": "ts-node --project tsconfig.scripts.json -r tsconfig-paths/register src/scripts/update-usage-stats.ts"
   },
   "dependencies": {
     "@mantine/core": "^8.2.1",
