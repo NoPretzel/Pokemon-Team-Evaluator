@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { Box } from '@mantine/core';
+import { IconQuestionMark } from '@tabler/icons-react';
 
 interface ItemSpriteProps {
   item: string;
@@ -6,28 +7,26 @@ interface ItemSpriteProps {
 }
 
 export function ItemSprite({ item, className = '' }: ItemSpriteProps) {
-  const spriteUrl = useMemo(() => {
-    const baseUrl = 'https://play.pokemonshowdown.com/sprites/itemicons';
-    
-    const formattedItem = item.toLowerCase().replace(/[^a-z0-9]+/g, '');
-    
-    return `${baseUrl}/${formattedItem}.png`;
-  }, [item]);
-
   if (!item) return null;
 
+  // For now, we'll use a placeholder icon for all items
   return (
-    <img
-      src={spriteUrl}
-      alt={item}
+    <Box
+      component="span"
       className={className}
-      loading="lazy"
-      width={24}
-      height={24}
-      onError={(e) => {
-        // Hide the image if it fails to load
-        (e.target as HTMLImageElement).style.display = 'none';
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 24,
+        height: 24,
+        backgroundColor: 'var(--mantine-color-gray-2)',
+        borderRadius: 4,
+        flexShrink: 0,
       }}
-    />
+      title={item}
+    >
+      <IconQuestionMark size={16} stroke={1.5} color="var(--mantine-color-gray-6)" />
+    </Box>
   );
 }
