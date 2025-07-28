@@ -9,6 +9,7 @@ import { Team } from '@/types';
 import { FormatId } from '@/lib/pokemon/formats';
 import { analyzeTeam } from '@/lib/analysis/archetype-analyzer';
 import { TeamAnalysis } from '@/types/analysis';
+import { BattleSimulation } from '@/components/TeamEvaluator/BattleSimulation';
 
 export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<FormatId>('gen9ou');
@@ -50,10 +51,13 @@ export default function Home() {
               team={team} 
               format={selectedFormat}
             />
-            
+
             {teamAnalysis && (
-              <TeamArchetype analysis={teamAnalysis} />
-            )}
+              <>
+                <TeamArchetype analysis={teamAnalysis} />
+                <BattleSimulation team={team} format={selectedFormat} />
+              </>
+            )}            
           </>
         )}
       </Stack>
