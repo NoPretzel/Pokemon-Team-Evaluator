@@ -11,6 +11,7 @@ import { analyzeTeam } from '@/lib/analysis/archetype-analyzer';
 import { TeamAnalysis } from '@/types/analysis';
 import { BattleSimulation } from '@/components/TeamEvaluator/BattleSimulation';
 import { TypeCoverage } from '@/components/TeamEvaluator/TypeCoverage';
+import { MetaCoverage } from '@/components/TeamEvaluator/MetaCoverage';
 
 export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<FormatId>('gen9ou');
@@ -58,6 +59,7 @@ export default function Home() {
                 <TeamArchetype analysis={teamAnalysis} />
                 <BattleSimulation team={team} format={selectedFormat} />
                 <TypeCoverage team={team} />
+                <MetaCoverage team={team} format={selectedFormat} />
               </>
             )}            
           </>

@@ -5,6 +5,19 @@ import { UsageStats, PokemonUsage } from '@/types';
 const SMOGON_STATS_BASE_URL = 'https://www.smogon.com/stats';
 const CACHE_TTL = 60 * 60 * 24 * 7; // 7 days
 
+async function request(url: string): Promise<string> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${url} - ${response.status}`);
+    }
+    return await response.text();
+  } catch (error) {
+    console.error(`Error fetching ${url}:`, error);
+    throw error;
+  }
+}
+
 async function getLatestMonth(): Promise<string> {
   try {
     // Fetch the stats index page to find available months
@@ -12,7 +25,6 @@ async function getLatestMonth(): Promise<string> {
     const html = await response.text();
     
     // Parse month directories from the HTML
-    // Look for patterns like href="2024-11/"
     const monthPattern = /href="(\d{4}-\d{2})\/"/g;
     const months: string[] = [];
     let match;
@@ -38,36 +50,6 @@ async function getLatestMonth(): Promise<string> {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   return `${year}-${month}`;
-}
-
-async function getAvailableFormatsForMonth(month: string): Promise<Map<string, string>> {
-  const formatFiles = new Map<string, string>();
-  
-  try {
-    const response = await fetch(`${SMOGON_STATS_BASE_URL}/${month}/`);
-    const html = await response.text();
-    
-    // Parse available files from the directory listing
-    // Look for patterns like href="gen9ou-1825.txt"
-    const filePattern = /href="(gen9[a-z0-9-]+)-(\d+)\.txt"/g;
-    let match;
-    
-    while ((match = filePattern.exec(html)) !== null) {
-      const format = match[1];
-      const rating = match[2];
-      
-      // Store the highest rating available for each format
-      if (!formatFiles.has(format) || parseInt(rating) > parseInt(formatFiles.get(format)!)) {
-        formatFiles.set(format, rating);
-      }
-    }
-    
-    console.log(`Found ${formatFiles.size} formats for month ${month}`);
-  } catch (error) {
-    console.error('Error fetching available formats:', error);
-  }
-  
-  return formatFiles;
 }
 
 function parseUsageStatsText(text: string): { totalBattles: number; pokemon: PokemonUsage[] } {
@@ -101,9 +83,6 @@ function parseUsageStatsText(text: string): { totalBattles: number; pokemon: Pok
     }
     
     // Parse Pokemon lines
-    // Format can be:
-    // | 1    | Landorus-Therian   | 31.44185% | 520879 | 25.085% | 429408 | 25.241% |
-    // or sometimes with different spacing
     const match = line.match(/\|\s*(\d+)\s*\|\s*([^|]+?)\s*\|\s*([\d.]+)%\s*\|\s*(\d+)\s*\|\s*([\d.]+)%\s*\|\s*(\d+)\s*\|\s*([\d.]+)%\s*\|/);
     
     if (match) {
@@ -131,45 +110,131 @@ function parseUsageStatsText(text: string): { totalBattles: number; pokemon: Pok
     }
   }
   
-  console.log(`Parsed ${pokemon.length} Pokemon from stats`);
-  if (pokemon.length > 0) {
-    console.log(`Top 3: ${pokemon.slice(0, 3).map(p => `${p.name} (${p.usage.toFixed(2)}%)`).join(', ')}`);
-  }
-  
+  console.log(`Parsed ${pokemon.length} Pokemon from usage stats`);
   return { totalBattles, pokemon };
 }
 
-async function fetchUsageStats(format: string, month: string, rating: string): Promise<UsageStats | null> {
+function parseChaosData(jsonData: any): Record<string, any> {
+  const data = jsonData.data || {};
+  const processedData: Record<string, any> = {};
+  
+  for (const [pokemon, stats] of Object.entries(data)) {
+    const statsData = stats as any; // Type assertion to avoid TypeScript error
+    processedData[pokemon] = {
+      Moves: statsData.Moves || {},
+      Abilities: statsData.Abilities || {},
+      Items: statsData.Items || {},
+      Spreads: statsData.Spreads || {},
+      Teammates: statsData.Teammates || {},
+      'Checks and Counters': statsData['Checks and Counters'] || {}
+    };
+  }
+  
+  return processedData;
+}
+
+async function fetchFormatStats(format: string, month: string, rating: number = 1695): Promise<UsageStats | null> {
   try {
-    const filename = `${format}-${rating}.txt`;
-    const url = `${SMOGON_STATS_BASE_URL}/${month}/${filename}`;
+    const usageUrl = `${SMOGON_STATS_BASE_URL}/${month}/${format}-${rating}.txt`;
+    const chaosUrl = `${SMOGON_STATS_BASE_URL}/${month}/chaos/${format}-${rating}.json`;
     
-    console.log(`Fetching usage stats from: ${url}`);
+    console.log(`Fetching usage stats for ${format} from: ${usageUrl}`);
     
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error(`Failed to fetch ${format} stats: ${response.status}`);
+    const usageText = await request(usageUrl);
+    const { totalBattles, pokemon: usagePokemon } = parseUsageStatsText(usageText);
+    
+    if (usagePokemon.length === 0) {
+      console.error(`No Pokemon found in ${format} usage stats`);
       return null;
     }
     
-    const text = await response.text();
-    const { totalBattles, pokemon } = parseUsageStatsText(text);
-    
-    if (pokemon.length === 0) {
-      console.error(`No Pokemon found in ${format} stats`);
-      console.log('First 500 chars of response:', text.substring(0, 500));
-      return null;
+    // Try to get chaos data
+    let chaosData: any = {};
+    try {
+      console.log(`Fetching movesets for ${format} from: ${chaosUrl}`);
+      const rawChaos = await request(chaosUrl);
+      const parsedChaos = JSON.parse(rawChaos);
+      chaosData = parseChaosData(parsedChaos);
+    } catch (error) {
+      console.warn(`Could not fetch chaos data for ${format}:`, error);
     }
+    
+    // Enhance Pokemon data with moveset information
+    const enhancedPokemon: PokemonUsage[] = usagePokemon.map(poke => {
+      const data = chaosData[poke.name];
+      if (!data) {
+        console.warn(`⚠️ No chaos data for ${poke.name}`);
+        return poke;
+      }
+      
+      // Extract top moves
+      const moves: Record<string, number> = {};
+      const sortedMoves = Object.entries(data.Moves || {})
+        .sort(([, a], [, b]) => (b as number) - (a as number))
+        .slice(0, 6);
+      sortedMoves.forEach(([move, usage]) => {
+        moves[move] = usage as number;
+      });
+      
+      // Extract abilities
+      const abilities: Record<string, number> = {};
+      Object.entries(data.Abilities || {}).forEach(([ability, usage]) => {
+        abilities[ability] = usage as number;
+      });
+      
+      // Extract items
+      const items: Record<string, number> = {};
+      Object.entries(data.Items || {}).forEach(([item, usage]) => {
+        items[item] = usage as number;
+      });
+      
+      // Extract EV spreads (top 3)
+      const spreads: Record<string, number> = {};
+      const sortedSpreads = Object.entries(data.Spreads || {})
+        .sort(([, a], [, b]) => (b as number) - (a as number))
+        .slice(0, 3);
+      sortedSpreads.forEach(([spread, usage]) => {
+        spreads[spread] = usage as number;
+      });
+      
+      // Extract teammates (top 5)
+      const teammates: Record<string, number> = {};
+      const sortedTeammates = Object.entries(data.Teammates || {})
+        .sort(([, a], [, b]) => (b as number) - (a as number))
+        .slice(0, 5);
+      sortedTeammates.forEach(([teammate, score]) => {
+        teammates[teammate] = score as number;
+      });
+      
+      // Extract checks and counters (top 5)
+      const checksAndCounters: Record<string, number> = {};
+      const sortedCounters = Object.entries(data['Checks and Counters'] || {})
+        .sort(([, a], [, b]) => (b as number) - (a as number))
+        .slice(0, 5);
+      sortedCounters.forEach(([counter, score]) => {
+        checksAndCounters[counter] = score as number;
+      });
+      
+      return {
+        ...poke,
+        abilities,
+        items,
+        spreads,
+        moves,
+        teammates,
+        checksAndCounters,
+      };
+    });
     
     return {
       format,
       month,
       totalBattles,
-      pokemon,
+      pokemon: enhancedPokemon,
       lastUpdated: new Date().toISOString(),
     };
   } catch (error) {
-    console.error(`Error fetching/parsing ${format} stats:`, error);
+    console.error(`Error fetching ${format} stats:`, error);
     return null;
   }
 }
@@ -178,27 +243,33 @@ async function updateAllFormats() {
   const month = await getLatestMonth();
   console.log(`Updating usage stats for month: ${month}`);
   
-  // Get available formats and ratings for this month
-  const availableFormats = await getAvailableFormatsForMonth(month);
-  
   const results: Record<string, UsageStats> = {};
   
   // Fetch stats for each format
   for (const [formatId, formatInfo] of Object.entries(FORMATS)) {
-    // Skip VGC as it uses different stats
+    // Skip VGC as it uses different stats format
     if (formatId === 'gen9vgc2024') {
       console.log(`Skipping ${formatId} - uses different stats format`);
       continue;
     }
     
-    // Check if this format is available
-    const rating = availableFormats.get(formatId);
-    if (!rating) {
-      console.log(`No stats available for ${formatId} in ${month}`);
-      continue;
+    // Try different ratings if default doesn't work
+    const ratings = [1695, 1825, 1760, 1630, 1500, 0];
+    let stats: UsageStats | null = null;
+    
+    for (const rating of ratings) {
+      try {
+        stats = await fetchFormatStats(formatId, month, rating);
+        if (stats && stats.pokemon.length > 0) {
+          console.log(`Successfully fetched ${formatId} stats at ${rating} rating`);
+          break;
+        }
+      } catch (error) {
+        // Try next rating
+        continue;
+      }
     }
     
-    const stats = await fetchUsageStats(formatId, month, rating);
     if (stats && stats.pokemon.length > 0) {
       results[formatId] = stats;
       
@@ -210,10 +281,19 @@ async function updateAllFormats() {
       await redis.setex(`usage:${formatId}:current`, CACHE_TTL, JSON.stringify(stats));
       
       console.log(`Cached ${formatId} stats in Redis (${stats.pokemon.length} Pokemon)`);
+      
+      // Log top 3 Pokemon with their movesets
+      console.log(`Top 3 ${formatId} Pokemon:`);
+      stats.pokemon.slice(0, 3).forEach(poke => {
+        const topMoves = Object.keys(poke.moves).slice(0, 4).join(', ');
+        const topItem = Object.keys(poke.items)[0] || 'none';
+        const topAbility = Object.keys(poke.abilities)[0] || 'none';
+        console.log(`  ${poke.name} (${poke.usage.toFixed(2)}%) - ${topAbility}, ${topItem}, [${topMoves}]`);
+      });
     }
     
     // Add a small delay to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
   
   // Store the latest month for reference
@@ -236,4 +316,4 @@ if (require.main === module) {
     });
 }
 
-export { updateAllFormats, fetchUsageStats };
+export { updateAllFormats, fetchFormatStats };
