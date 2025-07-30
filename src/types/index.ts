@@ -66,7 +66,7 @@ export interface PokemonUsage {
   spreads: Record<string, number>;
   moves: Record<string, number>;
   teammates: Record<string, number>;
-  checksAndCounters: Record<string, [number, number]>;
+  checksAndCounters: Record<string, number>;
 }
 
 export interface FormatUsageStats {
