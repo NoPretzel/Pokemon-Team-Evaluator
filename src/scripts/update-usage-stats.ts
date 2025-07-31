@@ -110,7 +110,6 @@ function parseUsageStatsText(text: string): { totalBattles: number; pokemon: Pok
     }
   }
   
-  console.log(`Parsed ${pokemon.length} Pokemon from usage stats`);
   return { totalBattles, pokemon };
 }
 
@@ -119,7 +118,7 @@ function parseChaosData(jsonData: any): Record<string, any> {
   const processedData: Record<string, any> = {};
   
   for (const [pokemon, stats] of Object.entries(data)) {
-    const statsData = stats as any; // Type assertion to avoid TypeScript error
+    const statsData = stats as any;
     processedData[pokemon] = {
       Moves: statsData.Moves || {},
       Abilities: statsData.Abilities || {},
@@ -159,11 +158,9 @@ async function fetchFormatStats(format: string, month: string, rating: number = 
       console.warn(`Could not fetch chaos data for ${format}:`, error);
     }
     
-    // Enhance Pokemon data with moveset information
     const enhancedPokemon: PokemonUsage[] = usagePokemon.map(poke => {
       const data = chaosData[poke.name];
       if (!data) {
-        console.warn(`⚠️ No chaos data for ${poke.name}`);
         return poke;
       }
       
@@ -247,9 +244,7 @@ async function updateAllFormats() {
   
   // Fetch stats for each format
   for (const [formatId, formatInfo] of Object.entries(FORMATS)) {
-    // Skip VGC as it uses different stats format
-    if (formatId === 'gen9vgc2024') {
-      console.log(`Skipping ${formatId} - uses different stats format`);
+=    if (formatId === 'gen9vgc2024') {
       continue;
     }
     
@@ -265,7 +260,6 @@ async function updateAllFormats() {
           break;
         }
       } catch (error) {
-        // Try next rating
         continue;
       }
     }
@@ -282,14 +276,6 @@ async function updateAllFormats() {
       
       console.log(`Cached ${formatId} stats in Redis (${stats.pokemon.length} Pokemon)`);
       
-      // Log top 3 Pokemon with their movesets
-      console.log(`Top 3 ${formatId} Pokemon:`);
-      stats.pokemon.slice(0, 3).forEach(poke => {
-        const topMoves = Object.keys(poke.moves).slice(0, 4).join(', ');
-        const topItem = Object.keys(poke.items)[0] || 'none';
-        const topAbility = Object.keys(poke.abilities)[0] || 'none';
-        console.log(`  ${poke.name} (${poke.usage.toFixed(2)}%) - ${topAbility}, ${topItem}, [${topMoves}]`);
-      });
     }
     
     // Add a small delay to avoid rate limiting

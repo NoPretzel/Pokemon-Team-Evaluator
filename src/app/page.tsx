@@ -12,6 +12,7 @@ import { TeamAnalysis } from '@/types/analysis';
 import { BattleSimulation } from '@/components/TeamEvaluator/BattleSimulation';
 import { TypeCoverage } from '@/components/TeamEvaluator/TypeCoverage';
 import { MetaCoverage } from '@/components/TeamEvaluator/MetaCoverage';
+import { TeamUtilities } from '@/components/TeamEvaluator/TeamUtilities';
 
 export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState<FormatId>('gen9ou');
@@ -60,6 +61,7 @@ export default function Home() {
                 <BattleSimulation team={team} format={selectedFormat} />
                 <TypeCoverage team={team} />
                 <MetaCoverage team={team} format={selectedFormat} />
+                <TeamUtilities team={team} />
               </>
             )}            
           </>
