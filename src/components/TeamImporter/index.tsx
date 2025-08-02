@@ -17,22 +17,24 @@ import {
   Center
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconFileImport, IconPokeball } from '@tabler/icons-react';
+import { IconFileImport, IconPokeball, IconChartBar } from '@tabler/icons-react';
 import { Team } from '@/types';
 import { parseFullTeam, validateTeamSize } from '@/lib/pokemon/team-parser';
 import { FormatId, FORMATS } from '@/lib/pokemon/formats';
+import { TeamBuilder } from '@/components/TeamBuilder';
 
 interface TeamImporterProps {
   format: FormatId;
   onFormatChange: (format: FormatId) => void;
   onTeamImport: (team: Team) => void;
+  onEvaluate?: () => void;
 }
 
-export function TeamImporter({ format, onFormatChange, onTeamImport }: TeamImporterProps) {
+export function TeamImporter({ format, onFormatChange, onTeamImport, onEvaluate }: TeamImporterProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [importText, setImportText] = useState('');
   const [error, setError] = useState<string | null>(null);
-
+  const [buildingTeam, setBuildingTeam] = useState<Team | undefined>(undefined);
   const formatOptions = Object.entries(FORMATS).map(([id, format]) => ({
     value: id,
     label: format.name,
@@ -59,8 +61,19 @@ export function TeamImporter({ format, onFormatChange, onTeamImport }: TeamImpor
       
       onTeamImport(team);
       setImportText('');
+      
+      if (onEvaluate) {
+        onEvaluate();
+      }
     } catch (err) {
       setError('Failed to parse team. Please check the format.');
+    }
+  };
+
+  const handleTeamUpdate = (team: Team) => {
+    setBuildingTeam(team);
+    if (team.pokemon.some(p => p.species)) {
+      onTeamImport(team);
     }
   };
 
@@ -167,7 +180,7 @@ IVs: 0 Atk
                 leftSection={<IconFileImport size={16} />}
                 style={{ whiteSpace: 'nowrap' }}
               >
-                Import from Showdown
+                Paste from Showdown
               </Tabs.Tab>
               <Tabs.Tab 
                 value="build" 
@@ -217,11 +230,12 @@ IVs: 0 Atk
                   </Button>
                   
                   <Button
-                    leftSection={<IconFileImport size={16} />}
+                    leftSection={<IconChartBar size={16} />}
                     onClick={handleImport}
                     disabled={!importText.trim()}
+                    variant="filled"
                   >
-                    Import Team
+                    Evaluate
                   </Button>
                 </Group>
               </Center>
@@ -229,9 +243,24 @@ IVs: 0 Atk
           </Tabs.Panel>
 
           <Tabs.Panel value="build" pt="md">
-            <Text c="dimmed" ta="center" py="xl">
-              Team builder coming soon! For now, please use the import feature.
-            </Text>
+            <Stack>
+              <TeamBuilder 
+                format={format}
+                initialTeam={buildingTeam}
+                onTeamUpdate={handleTeamUpdate}
+              />
+              {buildingTeam && buildingTeam.pokemon.some(p => p.species) && onEvaluate && (
+                <Group justify="flex-end">
+                  <Button
+                    leftSection={<IconChartBar size={16} />}
+                    onClick={onEvaluate}
+                    variant="filled"
+                  >
+                    Evaluate
+                  </Button>
+                </Group>
+              )}
+            </Stack>
           </Tabs.Panel>
         </Tabs>
       </Stack>
