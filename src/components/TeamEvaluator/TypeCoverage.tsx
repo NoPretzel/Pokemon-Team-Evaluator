@@ -30,7 +30,7 @@ const TYPE_COLORS: Record<TypeName, string> = {
 };
 
 export function TypeCoverage({ team }: TypeCoverageProps) {
-  const [activeTab, setActiveTab] = useState<string | null>('offensive');
+  const [activeTab, setActiveTab] = useState<string | null>('defensive');
   
   // Only analyze Pokemon that are actually on the team
   const activeTeamMembers = team.pokemon.filter(p => p.species);
@@ -102,11 +102,11 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
         
         <Tabs value={activeTab} onChange={setActiveTab} style={{ textAlign: 'center' }}>
           <Tabs.List grow>
-              <Tabs.Tab value="offensive" leftSection={<IconSword size={16} />}>
-              Offensive Coverage
-              </Tabs.Tab>
               <Tabs.Tab value="defensive" leftSection={<IconShield size={16} />}>
               Defensive Coverage
+              </Tabs.Tab>
+              <Tabs.Tab value="offensive" leftSection={<IconSword size={16} />}>
+              Offensive Coverage
               </Tabs.Tab>
           </Tabs.List>
           

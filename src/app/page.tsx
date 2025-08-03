@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Container, Stack, Title, Text, Center, Box, Modal, Textarea, Button } from '@mantine/core';
 import { TeamImporter } from '@/components/TeamImporter';
 import { TeamSummary } from '@/components/TeamSummary';
-import { TeamArchetype } from '@/components/TeamEvaluator/TeamArchetype';
+import { TeamArchetypeDisplay } from '@/components/TeamArchetypeDisplay';
 import { Team } from '@/types';
 import { FormatId } from '@/lib/pokemon/formats';
 import { analyzeTeam } from '@/lib/analysis/archetype-analyzer';
@@ -26,6 +26,7 @@ export default function Home() {
   
   const battleSimRef = useRef<HTMLDivElement>(null);
   const importerRef = useRef<HTMLDivElement>(null);
+  const archetypeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (team && team.pokemon.length > 0) {
@@ -66,7 +67,7 @@ export default function Home() {
 
   const handleEvaluateTeam = () => {
     setTimeout(() => {
-      smoothScrollTo(battleSimRef.current, 1500, 20);
+      smoothScrollTo(archetypeRef.current, 1500, 20);
     }, 100);
   };
 
@@ -113,7 +114,9 @@ export default function Home() {
 
             {teamAnalysis && (
               <>
-                <TeamArchetype analysis={teamAnalysis} />
+                <Box ref={archetypeRef}>
+                  <TeamArchetypeDisplay archetype={teamAnalysis.archetype} />
+                </Box>
                 
                 <Box ref={battleSimRef}>
                   <BattleSimulation team={team} format={selectedFormat} />
