@@ -4,6 +4,7 @@ interface PokemonSpriteProps {
   species: string;
   shiny?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function PokemonSprite({ 

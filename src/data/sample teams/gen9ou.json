@@ -1,0 +1,219 @@
+[
+  {
+    "format": "gen9ou",
+    "archetype": "Offense",
+    "pokemon": [
+      {
+        "species": "Torkoal",
+        "ability": "Drought",
+        "level": 100,
+        "item": "Heat Rock",
+        "nature": "Quiet",
+        "evs": { "hp": 104, "atk": 0, "def": 0, "spa": 252, "spd": 152, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Eruption", "Overheat", "Earthquake", "Stealth Rock"],
+        "teraType": "Ground"
+      },
+      {
+        "species": "Hatterene",
+        "ability": "Magic Bounce",
+        "level": 100,
+        "item": "Air Balloon",
+        "nature": "Relaxed",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Trick Room", "Psychic Noise", "Dazzling Gleam", "Healing Wish"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Raging Bolt",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Modest",
+        "evs": { "hp": 0, "atk": 0, "def": 36, "spa": 252, "spd": 0, "spe": 220 },
+        "ivs": { "hp": 31, "atk": 20, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Thunderclap", "Weather Ball", "Dragon Pulse", "Solar Beam"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Slither Wing",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Adamant",
+        "evs": { "hp": 40, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 216 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["U-turn", "First Impression", "Earthquake", "Temper Flare"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Venusaur",
+        "ability": "Chlorophyll",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Naive",
+        "evs": { "hp": 0, "atk": 4, "def": 0, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Growth", "Giga Drain", "Weather Ball", "Earthquake"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Walking Wake",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Wise Glasses",
+        "nature": "Timid",
+        "evs": { "hp": 12, "atk": 0, "def": 0, "spa": 244, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Hydro Steam", "Weather Ball", "Draco Meteor", "Flip Turn"],
+        "teraType": "Fairy"
+      }
+    ]
+  },
+  {
+    "format": "gen9ou",
+    "archetype": "Bulky Offense",
+    "pokemon": [
+      {
+        "species": "Dragonite",
+        "ability": "Multiscale",
+        "level": 100,
+        "item": "Lum Berry",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Tera Blast", "Earthquake", "Extreme Speed"],
+        "teraType": "Flying",
+        "gender": "F"
+      },
+      {
+        "species": "Zamazenta",
+        "ability": "Dauntless Shield",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Jolly",
+        "evs": { "hp": 4, "atk": 0, "def": 252, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Iron Defense", "Body Press", "Crunch", "Roar"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Landorus-Therian",
+        "ability": "Intimidate",
+        "level": 100,
+        "item": "Rocky Helmet",
+        "nature": "Jolly",
+        "evs": { "hp": 240, "atk": 0, "def": 64, "spa": 0, "spd": 156, "spe": 48 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Earthquake", "U-turn", "Stealth Rock", "Taunt"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Gholdengo",
+        "ability": "Good as Gold",
+        "level": 100,
+        "item": "Metal Coat",
+        "nature": "Modest",
+        "evs": { "hp": 120, "atk": 0, "def": 0, "spa": 192, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Nasty Plot", "Make It Rain", "Recover", "Thunderbolt"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Darkrai",
+        "ability": "Bad Dreams",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Timid",
+        "evs": { "hp": 144, "atk": 0, "def": 4, "spa": 108, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dark Pulse", "Ice Beam", "Will-O-Wisp", "Taunt"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Hatterene",
+        "ability": "Magic Bounce",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Modest",
+        "evs": { "hp": 248, "atk": 0, "def": 0, "spa": 80, "spd": 120, "spe": 60 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Psyshock", "Draining Kiss", "Mystical Fire", "Psychic Noise"],
+        "teraType": "Water"
+      }
+    ]
+  },
+  {
+    "format": "gen9ou",
+    "archetype": "Stall",
+    "pokemon": [
+      {
+        "species": "Dondozo",
+        "ability": "Unaware",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Impish",
+        "evs": { "hp": 248, "atk": 0, "def": 252, "spa": 0, "spd": 0, "spe": 8 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Body Press", "Avalanche", "Rest", "Sleep Talk"],
+        "teraType": "Dragon"
+      },
+      {
+        "species": "Blissey",
+        "ability": "Natural Cure",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Calm",
+        "evs": { "hp": 20, "atk": 0, "def": 252, "spa": 0, "spd": 236, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Seismic Toss", "Soft-Boiled", "Calm Mind", "Stealth Rock"],
+        "teraType": "Dark"
+      },
+      {
+        "species": "Corviknight",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Iron Defense", "Defog", "Roost", "Body Press"],
+        "teraType": "Fighting"
+      },
+      {
+        "species": "Weezing-Galar",
+        "ability": "Neutralizing Gas",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 244, "spa": 0, "spd": 0, "spe": 12 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Will-O-Wisp", "Defog", "Pain Split", "Strange Steam"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Gliscor",
+        "ability": "Poison Heal",
+        "level": 100,
+        "item": "Toxic Orb",
+        "nature": "Careful",
+        "evs": { "hp": 244, "atk": 0, "def": 12, "spa": 0, "spd": 252, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 24 },
+        "moves": ["Earthquake", "Spikes", "Knock Off", "Protect"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Toxapex",
+        "ability": "Regenerator",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Calm",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 252, "spe": 4 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Toxic", "Recover", "Toxic Spikes", "Haze"],
+        "teraType": "Steel"
+      }
+    ]
+  }
+]
