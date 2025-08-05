@@ -21,3 +21,18 @@
 .type-dark { background-color: #705848; }
 .type-steel { background-color: #B8B8D0; }
 .type-fairy { background-color: #EE99AC; }
+
+/* Responsive sprites for battle simulation */
+@media (max-width: 576px) {
+  .pokemon-sprite-battle {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .pokemon-sprite-battle {
+    width: 35px !important;
+    height: 35px !important;
+  }
+}

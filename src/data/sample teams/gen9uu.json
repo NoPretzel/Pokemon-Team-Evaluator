@@ -1,0 +1,225 @@
+[
+  {
+    "format": "gen9uu",
+    "archetype": "Hyper Offense",
+    "pokemon": [
+      {
+        "species": "Grimmsnarl",
+        "nickname": "Video Game",
+        "ability": "Prankster",
+        "level": 100,
+        "item": "Light Clay",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Reflect", "Light Screen", "Spirit Break", "Taunt"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Ogerpon-Cornerstone",
+        "nickname": "Skill",
+        "ability": "Sturdy",
+        "level": 100,
+        "item": "Cornerstone Mask",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Ivy Cudgel", "Superpower", "Power Whip", "Taunt"],
+        "teraType": "Rock",
+        "gender": "F"
+      },
+      {
+        "species": "Revavroom",
+        "nickname": "Bullet Bill",
+        "ability": "Filter",
+        "level": 100,
+        "item": "Air Balloon",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Gunk Shot", "High Horsepower", "Temper Flare", "Shift Gear"],
+        "teraType": "Ground"
+      },
+      {
+        "species": "Thundurus-Therian",
+        "nickname": "ZAP",
+        "ability": "Volt Absorb",
+        "level": 100,
+        "item": "Sitrus Berry",
+        "nature": "Modest",
+        "evs": { "hp": 132, "atk": 0, "def": 0, "spa": 176, "spd": 12, "spe": 188 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Thunderbolt", "Tera Blast", "Nasty Plot", "Agility"],
+        "teraType": "Flying"
+      },
+      {
+        "species": "Manaphy",
+        "nickname": "Cheese",
+        "ability": "Hydration",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Surf", "Stored Power", "Acid Armor", "Take Heart"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Jirachi",
+        "nickname": "Jerry",
+        "ability": "Serene Grace",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Jolly",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["U-turn", "Healing Wish", "Thunder Wave", "Stealth Rock"],
+        "teraType": "Water"
+      }
+    ]
+  },
+  {
+    "format": "gen9uu",
+    "archetype": "Balance",
+    "pokemon": [
+      {
+        "species": "Rhyperior",
+        "ability": "Solid Rock",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Adamant",
+        "evs": { "hp": 252, "atk": 16, "def": 0, "spa": 0, "spd": 184, "spe": 56 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Earthquake", "Stone Edge", "Swords Dance"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Slowking",
+        "ability": "Regenerator",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Sassy",
+        "evs": { "hp": 252, "atk": 0, "def": 240, "spa": 0, "spd": 16, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Future Sight", "Scald", "Slack Off", "Chilly Reception"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Lokix",
+        "ability": "Tinted Lens",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["First Impression", "Knock Off", "Sucker Punch", "U-turn"],
+        "teraType": "Bug"
+      },
+      {
+        "species": "Thundurus-Therian",
+        "ability": "Volt Absorb",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Volt Switch", "Focus Blast", "Sludge Bomb", "Thunderbolt"],
+        "teraType": "Poison"
+      },
+      {
+        "species": "Fezandipiti",
+        "ability": "Toxic Chain",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 240, "spa": 0, "spd": 16, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Beat Up", "Heat Wave", "Roost", "U-turn"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Greninja",
+        "ability": "Protean",
+        "level": 100,
+        "item": "Choice Specs",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Surf", "Dark Pulse", "Ice Beam", "Sludge Wave"],
+        "teraType": "Water"
+      }
+    ]
+  },
+  {
+    "format": "gen9uu",
+    "archetype": "Weather",
+    "pokemon": [
+      {
+        "species": "Ninetales",
+        "ability": "Drought",
+        "level": 100,
+        "item": "Heat Rock",
+        "nature": "Timid",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Encore", "Overheat", "Healing Wish", "Scorching Sands"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Donphan",
+        "ability": "Sturdy",
+        "level": 100,
+        "item": "Rocky Helmet",
+        "nature": "Adamant",
+        "evs": { "hp": 252, "atk": 96, "def": 144, "spa": 0, "spd": 0, "spe": 16 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Rapid Spin", "Stealth Rock", "Earthquake", "Ice Spinner"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Venusaur",
+        "ability": "Chlorophyll",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Growth", "Weather Ball", "Earth Power", "Giga Drain"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Heatran",
+        "ability": "Flash Fire",
+        "level": 100,
+        "item": "Air Balloon",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Magma Storm", "Taunt", "Earth Power", "Solar Beam"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Tornadus-Therian",
+        "ability": "Regenerator",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Timid",
+        "evs": { "hp": 248, "atk": 0, "def": 88, "spa": 0, "spd": 0, "spe": 172 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["U-turn", "Focus Blast", "Bleakwind Storm", "Knock Off"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Slither Wing",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["U-turn", "First Impression", "Close Combat", "Flare Blitz"],
+        "teraType": "Fire"
+      }
+    ]
+  }
+]

@@ -1,18 +1,33 @@
 import { useState, useEffect, useRef } from 'react';
 import { Team } from '@/types';
 import { BattleSimulator } from '@/lib/battle/simulator';
-import { SAMPLE_TEAMS } from '@/data/sample-teams';
-import { Card, Stack, Group, Text, Badge, Progress } from '@mantine/core';
+import { loadSampleTeams, TeamWithArchetype } from '@/data/sample-teams-loader';
+import { analyzeTeam } from '@/lib/analysis/archetype-analyzer';
+import { Card, Stack, Group, Text, Badge, Box, SimpleGrid, Progress, Paper, ThemeIcon, Center, Grid } from '@mantine/core';
+import { IconTrophy, IconSwords, IconShieldOff } from '@tabler/icons-react';
+import { PokemonSprite } from '@/components/common/PokemonSprite';
+import { FormatId } from '@/lib/pokemon/formats';
+import { ARCHETYPE_CONFIG } from '@/lib/pokemon/archetype-config';
+import { TeamArchetype } from '@/types/analysis';
 
 interface BattleSimulationProps {
   team: Team;
   format: string;
 }
 
+interface BattleResultWithTeam {
+  team: TeamWithArchetype;
+  archetype: string;
+  result: any;
+  winRate: number;
+}
+
 export function BattleSimulation({ team, format }: BattleSimulationProps) {
   const [simulating, setSimulating] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<BattleResultWithTeam[]>([]);
+  const [loading, setLoading] = useState(true);
   const hasStarted = useRef(false);
+  const currentFormat = useRef(format);
 
   // Normalize team to level 100
   const normalizedTeam = {
@@ -24,35 +39,60 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
   };
 
   useEffect(() => {
-    if (hasStarted.current) return;
-    hasStarted.current = true;
+    if (currentFormat.current !== format) {
+      currentFormat.current = format;
+      hasStarted.current = false;
+      setResults([]);
+    }
     
-    runSimulations();
-  }, []);
+    if (!hasStarted.current) {
+      hasStarted.current = true;
+      runSimulations();
+    }
+  }, [format, team]);
 
   const runSimulations = async () => {
+    setLoading(true);
     setSimulating(true);
+    setResults([]);
+    
+    const sampleTeams = await loadSampleTeams(format as FormatId);
+    
+    if (sampleTeams.length === 0) {
+      setLoading(false);
+      setSimulating(false);
+      return;
+    }
     
     // Defer to next tick
     await new Promise(resolve => setTimeout(resolve, 0));
     
     const simulator = new BattleSimulator(format);
-    const testTeams = SAMPLE_TEAMS[format] || [];
-    const battleResults = [];
+    const battleResults: BattleResultWithTeam[] = [];
 
-    for (let i = 0; i < testTeams.length; i++) {
+    for (let i = 0; i < Math.min(sampleTeams.length, 3); i++) {
+      const opponentTeam = sampleTeams[i];
+      
       // Normalize opponent team to level 100
       const normalizedOpponent = {
-        ...testTeams[i],
-        pokemon: testTeams[i].pokemon.map(p => ({
+        ...opponentTeam,
+        pokemon: opponentTeam.pokemon.map(p => ({
           ...p,
           level: 100
         }))
       };
       
+      // Use the archetype from the JSON if available
+      const archetype = opponentTeam.archetype || analyzeTeam(normalizedOpponent).archetype;
+      
       try {
         const result = await simulator.runSimulation(normalizedTeam, normalizedOpponent, 3);
-        battleResults.push(result);
+        battleResults.push({
+          team: normalizedOpponent,
+          archetype,
+          result,
+          winRate: result.winRate
+        });
         setResults([...battleResults]);
       } catch (error) {
         console.error(`Error simulating against team ${i + 1}:`, error);
@@ -62,6 +102,7 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
       await new Promise(resolve => setTimeout(resolve, 10));
     }
 
+    setLoading(false);
     setSimulating(false);
   };
 
@@ -69,13 +110,34 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
     ? results.reduce((sum, r) => sum + r.winRate, 0) / results.length
     : 0;
 
-  const getWinRateColor = (winRate: number) => {
-    if (winRate >= 60) return 'green';
-    if (winRate >= 40) return 'yellow';
-    return 'red';
-  };
-
+  const totalWins = results.filter(r => r.winRate >= 50).length;
+  const totalLosses = results.filter(r => r.winRate < 50).length;
+  const totalBattles = totalWins + totalLosses;
   const passed = overallWinRate >= 50;
+
+  if (loading) {
+    return (
+      <Card shadow="sm" radius="md" withBorder>
+        <Text ta="center" c="dimmed">Running battle simulations...</Text>
+      </Card>
+    );
+  }
+
+  if (results.length === 0) {
+    return (
+      <Card shadow="sm" radius="md" withBorder>
+        <Text ta="center" c="dimmed">No sample teams available for this format</Text>
+      </Card>
+    );
+  }
+
+  const getArchetypeConfig = (archetype: string) => {
+    return ARCHETYPE_CONFIG[archetype as TeamArchetype] || {
+      icon: <IconSwords size={20} />,
+      color: 'gray',
+      description: 'Unknown archetype'
+    };
+  };
 
   return (
     <Card shadow="sm" radius="md" withBorder>
@@ -90,48 +152,123 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
           </Badge>
         </Group>
 
-        {results.length > 0 && (
-          <>
-            <div>
-              <Group justify="space-between" mb="xs">
-                <Text size="sm">Win Rate vs Sample Teams</Text>
-                <Text size="sm" fw={500}>
-                  {overallWinRate?.toFixed(1)}%
-                </Text>
-              </Group>
-              <Progress
-                value={overallWinRate || 0}
-                color={getWinRateColor(overallWinRate || 0)}
-                size="lg"
-              />
-            </div>
+        {/* Overall Stats Summary */}
+        <Group justify="center" gap="md">
+          <Text size="lg" fw={700} c="green.6">
+            {totalWins} {totalWins === 1 ? 'victory' : 'victories'}
+          </Text>
+          <Text size="lg" fw={700} c="red.6">
+            {totalLosses} {totalLosses === 1 ? 'defeat' : 'defeats'}
+          </Text>
+        </Group>
 
-            <Stack gap="xs">
-              {results.map((result, index) => (
-                <div key={index}>
-                  <Group justify="space-between">
-                    <Text size="sm" c="dimmed">
-                      vs Sample Team {index + 1}
-                    </Text>
-                    <Text size="sm" fw={500}>
-                      {result.winRate.toFixed(0)}% ({result.results.filter((r: any) => r.winner === 'p1').length}/{result.results.length})
-                    </Text>
-                  </Group>
-                  <Progress
-                    value={result.winRate}
-                    color={getWinRateColor(result.winRate)}
-                    size="sm"
-                  />
-                </div>
-              ))}
-            </Stack>
+        {/* Battle Results */}
+        <Grid gutter={{ base: 'sm', md: 'md' }}>
+          {results.map((battle, index) => {
+            const config = getArchetypeConfig(battle.archetype);
+            const isVictory = battle.winRate >= 50;
+            
+            return (
+              <Grid.Col key={index} span={{ base: 12, md: 6 }}>
+                <Paper
+                  p={{ base: 'sm', md: 'md' }}
+                  radius="md"
+                  withBorder
+                  bg={isVictory ? 'green.0' : 'red.0'}
+                  h="100%"
+                >
+                  <Stack gap="sm">
+                    {/* Battle Header */}
+                    <Group justify="space-between">
+                      <Group gap="sm">
+                        <ThemeIcon
+                          size="md"
+                          radius="xl"
+                          color={config.color}
+                          variant="light"
+                        >
+                          {config.icon}
+                        </ThemeIcon>
+                        <div>
+                          <Text fw={600} size="sm">
+                            {battle.archetype} Team
+                          </Text>
+                          <Text size="xs" c="dimmed">
+                            Test Opponent #{index + 1}
+                          </Text>
+                        </div>
+                      </Group>
+                      
+                      <Center>
+                        {isVictory ? (
+                          <ThemeIcon size="xl" radius="xl" color="green" variant="light">
+                            <IconTrophy size={24} />
+                          </ThemeIcon>
+                        ) : (
+                          <ThemeIcon size="xl" radius="xl" color="red" variant="light">
+                            <IconShieldOff size={24} />
+                          </ThemeIcon>
+                        )}
+                      </Center>
+                    </Group>
 
-            <Text size="xs" c="dimmed" ta="center">
-              Simulated {results.reduce((sum, r) => sum + r.results.length, 0)} battles
-              against {results.length} different teams
-            </Text>
-          </>
-        )}
+                    {/* Team Preview */}
+                    <Box>
+                      <SimpleGrid 
+                        cols={{ base: 6, xs: 6 }} 
+                        spacing={{ base: 0, xs: 2 }}
+                      >
+                        {battle.team.pokemon.map((pokemon, i) => (
+                          <Box
+                            key={i}
+                            style={{
+                              aspectRatio: '1/1',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              padding: 0
+                            }}
+                            title={pokemon.species}
+                          >
+                            <Box
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}
+                            >
+                              <PokemonSprite 
+                                species={pokemon.species} 
+                                style={{ 
+                                  width: '40px',
+                                  height: '40px',
+                                  objectFit: 'contain'
+                                }}
+                                className="pokemon-sprite-battle"
+                              />
+                            </Box>
+                          </Box>
+                        ))}
+                      </SimpleGrid>
+                    </Box>
+
+                    {/* Battle Statistics */}
+                    <div>
+                      <Text size="sm" fw={500}>
+                        Battle Record: {battle.result.results.filter((r: any) => r.winner === 'p1').length}-{battle.result.results.filter((r: any) => r.winner === 'p2').length}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        {battle.result.results.length} battles • Avg {battle.result.avgTurns.toFixed(0)} turns
+                      </Text>
+                    </div>
+                  </Stack>
+                </Paper>
+              </Grid.Col>
+            );
+          })}
+        </Grid>
       </Stack>
     </Card>
   );

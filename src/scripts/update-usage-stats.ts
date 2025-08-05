@@ -244,7 +244,7 @@ async function updateAllFormats() {
   
   // Fetch stats for each format
   for (const [formatId, formatInfo] of Object.entries(FORMATS)) {
-=    if (formatId === 'gen9vgc2024') {
+    if (formatId === 'gen9vgc2024') {
       continue;
     }
     

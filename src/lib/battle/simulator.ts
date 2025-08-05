@@ -3,12 +3,13 @@ import { BattleResult, BattleSimulation } from '@/types/battle';
 import { Team } from '@/types';
 import { exportShowdownTeam } from '@/lib/pokemon/team-parser';
 import { RulesBasedAI } from './ai';
+import { FormatId } from '@/lib/pokemon/formats';
 
 export class BattleSimulator {
-  private formatId: string;
+  private formatId: FormatId;
   
-  constructor(formatId: string = 'gen9ou') {
-    this.formatId = formatId;
+  constructor(formatId: FormatId | string = 'gen9ou') {
+    this.formatId = formatId as FormatId;
   }
   
   async simulateBattle(team1: Team, team2: Team): Promise<BattleResult> {

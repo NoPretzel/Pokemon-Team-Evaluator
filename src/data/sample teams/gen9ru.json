@@ -1,0 +1,219 @@
+[
+  {
+    "format": "gen9ru",
+    "archetype": "Hyper Offense",
+    "pokemon": [
+      {
+        "species": "Lycanroc-Dusk",
+        "ability": "Tough Claws",
+        "level": 100,
+        "item": "Focus Sash",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 212, "def": 0, "spa": 0, "spd": 44, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Endeavor", "Close Combat", "Taunt"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Gyarados",
+        "ability": "Moxie",
+        "level": 100,
+        "item": "Chesto Berry",
+        "nature": "Adamant",
+        "evs": { "hp": 60, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Waterfall", "Tera Blast", "Rest"],
+        "teraType": "Flying"
+      },
+      {
+        "species": "Salamence",
+        "ability": "Moxie",
+        "level": 100,
+        "item": "Lum Berry",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Outrage", "Dual Wingbeat", "Earthquake"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Armarouge",
+        "ability": "Weak Armor",
+        "level": 100,
+        "item": "Weakness Policy",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Armor Cannon", "Psyshock", "Energy Ball", "Endure"],
+        "teraType": "Ground"
+      },
+      {
+        "species": "Maushold",
+        "ability": "Technician",
+        "level": 100,
+        "item": "Wide Lens",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Tidy Up", "Population Bomb", "Bullet Seed", "Encore"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Bisharp",
+        "ability": "Defiant",
+        "level": 100,
+        "item": "Eviolite",
+        "nature": "Adamant",
+        "evs": { "hp": 192, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 64 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Throat Chop", "Iron Head", "Sucker Punch"],
+        "teraType": "Ghost"
+      }
+    ]
+  },
+  {
+    "format": "gen9ru",
+    "archetype": "Bulky Offense",
+    "pokemon": [
+      {
+        "species": "Entei",
+        "ability": "Inner Focus",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Extreme Speed", "Sacred Fire", "Stone Edge", "Tera Blast"],
+        "teraType": "Grass"
+      },
+      {
+        "species": "Goodra-Hisui",
+        "ability": "Sap Sipper",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Quiet",
+        "evs": { "hp": 252, "atk": 0, "def": 64, "spa": 192, "spd": 0, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Draco Meteor", "Heavy Slam", "Knock Off", "Protect"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Zapdos-Galar",
+        "ability": "Defiant",
+        "level": 100,
+        "item": "Protective Pads",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Close Combat", "Brave Bird", "Knock Off", "U-turn"],
+        "teraType": "Flying"
+      },
+      {
+        "species": "Gengar",
+        "ability": "Cursed Body",
+        "level": 100,
+        "item": "Choice Scarf",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Shadow Ball", "Sludge Bomb", "Trick", "Toxic Spikes"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Cyclizar",
+        "ability": "Regenerator",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Jolly",
+        "evs": { "hp": 136, "atk": 0, "def": 12, "spa": 0, "spd": 152, "spe": 208 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Rapid Spin", "Knock Off", "U-turn", "Power Whip"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Gastrodon",
+        "ability": "Storm Drain",
+        "level": 100,
+        "item": "Rocky Helmet",
+        "nature": "Relaxed",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Earthquake", "Ice Beam", "Recover"],
+        "teraType": "Ghost"
+      }
+    ]
+  },
+  {
+    "format": "gen9ru",
+    "archetype": "Balance",
+    "pokemon": [
+      {
+        "species": "Noivern",
+        "ability": "Frisk",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Timid",
+        "evs": { "hp": 248, "atk": 0, "def": 0, "spa": 8, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Psychic Noise", "Super Fang", "Roost", "Defog"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Flygon",
+        "ability": "Levitate",
+        "level": 100,
+        "item": "Choice Band",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["First Impression", "Earthquake", "Outrage", "U-turn"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Wo-Chien",
+        "ability": "Tablets of Ruin",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Careful",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 244, "spe": 12 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Knock Off", "Leech Seed", "Rest", "Sleep Talk"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Registeel",
+        "ability": "Clear Body",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 180, "spa": 0, "spd": 68, "spe": 8 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Body Press", "Heavy Slam", "Iron Defense", "Stealth Rock"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Entei",
+        "ability": "Inner Focus",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Sacred Fire", "Extreme Speed", "Tera Blast", "Stone Edge"],
+        "teraType": "Grass",
+        "shiny": true
+      },
+      {
+        "species": "Slowbro",
+        "ability": "Regenerator",
+        "level": 100,
+        "item": "Rocky Helmet",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 212, "spa": 0, "spd": 0, "spe": 44 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Future Sight", "Foul Play", "Scald", "Slack Off"],
+        "teraType": "Poison"
+      }
+    ]
+  }
+]
