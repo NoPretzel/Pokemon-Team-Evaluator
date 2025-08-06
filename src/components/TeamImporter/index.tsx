@@ -79,7 +79,7 @@ export function TeamImporter({ format, onFormatChange, onTeamImport, onEvaluate 
 
   const sampleTeam = `Garchomp @ Loaded Dice
 Ability: Rough Skin
-Level: 50
+Level: 100
 Tera Type: Steel
 EVs: 252 Atk / 4 SpD / 252 Spe
 Jolly Nature
@@ -90,7 +90,7 @@ Jolly Nature
 
 Rillaboom @ Assault Vest
 Ability: Grassy Surge
-Level: 50
+Level: 100
 Tera Type: Fire
 EVs: 252 HP / 252 Atk / 4 SpD
 Adamant Nature
@@ -101,7 +101,7 @@ Adamant Nature
 
 Amoonguss @ Sitrus Berry
 Ability: Regenerator
-Level: 50
+Level: 100
 Tera Type: Water
 EVs: 252 HP / 116 Def / 140 SpD
 Calm Nature
@@ -113,7 +113,7 @@ IVs: 0 Atk
 
 Gholdengo @ Choice Specs
 Ability: Good as Gold
-Level: 50
+Level: 100
 Tera Type: Flying
 EVs: 252 HP / 252 SpA / 4 SpD
 Modest Nature
@@ -125,7 +125,7 @@ IVs: 0 Atk
 
 Urshifu-Rapid-Strike @ Focus Sash
 Ability: Unseen Fist
-Level: 50
+Level: 100
 Tera Type: Poison
 EVs: 252 Atk / 4 SpD / 252 Spe
 Jolly Nature
@@ -136,7 +136,7 @@ Jolly Nature
 
 Flutter Mane @ Choice Scarf
 Ability: Protosynthesis
-Level: 50
+Level: 100
 Tera Type: Fairy
 EVs: 252 SpA / 4 SpD / 252 Spe
 Timid Nature
