@@ -111,7 +111,10 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
       const response = await fetch(`/api/usage?format=${format}`);
       if (response.ok) {
         const data = await response.json();
+        console.log('Fetched usage data:', data);
         setUsageData(data.pokemon?.slice(0, 5) || []);
+      } else {
+        console.error('Failed to fetch usage data:', response.status);
       }
     } catch (error) {
       console.error('Error fetching usage data:', error);
@@ -156,8 +159,8 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
       
       const opponentPokemon = new CalcPokemon(gen, pokemonId as any, {
         level: 100,
-        ability: topAbility,
-        item: topItem,
+        ability: topAbility || species.abilities?.[0] || '',
+        item: topItem || '',
         nature,
         evs,
         ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }
@@ -166,7 +169,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
       const hasSetup = topMoves.some(move => SETUP_MOVES.includes(toID(move)));
       
       let canCounterCount = 0;
-      let bestWallDamage = 100;
+      let bestWallDamage = 999; // Initialize to high value to track if we found any walls
       let bestWallName = '';
       let fasterCount = 0;
       let hasCounterplay = false;
@@ -181,11 +184,11 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
         
         const attacker = new CalcPokemon(gen, toID(teamMember.species) as any, {
           level: 100,
-          ability: teamMember.ability,
-          item: teamMember.item,
-          nature: teamMember.nature,
-          evs: teamMember.evs,
-          ivs: teamMember.ivs
+          ability: teamMember.ability || teamSpecies.abilities?.[0] || '',
+          item: teamMember.item || '',
+          nature: teamMember.nature || 'Serious',
+          evs: teamMember.evs || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+          ivs: teamMember.ivs || { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }
         });
         
         const teamSpeed = calculateSpeed(attacker, 100);
@@ -204,7 +207,12 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
         for (const moveName of teamMember.moves) {
           const moveId = toID(moveName);
           const move = gen.moves.get(moveId as any);
+          
           if (!move || !move.basePower || move.basePower === 0) continue;
+          
+          if (['seismictoss', 'nightshade', 'psywave', 'sonicboom', 'dragonrage', 'superfang', 'naturesmadness'].includes(moveId)) {
+            continue;
+          }
           
           const result = calculate(
             gen,
@@ -236,11 +244,20 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
         }
         
         let canSurvive = true;
+        let maxDamageFromOpponent = 0;
+        let foundDamagingMove = false;
         
         for (const moveName of topMoves) {
           const moveId = toID(moveName);
           const move = gen.moves.get(moveId as any);
+          
           if (!move || !move.basePower || move.basePower === 0) continue;
+          
+          if (['seismictoss', 'nightshade', 'psywave', 'sonicboom', 'dragonrage', 'superfang', 'naturesmadness'].includes(moveId)) {
+            continue;
+          }
+          
+          foundDamagingMove = true;
           
           const result = calculate(
             gen,
@@ -250,23 +267,33 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
           );
           
           const damage = result.damage;
-          let maxDamage = 0;
+          let dmg = 0;
           
           if (typeof damage === 'number') {
-            maxDamage = damage;
+            dmg = damage;
           } else if (Array.isArray(damage)) {
             if (damage.length > 0 && typeof damage[0] === 'number') {
-              maxDamage = Math.max(...(damage as number[]));
+              dmg = Math.max(...(damage as number[]));
             } else if (damage.length > 0 && Array.isArray(damage[0])) {
               const flatDamage = (damage as number[][]).flat();
-              maxDamage = Math.max(...flatDamage);
+              dmg = Math.max(...flatDamage);
             }
           }
           
-          const damagePercent = (maxDamage / attacker.maxHP()) * 100;
+          const damagePercent = (dmg / attacker.maxHP()) * 100;
+          if (damagePercent > maxDamageFromOpponent) {
+            maxDamageFromOpponent = damagePercent;
+          }
           
           if (damagePercent >= 100 && teamSpeed <= opponentSpeed) {
             canSurvive = false;
+          }
+        }
+        
+        if (foundDamagingMove && maxDamageFromOpponent < 15 && maxDamageFromOpponent > 0) {
+          if (maxDamageFromOpponent < bestWallDamage) {
+            bestWallDamage = maxDamageFromOpponent;
+            bestWallName = teamMember.species;
           }
         }
         
@@ -274,13 +301,6 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
           canCounterCount++;
           const koType = bestDamageFromThis >= 100 ? 'OHKO' : '2HKO';
           teamCounterDetails.push(`${teamMember.species} (${koType})`);
-        }
-        
-        if (bestDamageFromThis < 15) {
-          if (bestDamageFromThis < bestWallDamage) {
-            bestWallDamage = bestDamageFromThis;
-            bestWallName = teamMember.species;
-          }
         }
       }
       
@@ -292,7 +312,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
         },
         defensive: {
           passed: bestWallDamage < 15,
-          bestWallDamage,
+          bestWallDamage: bestWallDamage === 999 ? 100 : bestWallDamage, // Show 100 if no walls found
           wallName: bestWallName
         },
         speed: {
@@ -306,7 +326,12 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
         }
       };
       
-      const checkedCount = Object.values(benchmarks).filter(b => b.passed).length;
+      let checkedCount = 0;
+      if (benchmarks.offensive.passed) checkedCount++;
+      if (benchmarks.defensive.passed) checkedCount++;
+      if (benchmarks.speed.passed) checkedCount++;
+      if (hasSetup && benchmarks.setup.passed) checkedCount++;
+      
       const totalBenchmarks = hasSetup ? 4 : 3;
       const requiredPercentage = 0.30;
       const isChecked = (checkedCount / totalBenchmarks) >= requiredPercentage;
@@ -336,6 +361,22 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
     );
   }
 
+  if (usageData.length === 0) {
+    return (
+      <Card shadow="sm" radius="md" withBorder>
+        <Stack>
+          <Group justify="space-between">
+            <Text fw={600} size="lg">Meta Coverage</Text>
+            <Badge size="lg" color="gray">No Data</Badge>
+          </Group>
+          <Text ta="center" c="dimmed">
+            No usage data available for {format}. Meta coverage analysis requires usage statistics.
+          </Text>
+        </Stack>
+      </Card>
+    );
+  }
+
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Stack>
@@ -348,11 +389,6 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
             {passed ? 'PASS' : 'FAIL'} - {overallScore.toFixed(0)}%
           </Badge>
         </Group>
-
-        <Text size="sm" c="dimmed" ta="center">
-          To check a Pokémon: Pass 30% of benchmarks (2/4 with setup, 1/3 without).
-          Offensive (OHKO/2HKO), Defensive (wall &lt;15%), Speed (50%+ faster), Setup (counterplay)
-        </Text>
 
         <Grid>
           {matchupResults.map((result) => (
@@ -403,7 +439,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
                         color={result.benchmarks.defensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
                       />
                       <Text size="xs">
-                        {result.benchmarks.defensive.passed
+                        {result.benchmarks.defensive.passed && result.benchmarks.defensive.wallName
                           ? `${result.benchmarks.defensive.wallName} walls (${result.benchmarks.defensive.bestWallDamage.toFixed(1)}%)`
                           : 'No defensive checks'
                         }
