@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Text, Stack, Tabs, Grid, Box, Alert, Group, Divider } from '@mantine/core';
+import { Card, Text, Stack, Tabs, Grid, Box, Alert, Group, Divider, Badge } from '@mantine/core';
 import { IconSword, IconShield, IconAlertTriangle } from '@tabler/icons-react';
 import { Team } from '@/types';
 import { analyzeTeamCoverageRatings, TypeName, TERA_WEIGHT } from '@/lib/pokemon/type-coverage';
@@ -201,8 +201,27 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
   return (
     <Card shadow="sm" radius="md" withBorder>
       <Stack>
-        <Text fw={600} size="lg">Type Coverage Analysis</Text>
-        
+        <Group justify="space-between" align="center">
+          <Text fw={600} size="lg">Type Coverage Analysis</Text>
+          {(() => {
+            // Calculate overall score
+            const offensiveCovered = 18 - coverage.offensive.uncovered.length;
+            const offensiveScore = (offensiveCovered / 18) * 100;
+            const defensiveIssues = coverage.defensive.vulnerable.length;
+            const defensiveScore = Math.max(0, 100 - (defensiveIssues * 10));
+            const overallScore = Math.round(offensiveScore * 0.6 + defensiveScore * 0.4);
+            const passed = overallScore >= 65;
+            
+            return (
+              <Badge 
+                size="lg" 
+                color={passed ? 'green' : 'red'}
+              >
+                {passed ? 'PASS' : 'FAIL'} - {overallScore}%
+              </Badge>
+            );
+          })()}
+        </Group>        
         <Tabs value={activeTab} onChange={setActiveTab}>
           <Tabs.List grow>
             <Tabs.Tab value="offensive" leftSection={<IconSword size={16} />}>
@@ -220,6 +239,15 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
                   icon={<IconAlertTriangle size={16} />} 
                   color="red" 
                   variant="light"
+                  styles={{
+                    icon: {
+                      alignSelf: 'center',
+                      marginRight: '8px'
+                    },
+                    body: {
+                      paddingLeft: 0
+                    }
+                  }}
                 >
                   <Box style={{ 
                     display: 'flex', 
@@ -262,6 +290,15 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
                   icon={<IconAlertTriangle size={16} />} 
                   color="red" 
                   variant="light"
+                  styles={{
+                    icon: {
+                      alignSelf: 'center',
+                      marginRight: '8px'
+                    },
+                    body: {
+                      paddingLeft: 0
+                    }
+                  }}
                 >
                   <Box style={{ 
                     display: 'flex', 
