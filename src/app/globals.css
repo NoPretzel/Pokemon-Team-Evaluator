@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
 /* Pokemon type colors */
 .type-normal { background-color: #A8A878; }
 .type-fire { background-color: #F08030; }
@@ -34,5 +43,58 @@
   .pokemon-sprite-battle {
     width: 35px !important;
     height: 35px !important;
+  }
+}
+
+/* Loader animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.5; 
+  }
+  50% { 
+    transform: scale(1.5); 
+    opacity: 1; 
+  }
+}
+
+/* Mobile tab underlines */
+@media (max-width: 768px) {
+  .mantine-Tabs-tab {
+    border-bottom: 2px solid var(--mantine-color-gray-3) !important;
+  }
+  
+  .mantine-Tabs-tab[data-active="true"] {
+    border-bottom-color: var(--mantine-color-blue-6) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Ensure Mantine containers don't overflow */
+  .mantine-Container-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  /* Prevent horizontal scroll on small screens */
+  .mantine-Paper-root {
+    max-width: 100%;
+  }
+  
+  /* Adjust modal for mobile */
+  .mantine-Modal-content {
+    margin: 0 !important;
+    max-height: 100vh !important;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .vh-fix {
+    height: -webkit-fill-available;
   }
 }

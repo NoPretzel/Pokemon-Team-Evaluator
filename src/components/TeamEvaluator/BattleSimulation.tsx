@@ -23,11 +23,9 @@ interface BattleResultWithTeam {
 }
 
 export function BattleSimulation({ team, format }: BattleSimulationProps) {
-  const [simulating, setSimulating] = useState(false);
-  const [results, setResults] = useState<BattleResultWithTeam[]>([]);
-  const [loading, setLoading] = useState(true);
-  const hasStarted = useRef(false);
-  const currentFormat = useRef(format);
+  const [results, setResults] = useState<BattleResultWithTeam[] | null>(null);
+  const hasRun = useRef(false);
+  const currentTeamId = JSON.stringify(team.pokemon.map(p => p.species + p.item));
 
   // Normalize team to level 100
   const normalizedTeam = {
@@ -39,30 +37,47 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
   };
 
   useEffect(() => {
-    if (currentFormat.current !== format) {
-      currentFormat.current = format;
-      hasStarted.current = false;
-      setResults([]);
-    }
-    
-    if (!hasStarted.current) {
-      hasStarted.current = true;
+    if (!hasRun.current) {
+      hasRun.current = true;
       runSimulations();
     }
-  }, [format, team]);
+  }, []);
+
+  const preloadTeamSprites = async (teams: TeamWithArchetype[]) => {
+    const spritesToLoad: string[] = [];
+    
+    teams.forEach(team => {
+      team.pokemon.forEach(p => {
+        if (p.species) {
+          const speciesId = p.species.toLowerCase().replace(/[^a-z0-9-]+/g, '');
+          spritesToLoad.push(`https://play.pokemonshowdown.com/sprites/ani/${speciesId}.gif`);
+          spritesToLoad.push(`https://play.pokemonshowdown.com/sprites/gen5/${speciesId}.png`);
+        }
+      });
+    });
+    
+    const loadPromises = spritesToLoad.map(src => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = resolve;
+        img.src = src;
+      });
+    });
+    
+    await Promise.all(loadPromises);
+  };
 
   const runSimulations = async () => {
-    setLoading(true);
-    setSimulating(true);
-    setResults([]);
-    
     const sampleTeams = await loadSampleTeams(format as FormatId);
     
     if (sampleTeams.length === 0) {
-      setLoading(false);
-      setSimulating(false);
+      setResults([]);
       return;
     }
+    
+    // Preload all sprites for sample teams
+    await preloadTeamSprites(sampleTeams.slice(0, 3));
     
     // Defer to next tick
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -93,7 +108,7 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
           result,
           winRate: result.winRate
         });
-        setResults([...battleResults]);
+        // Don't update state here - wait until all are done
       } catch (error) {
         console.error(`Error simulating against team ${i + 1}:`, error);
       }
@@ -102,9 +117,22 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
       await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    setLoading(false);
-    setSimulating(false);
+    setResults(battleResults);
   };
+
+  // Render a card with minimum height to prevent layout shift
+  if (results === null) {
+    return (
+      <Card shadow="sm" radius="md" withBorder style={{ minHeight: '300px', opacity: 0 }}>
+        <Stack>
+          <Group justify="space-between">
+            <Text fw={600} size="lg">Battle Performance</Text>
+            <Badge size="lg" color="gray">Loading...</Badge>
+          </Group>
+        </Stack>
+      </Card>
+    );
+  }
 
   const overallWinRate = results.length > 0
     ? results.reduce((sum, r) => sum + r.winRate, 0) / results.length
@@ -114,14 +142,6 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
   const totalLosses = results.filter(r => r.winRate < 50).length;
   const totalBattles = totalWins + totalLosses;
   const passed = overallWinRate >= 50;
-
-  if (loading) {
-    return (
-      <Card shadow="sm" radius="md" withBorder>
-        <Text ta="center" c="dimmed">Running battle simulations...</Text>
-      </Card>
-    );
-  }
 
   if (results.length === 0) {
     return (
