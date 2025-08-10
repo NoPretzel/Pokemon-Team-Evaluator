@@ -10,14 +10,13 @@ import {
   Text,
   Stack,
   Alert,
-  SegmentedControl,
   Select,
   Title,
   Box,
   Center
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconFileImport, IconPokeball, IconChartBar } from '@tabler/icons-react';
+import { IconFileImport, IconPokeball, IconSparkles } from '@tabler/icons-react';
 import { Team } from '@/types';
 import { parseFullTeam, validateTeamSize } from '@/lib/pokemon/team-parser';
 import { FormatId, FORMATS } from '@/lib/pokemon/formats';
@@ -32,9 +31,11 @@ interface TeamImporterProps {
 
 export function TeamImporter({ format, onFormatChange, onTeamImport, onEvaluate }: TeamImporterProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const isSmallScreen = useMediaQuery('(max-height: 700px)');
   const [importText, setImportText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [buildingTeam, setBuildingTeam] = useState<Team | undefined>(undefined);
+  
   const formatOptions = Object.entries(FORMATS).map(([id, format]) => ({
     value: id,
     label: format.name,
@@ -146,81 +147,93 @@ IVs: 0 Atk
 - Dazzling Gleam
 - Thunderbolt`;
 
+  const getTextareaRows = () => {
+    if (isSmallScreen) return isMobile ? 15 : 20;
+    if (isMobile) return 20;
+    return 24;
+  };
+
   return (
-    <Paper shadow="sm" radius="md" p="lg">
-      <Stack gap="md">
+    <Paper shadow="sm" radius="md" p={isMobile ? "sm" : "md"}>
+      <Stack gap={isMobile ? "xs" : "sm"}>
         {/* Format selector */}
-        <Box>
-          <Title order={4} mb="xs" ta="center">Select Format</Title>
-          <Center>
-            {isMobile ? (
-              <Select
-                value={format}
-                onChange={(val) => val && onFormatChange(val as FormatId)}
-                data={formatOptions}
-                style={{ width: '100%', maxWidth: 300 }}
-              />
-            ) : (
-              <SegmentedControl
-                value={format}
-                onChange={(val) => onFormatChange(val as FormatId)}
-                data={formatOptions}
-                size="md"
-              />
-            )}
-          </Center>
-        </Box>
+        <Stack gap="xs" align="center">
+          <Title order={4} size={isMobile ? 'h5' : 'h4'}>Select Format</Title>
+          <Select
+            value={format}
+            onChange={(val) => val && onFormatChange(val as FormatId)}
+            data={formatOptions}
+            size={isMobile ? "sm" : "md"}
+            style={{ width: '100%', maxWidth: '250px' }}
+          />
+        </Stack>
 
         {/* Team import tabs */}
         <Tabs defaultValue="paste">
           <Center>
-            <Tabs.List style={{ flexWrap: 'nowrap' }}>
+            <Tabs.List grow={isMobile} style={{ width: isMobile ? '100%' : 'auto' }}>
               <Tabs.Tab 
                 value="paste" 
-                leftSection={<IconFileImport size={16} />}
-                style={{ whiteSpace: 'nowrap' }}
+                leftSection={<IconFileImport size={14} />}
+                px={isMobile ? "xs" : "sm"}
               >
                 Paste from Showdown
               </Tabs.Tab>
               <Tabs.Tab 
                 value="build" 
-                leftSection={<IconPokeball size={16} />}
-                style={{ whiteSpace: 'nowrap' }}
+                leftSection={<IconPokeball size={14} />}
+                px={isMobile ? "xs" : "sm"}
               >
                 Build Team
               </Tabs.Tab>
             </Tabs.List>
           </Center>
 
-          <Tabs.Panel value="paste" pt="md">
-            <Stack>
+          <Tabs.Panel value="paste" pt="sm">
+            <Stack gap="xs">
               <Center>
                 <Textarea
                   placeholder="Paste your Pokemon Showdown team here..."
-                  minRows={15}
-                  maxRows={25}
                   value={importText}
                   onChange={(e) => setImportText(e.currentTarget.value)}
+                  rows={getTextareaRows()}
                   styles={{
                     input: { 
                       fontFamily: 'monospace',
-                      fontSize: '13px',
+                      fontSize: isMobile ? '11px' : '12px',
+                      lineHeight: '1.3',
                     }
                   }}
-                  w={{ base: '100%', md: '600px' }}
+                  style={{ 
+                    width: '100%', 
+                    maxWidth: isMobile ? '100%' : '450px' 
+                  }}
                 />
               </Center>
               
               {error && (
                 <Center>
-                  <Alert color="red" title="Import Error" w={{ base: '100%', md: '600px' }}>
+                  <Alert 
+                    color="red" 
+                    title="Import Error" 
+                    style={{ 
+                      width: '100%', 
+                      maxWidth: isMobile ? '100%' : '450px' 
+                    }}
+                  >
                     {error}
                   </Alert>
                 </Center>
               )}
               
               <Center>
-                <Group justify="space-between" w={{ base: '100%', md: '600px' }}>
+                <Group 
+                  justify="space-between" 
+                  style={{ 
+                    width: '100%', 
+                    maxWidth: isMobile ? '100%' : '450px' 
+                  }}
+                >
                   <Button
                     variant="subtle"
                     size="xs"
@@ -230,10 +243,11 @@ IVs: 0 Atk
                   </Button>
                   
                   <Button
-                    leftSection={<IconChartBar size={16} />}
+                    leftSection={<IconSparkles size={16} />}
                     onClick={handleImport}
                     disabled={!importText.trim()}
                     variant="filled"
+                    size={isMobile ? "sm" : "md"}
                   >
                     Evaluate
                   </Button>
@@ -242,7 +256,7 @@ IVs: 0 Atk
             </Stack>
           </Tabs.Panel>
 
-          <Tabs.Panel value="build" pt="md">
+          <Tabs.Panel value="build" pt="sm">
             <Stack>
               <TeamBuilder 
                 format={format}
@@ -252,9 +266,10 @@ IVs: 0 Atk
               {buildingTeam && buildingTeam.pokemon.some(p => p.species) && onEvaluate && (
                 <Group justify="flex-end">
                   <Button
-                    leftSection={<IconChartBar size={16} />}
+                    leftSection={<IconSparkles size={16} />}
                     onClick={onEvaluate}
                     variant="filled"
+                    size={isMobile ? "sm" : "md"}
                   >
                     Evaluate
                   </Button>
