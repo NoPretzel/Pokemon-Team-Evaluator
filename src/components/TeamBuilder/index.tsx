@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Stack,
   Grid,
@@ -112,20 +112,180 @@ function getDefaultPokemon(): Pokemon {
     evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
     ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
     moves: [],
-    level: 50,
+    level: 100,
     teraType: undefined
   };
+}
+
+async function getAvailableMovesForSpecies(targetSpecies: string, searchQuery: string = '', currentMove?: string): Promise<{ value: string; label: string }[]> {
+  if (!targetSpecies) return [];
+  
+  const currentMoveOption = currentMove ? [{ value: currentMove, label: currentMove }] : [];
+  
+  try {
+    const species = dex.species.get(targetSpecies);
+    if (!species || !species.exists) {
+      return currentMoveOption;
+    }
+    
+    const targetPokemonData = getPokemonData(targetSpecies);
+    
+    let learnableMoves: { value: string; label: string }[] = [];
+    
+    const speciesId = species.id;
+    const learnsetData = await gen.learnsets.get(speciesId as any);
+    
+    if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
+      const learnset = (learnsetData as any).learnset;
+      const moveIds = Object.keys(learnset);
+      
+      learnableMoves = moveIds.map(moveId => {
+        const move = dex.moves.get(moveId);
+        if (!move || !move.exists || move.isNonstandard) return null;
+        if (move.isZ || move.isMax) return null;
+        
+        return { value: move.name, label: move.name };
+      }).filter(Boolean) as { value: string; label: string }[];
+    }
+    
+    // Fallback if no learnset data
+    if (learnableMoves.length === 0) {
+      const allMoves = dex.moves.all()
+        .filter(m => m.exists && !m.isNonstandard && m.num > 0);
+      
+      learnableMoves = allMoves
+        .filter(move => {
+          if (move.isZ || move.isMax) return false;
+          if (move.type === 'Normal' || move.category === 'Status') return true;
+          if (targetPokemonData && targetPokemonData.types.includes(move.type)) return true;
+          
+          const commonCoverage = ['Hidden Power', 'Return', 'Frustration', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk'];
+          if (commonCoverage.includes(move.name)) return true;
+          
+          return false;
+        })
+        .map(m => ({ value: m.name, label: m.name }));
+    }
+
+    const fallbackMoves = ['Protect', 'Substitute', 'Rest', 'Sleep Talk', 'Toxic', 'Return', 'Tackle', 'Facade'];
+    fallbackMoves.forEach(move => {
+      if (!learnableMoves.some(m => m.value === move)) {
+        learnableMoves.push({ value: move, label: move });
+      }
+    });
+
+    const sortedMoves = [...learnableMoves].sort((a, b) => a.label.localeCompare(b.label));
+
+    let filteredMoves = sortedMoves;
+    if (searchQuery) {
+      filteredMoves = sortedMoves.filter(m => 
+        m.label.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (currentMove) {
+      filteredMoves = filteredMoves.filter(m => m.value !== currentMove);
+      filteredMoves.unshift({ value: currentMove, label: currentMove });
+    }
+
+    return filteredMoves.slice(0, 100);
+  } catch (error) {
+    console.error('Error getting moves:', error);
+    const basicMoves = [
+      'Tackle', 'Scratch', 'Pound', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk',
+      'Return', 'Frustration', 'Hidden Power', 'Double Team', 'Swagger', 'Attract', 'Facade'
+    ].map(m => ({ value: m, label: m }));
+    
+    if (currentMove) {
+      return [{ value: currentMove, label: currentMove }, ...basicMoves];
+    }
+    return basicMoves;
+  }
+}
+
+async function getMovesForRandomization(targetSpecies: string): Promise<string[]> {
+  if (!targetSpecies) return [];
+  
+  try {
+    const species = dex.species.get(targetSpecies);
+    if (!species || !species.exists) {
+      return [];
+    }
+    
+    const targetPokemonData = getPokemonData(targetSpecies);
+    let learnableMoves: string[] = [];
+    
+    const speciesId = species.id;
+    const learnsetData = await gen.learnsets.get(speciesId as any);
+    
+    if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
+      const learnset = (learnsetData as any).learnset;
+      const moveIds = Object.keys(learnset);
+      
+      learnableMoves = moveIds.map(moveId => {
+        const move = dex.moves.get(moveId);
+        if (!move || !move.exists || move.isNonstandard) return null;
+        if (move.isZ || move.isMax) return null;
+        return move.name;
+      }).filter(Boolean) as string[];
+    }
+    
+    if (learnableMoves.length === 0 && targetPokemonData) {
+      const allMoves = dex.moves.all()
+        .filter(m => m.exists && !m.isNonstandard && m.num > 0 && !m.isZ && !m.isMax);
+      
+      learnableMoves = allMoves
+        .filter(move => {
+          if (move.type === 'Normal' || move.category === 'Status') return true;
+          if (targetPokemonData.types.includes(move.type)) return true;
+          return false;
+        })
+        .map(m => m.name);
+    }
+
+    const universalMoves = ['Protect', 'Substitute', 'Rest', 'Sleep Talk', 'Toxic', 'Facade', 'Endure', 'Hidden Power'];
+    universalMoves.forEach(move => {
+      if (!learnableMoves.includes(move)) {
+        learnableMoves.push(move);
+      }
+    });
+    
+    return learnableMoves;
+  } catch (error) {
+    console.error('Error getting moves for randomization:', error);
+    return ['Tackle', 'Scratch', 'Pound', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk',
+            'Return', 'Frustration', 'Hidden Power', 'Facade', 'Endure'];
+  }
 }
 
 function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicate }: PokemonBuilderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [moveSearchQueries, setMoveSearchQueries] = useState(['', '', '', '']);
+  const [availableMovesList, setAvailableMovesList] = useState<{ value: string; label: string }[][]>([[], [], [], []]);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const pokemonData = useMemo(() => {
     if (!pokemon.species) return null;
     return getPokemonData(pokemon.species);
   }, [pokemon.species]);
+
+  // Load available moves when pokemon species or search queries change
+  useEffect(() => {
+    if (!pokemon.species) {
+      setAvailableMovesList([[], [], [], []]);
+      return;
+    }
+
+    const loadMoves = async () => {
+      const movePromises = moveSearchQueries.map((query, i) => 
+        getAvailableMovesForSpecies(pokemon.species, query, pokemon.moves[i])
+      );
+      const results = await Promise.all(movePromises);
+      setAvailableMovesList(results);
+    };
+
+    loadMoves();
+  }, [pokemon.species, pokemon.moves, moveSearchQueries]);
 
   const availablePokemon = useMemo(() => {
     const allSpecies = dex.species.all()
@@ -141,7 +301,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
       );
     }
 
-    // Ensure the selected species is always present
     if (pokemon.species) {
       const selected = { value: pokemon.species as any, label: pokemon.species as any };
       results = [selected, ...results.filter(p => p.value !== pokemon.species)];
@@ -166,68 +325,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
     value: type,
     label: type
   }));
-
-  const getAvailableMoves = (searchQuery: string) => {
-    if (!pokemon.species) return [];
-    
-    try {
-      const species = dex.species.get(pokemon.species);
-      if (!species || !species.exists) {
-        return [];
-      }
-      
-      let learnableMoves: { value: string; label: string }[] = [];
-      
-      const speciesId = species.id;
-      const learnsetData = gen.learnsets.get(speciesId as any);
-      
-      if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
-        const learnset = (learnsetData as any).learnset;
-        const moveIds = Object.keys(learnset);
-        
-        learnableMoves = moveIds.map(moveId => {
-          const move = dex.moves.get(moveId);
-          if (!move || !move.exists || move.isNonstandard) return null;
-          if (move.isZ || move.isMax) return null;
-          
-          return { value: move.name, label: move.name };
-        }).filter(Boolean) as { value: string; label: string }[];
-      } else {
-        const allMoves = dex.moves.all()
-          .filter(m => m.exists && !m.isNonstandard && m.num > 0);
-        
-        learnableMoves = allMoves
-          .filter(move => {
-            if (move.isZ || move.isMax) return false;
-            if (move.type === 'Normal' || move.category === 'Status') return true;
-            if (pokemonData && pokemonData.types.includes(move.type)) return true;
-            
-            const commonCoverage = ['Hidden Power', 'Return', 'Frustration', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk'];
-            if (commonCoverage.includes(move.name)) return true;
-            
-            if (pokemon.species === 'Abomasnow' && move.type === 'Fire') return false;
-            
-            return false;
-          })
-          .map(m => ({ value: m.name, label: m.name }));
-      }
-
-      learnableMoves.sort((a, b) => a.label.localeCompare(b.label));
-
-      if (!searchQuery) return learnableMoves.slice(0, 100);
-      
-      return learnableMoves
-        .filter(m => m.label.toLowerCase().includes(searchQuery.toLowerCase()))
-        .slice(0, 100);
-    } catch (error) {
-      const basicMoves = [
-        'Tackle', 'Scratch', 'Pound', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk',
-        'Return', 'Frustration', 'Hidden Power', 'Double Team', 'Swagger', 'Attract'
-      ].map(m => ({ value: m, label: m }));
-      
-      return basicMoves;
-    }
-  };
 
   const updateEv = (stat: keyof StatsTable, value: number | string) => {
     const numValue = typeof value === 'string' ? parseInt(value) || 0 : value;
@@ -256,7 +353,7 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
     onUpdate({ ...pokemon, evs: spread.evs });
   };
 
-  const randomizePokemon = () => {
+  const randomizePokemon = async () => {
     const randomSpecies = dex.species.all()
       .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
       .sort(() => Math.random() - 0.5)
@@ -269,38 +366,53 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
 
     const randomAbility = speciesData.abilities[Math.floor(Math.random() * speciesData.abilities.length)];
     const randomNature = NATURES[Math.floor(Math.random() * NATURES.length)];
-    const randomItem = dex.items.all()
-      .filter(i => i.exists && !i.isNonstandard)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 1)[0]?.name || '';
-
-    const availableMoves = getAvailableMoves('');
-    const randomMoves: string[] = [];
-    const shuffledMoves = availableMoves.sort(() => Math.random() - 0.5);
     
-    for (let i = 0; i < 4 && i < shuffledMoves.length; i++) {
-      if (shuffledMoves[i]) {
-        randomMoves.push(shuffledMoves[i].value);
+    const viableItems = dex.items.all()
+      .filter(i => i.exists && !i.isNonstandard && !i.zMove && !i.megaStone)
+      .map(i => i.name);
+    
+    const randomItem = viableItems[Math.floor(Math.random() * viableItems.length)] || 'Leftovers';
+
+    const allAvailableMoves = await getMovesForRandomization(randomSpecies.name);
+    
+    const randomMoves: string[] = [];
+    
+    const shuffledMoves = [...allAvailableMoves].sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < shuffledMoves.length && randomMoves.length < 4; i++) {
+      const currentMove = shuffledMoves[i];
+      
+      if (currentMove && !randomMoves.includes(currentMove)) {
+        randomMoves.push(currentMove);
+      }
+    }
+    
+    const commonMoves = ['Protect', 'Substitute', 'Rest', 'Sleep Talk', 'Toxic', 'Return', 'Tackle', 'Facade'];
+    while (randomMoves.length < 4) {
+      const fallbackMove = commonMoves[Math.floor(Math.random() * commonMoves.length)];
+      if (!randomMoves.includes(fallbackMove)) {
+        randomMoves.push(fallbackMove);
       }
     }
 
     const randomSpread = COMMON_SPREADS[Math.floor(Math.random() * COMMON_SPREADS.length)];
-    const randomTeraType = Math.random() > 0.5 ? 
-      availableTypes[Math.floor(Math.random() * availableTypes.length)].value : 
-      undefined;
+    
+    const randomTeraType = availableTypes[Math.floor(Math.random() * availableTypes.length)].value;
 
-    onUpdate({
+    const updateData = {
       ...pokemon,
       species: randomSpecies.name,
       ability: randomAbility,
       item: randomItem,
       nature: randomNature,
       evs: randomSpread.evs,
-      moves: randomMoves,
+      moves: randomMoves.slice(0, 4),
       teraType: randomTeraType,
       ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
-      level: 50
-    });
+      level: 100
+    };
+    
+    onUpdate(updateData);
   };
 
   const totalEvs = Object.values(pokemon.evs).reduce((sum, ev) => sum + ev, 0);
@@ -311,7 +423,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
         {/* Mobile Layout */}
         {isMobile && (
           <>
-            {/* Header with sprite and dropdown stacked */}
             <Stack gap="xs">
               <Group justify="space-between" wrap="nowrap">
                 <Stack gap={8} align="center">
@@ -336,7 +447,7 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
                     </Box>
                   )}
                 </Stack>
-                <Box style={{ flex: 1 }}>
+                <Box style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <Select
                     placeholder="Choose Pokemon"
                     data={availablePokemon}
@@ -350,18 +461,18 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
                     clearable
                     key={`pokemon-select-${index}-${pokemon.species}`}
                   />
+                  <Group gap={4} justify="center">
+                    <ActionIcon size="sm" variant="subtle" color="violet" onClick={randomizePokemon}>
+                      <IconDice3 size={14} />
+                    </ActionIcon>
+                    <ActionIcon size="sm" variant="subtle" onClick={onDuplicate} disabled={!pokemon.species}>
+                      <IconCopy size={14} />
+                    </ActionIcon>
+                    <ActionIcon size="sm" variant="subtle" color="red" onClick={onRemove}>
+                      <IconTrash size={14} />
+                    </ActionIcon>
+                  </Group>
                 </Box>
-                <Group gap={4}>
-                  <ActionIcon size="sm" variant="subtle" color="violet" onClick={randomizePokemon}>
-                    <IconDice3 size={14} />
-                  </ActionIcon>
-                  <ActionIcon size="sm" variant="subtle" onClick={onDuplicate} disabled={!pokemon.species}>
-                    <IconCopy size={14} />
-                  </ActionIcon>
-                  <ActionIcon size="sm" variant="subtle" color="red" onClick={onRemove}>
-                    <IconTrash size={14} />
-                  </ActionIcon>
-                </Group>
               </Group>
             </Stack>
           </>
@@ -471,24 +582,27 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
               <Box>
                 <Text size="xs" fw={500} mb={4}>Moves</Text>
                 <Stack gap={4}>
-                  {[0, 1, 2, 3].map((i) => (
-                    <Select
-                      key={i}
-                      placeholder={`Move ${i + 1}`}
-                      data={getAvailableMoves(moveSearchQueries[i])}
-                      value={pokemon.moves[i] || ''}
-                      onChange={(value) => updateMove(i, value)}
-                      searchable
-                      onSearchChange={(query) => {
-                        const newQueries = [...moveSearchQueries];
-                        newQueries[i] = query;
-                        setMoveSearchQueries(newQueries);
-                      }}
-                      disabled={!pokemon.species}
-                      size="xs"
-                      clearable
-                    />
-                  ))}
+                  {[0, 1, 2, 3].map((i) => {
+                    const moveData = availableMovesList[i] || [];
+                    return (
+                      <Select
+                        key={`move-${i}-${pokemon.species}-${pokemon.moves[i] || ''}`}
+                        placeholder={`Move ${i + 1}`}
+                        data={moveData}
+                        value={pokemon.moves[i] || ''}
+                        onChange={(value) => updateMove(i, value)}
+                        searchable
+                        onSearchChange={(query) => {
+                          const newQueries = [...moveSearchQueries];
+                          newQueries[i] = query;
+                          setMoveSearchQueries(newQueries);
+                        }}
+                        disabled={!pokemon.species}
+                        size="xs"
+                        clearable
+                      />
+                    );
+                  })}
                 </Stack>
               </Box>
             </Stack>
@@ -587,10 +701,14 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
     onTeamUpdate(newTeam);
   };
 
-  const randomizeTeam = () => {
+  const randomizeTeam = async () => {
     const randomPokemon: Pokemon[] = [];
     const existingValidCount = team.pokemon.filter(p => p.species).length;
     const numToGenerate = Math.min(6 - existingValidCount, 6);
+    
+    const viableItems = dex.items.all()
+      .filter(i => i.exists && !i.isNonstandard && !i.zMove && !i.megaStone)
+      .map(i => i.name);
     
     for (let i = 0; i < numToGenerate; i++) {
       const randomSpecies = dex.species.all()
@@ -604,38 +722,44 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
 
       const randomAbility = speciesData.abilities[Math.floor(Math.random() * speciesData.abilities.length)];
       const randomNature = NATURES[Math.floor(Math.random() * NATURES.length)];
-      const randomItem = dex.items.all()
-        .filter(i => i.exists && !i.isNonstandard)
-        .sort(() => Math.random() - 0.5)[0]?.name || '';
+      const randomItem = viableItems[Math.floor(Math.random() * viableItems.length)] || 'Leftovers';
 
-      const allMoves = dex.moves.all()
-        .filter(m => m.exists && !m.isNonstandard && m.basePower > 0 && !m.isZ && !m.isMax)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 10);
+      const availableMoves = await getMovesForRandomization(randomSpecies.name);
       
       const randomMoves: string[] = [];
-      for (let j = 0; j < 4 && j < allMoves.length; j++) {
-        if (allMoves[j]) {
-          randomMoves.push(allMoves[j].name);
+      const shuffledMoves = [...availableMoves].sort(() => Math.random() - 0.5);
+      
+      for (let j = 0; j < shuffledMoves.length && randomMoves.length < 4; j++) {
+        if (shuffledMoves[j] && !randomMoves.includes(shuffledMoves[j])) {
+          randomMoves.push(shuffledMoves[j]);
+        }
+      }
+      
+      const fallbackMoves = ['Tackle', 'Protect', 'Substitute', 'Rest'];
+      while (randomMoves.length < 4) {
+        const fallback = fallbackMoves[randomMoves.length];
+        if (!randomMoves.includes(fallback)) {
+          randomMoves.push(fallback);
         }
       }
 
       const randomSpread = COMMON_SPREADS[Math.floor(Math.random() * COMMON_SPREADS.length)];
-      const randomTeraType = Math.random() > 0.5 ? 
-        Object.keys(TYPE_COLORS)[Math.floor(Math.random() * Object.keys(TYPE_COLORS).length)] : 
-        undefined;
       
-      randomPokemon.push({
+      const randomTeraType = Object.keys(TYPE_COLORS)[Math.floor(Math.random() * Object.keys(TYPE_COLORS).length)];
+      
+      const pokemonData = {
         species: randomSpecies.name,
         ability: randomAbility,
         item: randomItem,
         nature: randomNature,
         evs: randomSpread.evs,
         ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
-        moves: randomMoves,
-        level: 50,
+        moves: randomMoves.slice(0, 4),
+        level: 100,
         teraType: randomTeraType
-      });
+      };
+      
+      randomPokemon.push(pokemonData);
     }
     
     const existingValidPokemon = team.pokemon.filter(p => p.species);
@@ -661,32 +785,61 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
       <Stack gap="md">
         {/* Team Controls */}
         <Paper withBorder p="sm">
-          <Group justify="space-between">
-            <Group>
-              <Text fw={600} size="sm">Team Builder</Text>
-              <Badge size="sm" variant="filled">
-                {validPokemon}/6 Pokemon
-              </Badge>
+          {!isMobile ? (
+            <Group justify="space-between">
+              <Group>
+                <Text fw={600} size="sm">Team Builder</Text>
+                <Badge size="sm" variant="filled">
+                  {validPokemon}/6 Pokemon
+                </Badge>
+              </Group>
+              <Group gap="xs">
+                <Button
+                  size="xs"
+                  variant="light"
+                  leftSection={<IconDice3 size={14} />}
+                  onClick={randomizeTeam}
+                >
+                  Random
+                </Button>
+                <Button
+                  size="xs"
+                  leftSection={<IconFileExport size={14} />}
+                  onClick={openExportModal}
+                  disabled={validPokemon === 0}
+                >
+                  Export
+                </Button>
+              </Group>
             </Group>
-            <Group gap="xs">
-              <Button
-                size="xs"
-                variant="light"
-                leftSection={<IconDice3 size={14} />}
-                onClick={randomizeTeam}
-              >
-                Random
-              </Button>
-              <Button
-                size="xs"
-                leftSection={<IconFileExport size={14} />}
-                onClick={openExportModal}
-                disabled={validPokemon === 0}
-              >
-                Export
-              </Button>
-            </Group>
-          </Group>
+          ) : (
+            <Stack gap="xs" align="center" style={{ width: '100%' }}>
+              <Group gap="xs" position="center" style={{ width: '100%', justifyContent: 'center' }}>
+                <Text fw={600} size="sm">Team Builder</Text>
+                <Badge size="sm" variant="filled">
+                  {validPokemon}/6 Pokemon
+                </Badge>
+              </Group>
+              <Group gap="xs" position="center" style={{ width: '100%', justifyContent: 'center' }}>
+                <Button
+                  size="xs"
+                  variant="light"
+                  leftSection={<IconDice3 size={14} />}
+                  onClick={randomizeTeam}
+                >
+                  Random
+                </Button>
+                <Button
+                  size="xs"
+                  leftSection={<IconFileExport size={14} />}
+                  onClick={openExportModal}
+                  disabled={validPokemon === 0}
+                >
+                  Export
+                </Button>
+              </Group>
+            </Stack>
+          )}
         </Paper>
 
         {/* Pokemon List */}
@@ -727,21 +880,51 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
           setCopiedExport(false);
         }}
         title="Export Team"
-        size="md"
+        size={isMobile ? "100%" : "md"}
         fullScreen={isMobile}
+        styles={{
+          body: { 
+            display: 'flex', 
+            flexDirection: 'column',
+            height: isMobile ? 'calc(100% - 60px)' : '80vh',
+            minHeight: '500px',
+            padding: isMobile ? '16px' : '24px'
+          },
+          content: {
+            height: isMobile ? '100%' : '90vh',
+            maxHeight: isMobile ? '100%' : '90vh'
+          }
+        }}
       >
-        <Stack>
-          <Textarea
-            value={exportTeam()}
-            readOnly
-            minRows={15}
-            styles={{
-              input: {
-                fontFamily: 'monospace',
-                fontSize: '12px'
-              }
-            }}
-          />
+        <Stack style={{ flex: 1, height: '100%' }} gap="md">
+          <Box style={{ flex: 1, minHeight: 0, display: 'flex', width: '100%' }}>
+            <Textarea
+              value={exportTeam()}
+              readOnly
+              styles={{
+                input: {
+                  fontFamily: 'monospace',
+                  fontSize: isMobile ? '11px' : '13px',
+                  lineHeight: '1.4',
+                  height: '100%',
+                  minHeight: '400px',
+                  width: '100%'
+                },
+                wrapper: {
+                  height: '100%',
+                  width: '100%'
+                },
+                root: {
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }
+              }}
+              style={{ width: '100%' }}
+              autosize={false}
+            />
+          </Box>
           <Button
             fullWidth
             leftSection={copiedExport ? <IconCheck size={16} /> : <IconCopy size={16} />}
@@ -751,6 +934,7 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
               setCopiedExport(true);
               setTimeout(() => setCopiedExport(false), 2000);
             }}
+            style={{ flexShrink: 0 }}
           >
             {copiedExport ? 'Copied!' : 'Copy to Clipboard'}
           </Button>
