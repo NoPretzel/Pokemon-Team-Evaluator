@@ -27,19 +27,20 @@ export default function Home() {
   const [copiedExport, setCopiedExport] = useState(false);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [loaderPosition, setLoaderPosition] = useState({ top: '50%' });
+  const [hasEvaluated, setHasEvaluated] = useState(false);
   
   const battleSimRef = useRef<HTMLDivElement>(null);
   const importerRef = useRef<HTMLDivElement>(null);
   const archetypeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (team && team.pokemon.length > 0) {
+    if (team && team.pokemon.length > 0 && hasEvaluated) {
       const analysis = analyzeTeam(team);
       setTeamAnalysis(analysis);
-    } else {
+    } else if (!hasEvaluated) {
       setTeamAnalysis(null);
     }
-  }, [team]);
+  }, [team, hasEvaluated]);
 
   useEffect(() => {
     if (isEvaluating && importerRef.current) {
@@ -85,6 +86,7 @@ export default function Home() {
 
   const handleEvaluateTeam = () => {
     setIsEvaluating(true);
+    setHasEvaluated(true);
     
     // Simulate evaluation time
     setTimeout(() => {
@@ -97,6 +99,8 @@ export default function Home() {
   };
 
   const handleEditTeam = () => {
+    // Reset evaluation state when going back to edit
+    setHasEvaluated(false);
     // Scroll back to the importer/builder
     smoothScrollTo(importerRef.current, 1000, 0);
   };
@@ -165,7 +169,7 @@ export default function Home() {
         </Box>
       )}
       
-      {team && teamAnalysis && (
+      {team && teamAnalysis && hasEvaluated && (
         <Container size="xl" py="xl">
           <Stack gap="xl">
             <TeamSummary 

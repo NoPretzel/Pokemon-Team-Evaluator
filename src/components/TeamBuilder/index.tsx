@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Stack,
   Grid,
@@ -17,8 +17,9 @@ import {
   Textarea,
   SimpleGrid,
   NumberInput,
-  Chip
+  ScrollArea
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import {
   IconPlus,
   IconTrash,
@@ -120,33 +121,37 @@ function getDefaultPokemon(): Pokemon {
 function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicate }: PokemonBuilderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [moveSearchQueries, setMoveSearchQueries] = useState(['', '', '', '']);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const pokemonData = useMemo(() => {
     if (!pokemon.species) return null;
     return getPokemonData(pokemon.species);
   }, [pokemon.species]);
 
-  // Get all available Pokemon
   const availablePokemon = useMemo(() => {
     const allSpecies = dex.species.all()
       .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
       .map(s => ({ value: s.name, label: s.name }))
       .sort((a, b) => a.label.localeCompare(b.label));
 
-    if (!searchQuery) return allSpecies.slice(0, 100);
+    let results = allSpecies;
     
-    return allSpecies
-      .filter(p => p.label.toLowerCase().includes(searchQuery.toLowerCase()))
-      .slice(0, 100);
-  }, [searchQuery]);
+    if (searchQuery) {
+      results = allSpecies.filter(p => p.label.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+    
+    if (pokemon.species && !results.find(p => p.value === pokemon.species)) {
+      results.unshift({ value: pokemon.species as any, label: pokemon.species as any });
+    }
+    
+    return results.slice(0, 100);
+  }, [searchQuery, pokemon.species]);
 
-  // Get available abilities
   const availableAbilities = useMemo(() => {
     if (!pokemonData) return [];
     return pokemonData.abilities.map(a => ({ value: a, label: a }));
   }, [pokemonData]);
 
-  // Get all items
   const availableItems = useMemo(() => {
     return dex.items.all()
       .filter(i => i.exists && !i.isNonstandard)
@@ -154,74 +159,59 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
       .sort((a, b) => a.label.localeCompare(b.label));
   }, []);
 
-  // Get available types for Tera
   const availableTypes = Object.keys(TYPE_COLORS).map(type => ({
     value: type,
     label: type
   }));
 
-  // Get available moves
   const getAvailableMoves = (searchQuery: string) => {
     if (!pokemon.species) return [];
     
     try {
-      // Get the species for learnset lookup
       const species = dex.species.get(pokemon.species);
       if (!species || !species.exists) {
-        console.warn(`Species not found: ${pokemon.species}`);
         return [];
-      }
-      
-      // Debug logging
-      console.log(`Looking up learnset for: ${pokemon.species} (ID: ${species.id})`);
-      
-      // Try to get the learnset for this Pokemon
-      let learnset = gen.learnsets.get(species.id);
-      
-      // Try alternative lookups if primary fails
-      if (!learnset) {
-        const alternativeIds = [
-          species.id.toLowerCase(),
-          species.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
-          species.baseSpecies?.toLowerCase().replace(/[^a-z0-9]/g, ''),
-        ].filter(Boolean);
-        
-        for (const altId of alternativeIds) {
-          console.log(`Trying alternative ID: ${altId}`);
-          learnset = gen.learnsets.get(altId as any);
-          if (learnset) {
-            console.log(`Found learnset with ID: ${altId}`);
-            break;
-          }
-        }
       }
       
       let learnableMoves: { value: string; label: string }[] = [];
       
-      if (learnset && typeof learnset === 'object') {
-        console.log(`Learnset found! Contains ${Object.keys(learnset).length} moves`);
-        
-        // Extract all learnable moves from learnset
+      const speciesId = species.id;
+      const learnsetData = gen.learnsets.get(speciesId as any);
+      
+      if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
+        const learnset = (learnsetData as any).learnset;
         const moveIds = Object.keys(learnset);
+        
         learnableMoves = moveIds.map(moveId => {
           const move = dex.moves.get(moveId);
-          if (!move || !move.exists) return null;
+          if (!move || !move.exists || move.isNonstandard) return null;
+          if (move.isZ || move.isMax) return null;
+          
           return { value: move.name, label: move.name };
         }).filter(Boolean) as { value: string; label: string }[];
-        
-        console.log(`Parsed ${learnableMoves.length} valid moves`);
       } else {
-        console.warn(`No learnset found for ${pokemon.species}, falling back to all moves`);
-      }
-      
-      // If no learnset found or empty, show all moves as fallback
-      if (learnableMoves.length === 0) {
-        learnableMoves = dex.moves.all()
-          .filter(m => m.exists && !m.isNonstandard && m.num > 0)
+        const allMoves = dex.moves.all()
+          .filter(m => m.exists && !m.isNonstandard && m.num > 0);
+        
+        learnableMoves = allMoves
+          .filter(move => {
+            if (move.isZ || move.isMax) return false;
+            if (move.type === 'Normal' || move.category === 'Status') return true;
+            if (pokemonData && pokemonData.types.includes(move.type)) return true;
+            
+            const commonCoverage = ['Hidden Power', 'Return', 'Frustration', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk'];
+            if (commonCoverage.includes(move.name)) return true;
+            
+            const signatureMoves = ['Sacred Fire', 'Aeroblast', 'Spacial Rend', 'Roar of Time', 'Shadow Force', 'Crush Grip', 'Magma Storm', 'Dark Void', 'Seed Flare', 'Judgment', 'V-create', 'Blue Flare', 'Bolt Strike', 'Glaciate', 'Fusion Flare', 'Fusion Bolt', 'Ice Burn', 'Freeze Shock', 'Secret Sword', 'Relic Song', 'Techno Blast', 'Geomancy', 'Oblivion Wing', 'Land\'s Wrath', 'Thousand Arrows', 'Thousand Waves', 'Core Enforcer', 'Diamond Storm', 'Hyperspace Hole', 'Hyperspace Fury', 'Steam Eruption', 'Prismatic Laser', 'Sunsteel Strike', 'Moongeist Beam', 'Nature\'s Madness', 'Multi-Attack', 'Mind Blown', 'Plasma Fists', 'Photon Geyser', 'Light That Burns the Sky', 'Searing Sunraze Smash', 'Menacing Moonraze Maelstrom'];
+            if (signatureMoves.includes(move.name)) return false;
+            
+            if (pokemon.species === 'Abomasnow' && move.type === 'Fire') return false;
+            
+            return false;
+          })
           .map(m => ({ value: m.name, label: m.name }));
       }
 
-      // Sort alphabetically
       learnableMoves.sort((a, b) => a.label.localeCompare(b.label));
 
       if (!searchQuery) return learnableMoves.slice(0, 100);
@@ -230,18 +220,12 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
         .filter(m => m.label.toLowerCase().includes(searchQuery.toLowerCase()))
         .slice(0, 100);
     } catch (error) {
-      console.error('Error getting moves:', error);
-      // Fallback to all moves if there's an error
-      const allMoves = dex.moves.all()
-        .filter(m => m.exists && !m.isNonstandard && m.num > 0)
-        .map(m => ({ value: m.name, label: m.name }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (!searchQuery) return allMoves.slice(0, 100);
+      const basicMoves = [
+        'Tackle', 'Scratch', 'Pound', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk',
+        'Return', 'Frustration', 'Hidden Power', 'Double Team', 'Swagger', 'Attract'
+      ].map(m => ({ value: m, label: m }));
       
-      return allMoves
-        .filter(m => m.label.toLowerCase().includes(searchQuery.toLowerCase()))
-        .slice(0, 100);
+      return basicMoves;
     }
   };
 
@@ -291,16 +275,13 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
       .sort(() => Math.random() - 0.5)
       .slice(0, 1)[0]?.name || '';
 
-    // Get random moves from available moves
-    const allMoves = dex.moves.all()
-      .filter(m => m.exists && !m.isNonstandard && m.basePower > 0)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 10);
-    
+    const availableMoves = getAvailableMoves('');
     const randomMoves: string[] = [];
-    for (let i = 0; i < 4 && i < allMoves.length; i++) {
-      if (allMoves[i]) {
-        randomMoves.push(allMoves[i].name);
+    const shuffledMoves = availableMoves.sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < 4 && i < shuffledMoves.length; i++) {
+      if (shuffledMoves[i]) {
+        randomMoves.push(shuffledMoves[i].value);
       }
     }
 
@@ -330,21 +311,26 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
       <Stack gap="sm">
         {/* Header Row */}
         <Group justify="space-between" wrap="nowrap">
-          <Group gap="xs" wrap="nowrap">
+          <Group gap="xs" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
             {pokemon.species && (
-              <PokemonSprite species={pokemon.species} className="w-10 h-10" />
+              <PokemonSprite species={pokemon.species} className="w-10 h-10 flex-shrink-0" />
             )}
             <Select
               placeholder="Choose Pokemon"
               data={availablePokemon}
-              value={pokemon.species}
-              onChange={(value) => onUpdate({ ...pokemon, species: value || '' })}
+              value={pokemon.species || null}
+              onChange={(value) => {
+                onUpdate({ ...pokemon, species: value || '', ability: '', moves: [] });
+              }}
               searchable
               onSearchChange={setSearchQuery}
-              w={200}
+              w={isMobile ? '100%' : 200}
               size="sm"
+              style={{ flex: isMobile ? 1 : 'initial' }}
+              clearable
+              key={`pokemon-select-${index}-${pokemon.species}`}
             />
-            {pokemonData && (
+            {!isMobile && pokemonData && (
               <Group gap={4}>
                 {pokemonData.types.map(type => (
                   <Badge
@@ -361,7 +347,7 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
               </Group>
             )}
           </Group>
-          <Group gap={4}>
+          <Group gap={4} style={{ flexShrink: 0 }}>
             <Tooltip label="Randomize">
               <ActionIcon size="sm" variant="subtle" color="violet" onClick={randomizePokemon}>
                 <IconDice3 size={14} />
@@ -380,12 +366,30 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
           </Group>
         </Group>
 
+        {/* Show types on mobile below the header */}
+        {isMobile && pokemonData && (
+          <Group gap={4}>
+            {pokemonData.types.map(type => (
+              <Badge
+                key={type}
+                size="xs"
+                style={{
+                  backgroundColor: TYPE_COLORS[type],
+                  color: 'white'
+                }}
+              >
+                {type}
+              </Badge>
+            ))}
+          </Group>
+        )}
+
         {/* Main Content Grid */}
         <Grid gutter="xs">
           {/* Left Column - Basic Info */}
-          <Grid.Col span={6}>
+          <Grid.Col span={{ base: 12, sm: 6 }}>
             <Stack gap="xs">
-              <Group gap="xs">
+              <Group gap="xs" grow>
                 <Select
                   placeholder="Ability"
                   data={availableAbilities}
@@ -393,7 +397,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
                   onChange={(value) => onUpdate({ ...pokemon, ability: value || '' })}
                   disabled={!pokemon.species}
                   size="xs"
-                  style={{ flex: 1 }}
                 />
                 <Select
                   placeholder="Item"
@@ -402,18 +405,16 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
                   onChange={(value) => onUpdate({ ...pokemon, item: value || '' })}
                   searchable
                   size="xs"
-                  style={{ flex: 1 }}
                 />
               </Group>
               
-              <Group gap="xs">
+              <Group gap="xs" grow>
                 <Select
                   placeholder="Nature"
                   data={NATURES}
                   value={pokemon.nature}
                   onChange={(value) => onUpdate({ ...pokemon, nature: value || 'Adamant' })}
                   size="xs"
-                  style={{ flex: 1 }}
                 />
                 <Select
                   placeholder="Tera Type"
@@ -422,7 +423,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
                   onChange={(value) => onUpdate({ ...pokemon, teraType: value || undefined })}
                   clearable
                   size="xs"
-                  style={{ flex: 1 }}
                 />
               </Group>
 
@@ -454,23 +454,21 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
           </Grid.Col>
 
           {/* Right Column - EVs */}
-          <Grid.Col span={6}>
+          <Grid.Col span={{ base: 12, sm: 6 }}>
             <Stack gap="xs">
               <Group justify="space-between" align="center">
                 <Text size="xs" fw={500}>EVs ({totalEvs}/508)</Text>
-                <Group gap={4}>
-                  {COMMON_SPREADS.slice(0, 3).map((spread) => (
-                    <Tooltip key={spread.name} label={spread.name}>
-                      <ActionIcon
-                        size="xs"
-                        variant="light"
-                        onClick={() => applySpread(spread)}
-                      >
-                        {spread.name.charAt(0)}
-                      </ActionIcon>
-                    </Tooltip>
-                  ))}
-                </Group>
+                <Select
+                  placeholder="Spread"
+                  data={COMMON_SPREADS.map(s => ({ value: s.name, label: s.name }))}
+                  onChange={(value) => {
+                    const spread = COMMON_SPREADS.find(s => s.name === value);
+                    if (spread) applySpread(spread);
+                  }}
+                  clearable
+                  size="xs"
+                  w={100}
+                />
               </Group>
               
               <SimpleGrid cols={3} spacing={4}>
@@ -491,21 +489,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
                   />
                 ))}
               </SimpleGrid>
-              
-              {/* Spread chips */}
-              <Group gap={4}>
-                {COMMON_SPREADS.slice(3).map((spread) => (
-                  <Chip
-                    key={spread.name}
-                    size="xs"
-                    variant="light"
-                    checked={false}
-                    onClick={() => applySpread(spread)}
-                  >
-                    {spread.name}
-                  </Chip>
-                ))}
-              </Group>
             </Stack>
           </Grid.Col>
         </Grid>
@@ -520,6 +503,7 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
   );
   const [showExportModal, { open: openExportModal, close: closeExportModal }] = useDisclosure(false);
   const [copiedExport, setCopiedExport] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const updatePokemon = (index: number, pokemon: Pokemon) => {
     const newTeam = {
@@ -564,13 +548,14 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
 
   const randomizeTeam = () => {
     const randomPokemon: Pokemon[] = [];
-    const numToGenerate = Math.min(6, Math.max(1, 6 - team.pokemon.filter(p => p.species).length));
+    const existingValidCount = team.pokemon.filter(p => p.species).length;
+    const numToGenerate = Math.min(6 - existingValidCount, 6);
     
+    // Generate new random Pokemon
     for (let i = 0; i < numToGenerate; i++) {
       const randomSpecies = dex.species.all()
         .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 1)[0];
+        .sort(() => Math.random() - 0.5)[0];
       
       if (!randomSpecies) continue;
 
@@ -581,12 +566,11 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
       const randomNature = NATURES[Math.floor(Math.random() * NATURES.length)];
       const randomItem = dex.items.all()
         .filter(i => i.exists && !i.isNonstandard)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 1)[0]?.name || '';
+        .sort(() => Math.random() - 0.5)[0]?.name || '';
 
       // Get random moves
       const allMoves = dex.moves.all()
-        .filter(m => m.exists && !m.isNonstandard && m.basePower > 0)
+        .filter(m => m.exists && !m.isNonstandard && m.basePower > 0 && !m.isZ && !m.isMax)
         .sort(() => Math.random() - 0.5)
         .slice(0, 10);
       
@@ -598,6 +582,9 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
       }
 
       const randomSpread = COMMON_SPREADS[Math.floor(Math.random() * COMMON_SPREADS.length)];
+      const randomTeraType = Math.random() > 0.5 ? 
+        Object.keys(TYPE_COLORS)[Math.floor(Math.random() * Object.keys(TYPE_COLORS).length)] : 
+        undefined;
       
       randomPokemon.push({
         species: randomSpecies.name,
@@ -608,15 +595,19 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
         ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
         moves: randomMoves,
         level: 50,
-        teraType: Math.random() > 0.5 ? Object.keys(TYPE_COLORS)[Math.floor(Math.random() * 18)] : undefined
+        teraType: randomTeraType
       });
     }
     
+    // Keep existing valid Pokemon and add new ones
     const existingValidPokemon = team.pokemon.filter(p => p.species);
+    const newPokemon = [...existingValidPokemon, ...randomPokemon].slice(0, 6);
+    
     const newTeam = {
       ...team,
-      pokemon: [...existingValidPokemon, ...randomPokemon].slice(0, 6)
+      pokemon: newPokemon
     };
+    
     setTeam(newTeam);
     onTeamUpdate(newTeam);
   };
@@ -699,6 +690,7 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
         }}
         title="Export Team"
         size="md"
+        fullScreen={isMobile}
       >
         <Stack>
           <Textarea
