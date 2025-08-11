@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Stack,
   Grid,
@@ -17,7 +17,7 @@ import {
   Textarea,
   SimpleGrid,
   NumberInput,
-  ScrollArea
+  Flex
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import {
@@ -26,12 +26,11 @@ import {
   IconCopy,
   IconCheck,
   IconFileExport,
-  IconDice3,
-  IconWand
+  IconDice3
 } from '@tabler/icons-react';
 import { Team, Pokemon } from '@/types';
 import { FormatId } from '@/lib/pokemon/formats';
-import { getPokemonData, getMoveData } from '@/lib/pokemon/data-service';
+import { getPokemonData } from '@/lib/pokemon/data-service';
 import { PokemonSprite } from '@/components/common/PokemonSprite';
 import { StatsTable } from '@smogon/calc';
 import { Dex } from '@pkmn/dex';
@@ -41,7 +40,7 @@ import { useDisclosure } from '@mantine/hooks';
 
 const dex = Dex;
 const gens = new Generations(Dex);
-const gen = gens.get(9); // Gen 9 for current games
+const gen = gens.get(9);
 
 interface TeamBuilderProps {
   format: FormatId;
@@ -131,19 +130,23 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
   const availablePokemon = useMemo(() => {
     const allSpecies = dex.species.all()
       .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
-      .map(s => ({ value: s.name, label: s.name }))
+      .map(s => ({ value: s.name as any, label: s.name as any }))
       .sort((a, b) => a.label.localeCompare(b.label));
 
     let results = allSpecies;
-    
+
     if (searchQuery) {
-      results = allSpecies.filter(p => p.label.toLowerCase().includes(searchQuery.toLowerCase()));
+      results = allSpecies.filter(p =>
+        p.label.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
-    
-    if (pokemon.species && !results.find(p => p.value === pokemon.species)) {
-      results.unshift({ value: pokemon.species as any, label: pokemon.species as any });
+
+    // Ensure the selected species is always present
+    if (pokemon.species) {
+      const selected = { value: pokemon.species as any, label: pokemon.species as any };
+      results = [selected, ...results.filter(p => p.value !== pokemon.species)];
     }
-    
+
     return results.slice(0, 100);
   }, [searchQuery, pokemon.species]);
 
@@ -202,9 +205,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
             const commonCoverage = ['Hidden Power', 'Return', 'Frustration', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk'];
             if (commonCoverage.includes(move.name)) return true;
             
-            const signatureMoves = ['Sacred Fire', 'Aeroblast', 'Spacial Rend', 'Roar of Time', 'Shadow Force', 'Crush Grip', 'Magma Storm', 'Dark Void', 'Seed Flare', 'Judgment', 'V-create', 'Blue Flare', 'Bolt Strike', 'Glaciate', 'Fusion Flare', 'Fusion Bolt', 'Ice Burn', 'Freeze Shock', 'Secret Sword', 'Relic Song', 'Techno Blast', 'Geomancy', 'Oblivion Wing', 'Land\'s Wrath', 'Thousand Arrows', 'Thousand Waves', 'Core Enforcer', 'Diamond Storm', 'Hyperspace Hole', 'Hyperspace Fury', 'Steam Eruption', 'Prismatic Laser', 'Sunsteel Strike', 'Moongeist Beam', 'Nature\'s Madness', 'Multi-Attack', 'Mind Blown', 'Plasma Fists', 'Photon Geyser', 'Light That Burns the Sky', 'Searing Sunraze Smash', 'Menacing Moonraze Maelstrom'];
-            if (signatureMoves.includes(move.name)) return false;
-            
             if (pokemon.species === 'Abomasnow' && move.type === 'Fire') return false;
             
             return false;
@@ -233,7 +233,6 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
     const numValue = typeof value === 'string' ? parseInt(value) || 0 : value;
     const newEvs = { ...pokemon.evs, [stat]: Math.min(252, Math.max(0, numValue)) };
     
-    // Ensure total EVs don't exceed 508
     const total = Object.values(newEvs).reduce((sum, ev) => sum + ev, 0);
     if (total > 508) {
       const excess = total - 508;
@@ -309,78 +308,120 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
   return (
     <Card shadow="sm" radius="md" withBorder p="sm">
       <Stack gap="sm">
-        {/* Header Row */}
-        <Group justify="space-between" wrap="nowrap">
-          <Group gap="xs" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
-            {pokemon.species && (
-              <PokemonSprite species={pokemon.species} className="w-10 h-10 flex-shrink-0" />
-            )}
-            <Select
-              placeholder="Choose Pokemon"
-              data={availablePokemon}
-              value={pokemon.species || null}
-              onChange={(value) => {
-                onUpdate({ ...pokemon, species: value || '', ability: '', moves: [] });
-              }}
-              searchable
-              onSearchChange={setSearchQuery}
-              w={isMobile ? '100%' : 200}
-              size="sm"
-              style={{ flex: isMobile ? 1 : 'initial' }}
-              clearable
-              key={`pokemon-select-${index}-${pokemon.species}`}
-            />
-            {!isMobile && pokemonData && (
-              <Group gap={4}>
-                {pokemonData.types.map(type => (
-                  <Badge
-                    key={type}
-                    size="xs"
-                    style={{
-                      backgroundColor: TYPE_COLORS[type],
-                      color: 'white'
+        {/* Mobile Layout */}
+        {isMobile && (
+          <>
+            {/* Header with sprite and dropdown stacked */}
+            <Stack gap="xs">
+              <Group justify="space-between" wrap="nowrap">
+                <Stack gap={8} align="center">
+                  {pokemon.species && (
+                    <PokemonSprite species={pokemon.species} className="w-12 h-12" />
+                  )}
+                  {pokemon.species && pokemonData && (
+                    <Box style={{ display: 'flex', justifyContent: 'center' }}>
+                      {pokemonData.types.map((type, i) => (
+                        <Badge
+                          key={type}
+                          size="xs"
+                          style={{
+                            backgroundColor: TYPE_COLORS[type],
+                            color: 'white',
+                            marginLeft: i > 0 ? '4px' : '0'
+                          }}
+                        >
+                          {type}
+                        </Badge>
+                      ))}
+                    </Box>
+                  )}
+                </Stack>
+                <Box style={{ flex: 1 }}>
+                  <Select
+                    placeholder="Choose Pokemon"
+                    data={availablePokemon}
+                    value={pokemon.species || null}
+                    onChange={(value) => {
+                      onUpdate({ ...pokemon, species: value || '', ability: '', moves: [] });
                     }}
-                  >
-                    {type}
-                  </Badge>
-                ))}
+                    searchable
+                    onSearchChange={setSearchQuery}
+                    size="sm"
+                    clearable
+                    key={`pokemon-select-${index}-${pokemon.species}`}
+                  />
+                </Box>
+                <Group gap={4}>
+                  <ActionIcon size="sm" variant="subtle" color="violet" onClick={randomizePokemon}>
+                    <IconDice3 size={14} />
+                  </ActionIcon>
+                  <ActionIcon size="sm" variant="subtle" onClick={onDuplicate} disabled={!pokemon.species}>
+                    <IconCopy size={14} />
+                  </ActionIcon>
+                  <ActionIcon size="sm" variant="subtle" color="red" onClick={onRemove}>
+                    <IconTrash size={14} />
+                  </ActionIcon>
+                </Group>
               </Group>
-            )}
-          </Group>
-          <Group gap={4} style={{ flexShrink: 0 }}>
-            <Tooltip label="Randomize">
-              <ActionIcon size="sm" variant="subtle" color="violet" onClick={randomizePokemon}>
-                <IconDice3 size={14} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="Duplicate">
-              <ActionIcon size="sm" variant="subtle" onClick={onDuplicate} disabled={!pokemon.species}>
-                <IconCopy size={14} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label="Remove">
-              <ActionIcon size="sm" variant="subtle" color="red" onClick={onRemove}>
-                <IconTrash size={14} />
-              </ActionIcon>
-            </Tooltip>
-          </Group>
-        </Group>
+            </Stack>
+          </>
+        )}
 
-        {/* Show types on mobile below the header */}
-        {isMobile && pokemonData && (
-          <Group gap={4}>
-            {pokemonData.types.map(type => (
-              <Badge
-                key={type}
-                size="xs"
-                style={{
-                  backgroundColor: TYPE_COLORS[type],
-                  color: 'white'
+        {/* Desktop Layout */}
+        {!isMobile && (
+          <Group justify="space-between" wrap="nowrap">
+            <Group gap="xs" wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
+              {pokemon.species && (
+                <PokemonSprite species={pokemon.species} className="w-10 h-10 flex-shrink-0" />
+              )}
+              <Select
+                placeholder="Choose Pokemon"
+                data={availablePokemon}
+                value={pokemon.species || null}
+                onChange={(value) => {
+                  onUpdate({ ...pokemon, species: value || '', ability: '', moves: [] });
                 }}
-              >
-                {type}
-              </Badge>
-            ))}
+                searchable
+                onSearchChange={setSearchQuery}
+                w={200}
+                size="sm"
+                clearable
+                key={`pokemon-select-${index}-${pokemon.species}`}
+              />
+              {pokemonData && (
+                <Group gap={4}>
+                  {pokemonData.types.map(type => (
+                    <Badge
+                      key={type}
+                      size="xs"
+                      style={{
+                        backgroundColor: TYPE_COLORS[type],
+                        color: 'white'
+                      }}
+                    >
+                      {type}
+                    </Badge>
+                  ))}
+                </Group>
+              )}
+            </Group>
+            <Group gap={4} style={{ flexShrink: 0 }}>
+              <Tooltip label="Randomize">
+                <ActionIcon size="sm" variant="subtle" color="violet" onClick={randomizePokemon}>
+                  <IconDice3 size={14} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip label="Duplicate">
+                <ActionIcon size="sm" variant="subtle" onClick={onDuplicate} disabled={!pokemon.species}>
+                  <IconCopy size={14} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip label="Remove">
+                <ActionIcon size="sm" variant="subtle" color="red" onClick={onRemove}>
+                  <IconTrash size={14} />
+                </ActionIcon>
+              </Tooltip>
+            </Group>
           </Group>
         )}
 
@@ -551,7 +592,6 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
     const existingValidCount = team.pokemon.filter(p => p.species).length;
     const numToGenerate = Math.min(6 - existingValidCount, 6);
     
-    // Generate new random Pokemon
     for (let i = 0; i < numToGenerate; i++) {
       const randomSpecies = dex.species.all()
         .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
@@ -568,7 +608,6 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
         .filter(i => i.exists && !i.isNonstandard)
         .sort(() => Math.random() - 0.5)[0]?.name || '';
 
-      // Get random moves
       const allMoves = dex.moves.all()
         .filter(m => m.exists && !m.isNonstandard && m.basePower > 0 && !m.isZ && !m.isMax)
         .sort(() => Math.random() - 0.5)
@@ -599,7 +638,6 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
       });
     }
     
-    // Keep existing valid Pokemon and add new ones
     const existingValidPokemon = team.pokemon.filter(p => p.species);
     const newPokemon = [...existingValidPokemon, ...randomPokemon].slice(0, 6);
     
