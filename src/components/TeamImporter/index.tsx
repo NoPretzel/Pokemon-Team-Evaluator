@@ -148,9 +148,9 @@ IVs: 0 Atk
 - Thunderbolt`;
 
   const getTextareaRows = () => {
-    if (isSmallScreen) return isMobile ? 15 : 20;
-    if (isMobile) return 20;
-    return 24;
+    if (isSmallScreen) return isMobile ? 12 : 16;
+    if (isMobile) return 16;
+    return 20;
   };
 
   return (
