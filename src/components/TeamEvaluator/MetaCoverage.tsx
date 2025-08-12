@@ -420,12 +420,14 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
                   </Group>
 
                   <Stack gap={4} style={{ minHeight: 80 }}>
-                    <Group gap="xs">
-                      <IconSword 
-                        size={16} 
-                        color={result.benchmarks.offensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
-                      />
-                      <Text size="xs">
+                    <Group gap="xs" wrap="nowrap" align="flex-start">
+                      <Box style={{ flexShrink: 0 }}>
+                        <IconSword 
+                          size={16} 
+                          color={result.benchmarks.offensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
+                        />
+                      </Box>
+                      <Text size="xs" style={{ wordBreak: 'break-word' }}>
                         {result.benchmarks.offensive.canCounter > 0 
                           ? `${result.benchmarks.offensive.canCounter} can KO: ${result.benchmarks.offensive.details}`
                           : 'No reliable KOs'
@@ -433,12 +435,14 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
                       </Text>
                     </Group>
 
-                    <Group gap="xs">
-                      <IconShield 
-                        size={16} 
-                        color={result.benchmarks.defensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
-                      />
-                      <Text size="xs">
+                    <Group gap="xs" wrap="nowrap" align="flex-start">
+                      <Box style={{ flexShrink: 0 }}>
+                        <IconShield 
+                          size={16} 
+                          color={result.benchmarks.defensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
+                        />
+                      </Box>
+                      <Text size="xs" style={{ wordBreak: 'break-word' }}>
                         {result.benchmarks.defensive.passed && result.benchmarks.defensive.wallName
                           ? `${result.benchmarks.defensive.wallName} walls (${result.benchmarks.defensive.bestWallDamage.toFixed(1)}%)`
                           : 'No defensive checks'
@@ -446,11 +450,13 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
                       </Text>
                     </Group>
 
-                    <Group gap="xs">
-                      <IconBolt 
-                        size={16} 
-                        color={result.benchmarks.speed.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
-                      />
+                    <Group gap="xs" wrap="nowrap" align="flex-start">
+                      <Box style={{ flexShrink: 0 }}>
+                        <IconBolt 
+                          size={16} 
+                          color={result.benchmarks.speed.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
+                        />
+                      </Box>
                       <Text size="xs">
                         {result.benchmarks.speed.fasterCount}/{team.pokemon.filter(p => p.species).length} outspeeds
                       </Text>
