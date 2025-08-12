@@ -28,6 +28,7 @@ export default function Home() {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [loaderPosition, setLoaderPosition] = useState({ top: '50%' });
   const [hasEvaluated, setHasEvaluated] = useState(false);
+  const [editTeamText, setEditTeamText] = useState('');
   
   const battleSimRef = useRef<HTMLDivElement>(null);
   const importerRef = useRef<HTMLDivElement>(null);
@@ -101,6 +102,13 @@ export default function Home() {
   const handleEditTeam = () => {
     // Reset evaluation state when going back to edit
     setHasEvaluated(false);
+    
+    // Export current team to text format
+    if (team) {
+      const teamText = exportShowdownTeam(team);
+      setEditTeamText(teamText);
+    }
+    
     // Scroll back to the importer/builder
     smoothScrollTo(importerRef.current, 1000, 0);
   };
@@ -140,6 +148,12 @@ export default function Home() {
                 onFormatChange={setSelectedFormat}
                 onTeamImport={setTeam}
                 onEvaluate={handleEvaluateTeam}
+                onExport={(exportTeam) => {
+                  setTeam(exportTeam);
+                  openExportModal();
+                }}
+                editTeamText={editTeamText}
+                onEditComplete={() => setEditTeamText('')}
               />
             </Box>
           </Stack>
@@ -202,21 +216,51 @@ export default function Home() {
             setCopiedExport(false);
           }}
           title="Export Team"
-          size="md"
+          size={isMobile ? "100%" : "md"}
           fullScreen={isMobile}
+          styles={{
+            body: { 
+              display: 'flex', 
+              flexDirection: 'column',
+              height: isMobile ? 'calc(100% - 60px)' : '80vh',
+              minHeight: '500px',
+              padding: isMobile ? '16px' : '24px'
+            },
+            content: {
+              height: isMobile ? '100%' : '90vh',
+              maxHeight: isMobile ? '100%' : '90vh'
+            }
+          }}
         >
-          <Stack gap="md">
-            <Textarea
-              value={exportShowdownTeam(team)}
-              readOnly
-              minRows={15}
-              styles={{
-                input: {
-                  fontFamily: 'monospace',
-                  fontSize: '12px'
-                }
-              }}
-            />
+          <Stack style={{ flex: 1, height: '100%' }} gap="md">
+            <Box style={{ flex: 1, minHeight: 0, display: 'flex', width: '100%' }}>
+              <Textarea
+                value={exportShowdownTeam(team)}
+                readOnly
+                styles={{
+                  input: {
+                    fontFamily: 'monospace',
+                    fontSize: isMobile ? '11px' : '13px',
+                    lineHeight: '1.4',
+                    height: '100%',
+                    minHeight: '400px',
+                    width: '100%'
+                  },
+                  wrapper: {
+                    height: '100%',
+                    width: '100%'
+                  },
+                  root: {
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }
+                }}
+                style={{ width: '100%' }}
+                autosize={false}
+              />
+            </Box>
             <Button
               fullWidth
               leftSection={copiedExport ? <IconCheck size={16} /> : <IconCopy size={16} />}
@@ -226,6 +270,7 @@ export default function Home() {
                 setCopiedExport(true);
                 setTimeout(() => setCopiedExport(false), 2000);
               }}
+              style={{ flexShrink: 0 }}
             >
               {copiedExport ? 'Copied!' : 'Copy to Clipboard'}
             </Button>

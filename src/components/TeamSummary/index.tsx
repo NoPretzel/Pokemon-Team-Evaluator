@@ -1,5 +1,6 @@
-import { Paper, SimpleGrid, Group, Text, Badge, Stack, ActionIcon, Tooltip, Box } from '@mantine/core';
-import { IconEdit, IconCopy, IconEye } from '@tabler/icons-react';
+import { Paper, SimpleGrid, Group, Text, Badge, Stack, ActionIcon, Tooltip, Box, Center } from '@mantine/core';
+import { IconEdit, IconCopy } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import { Team, Pokemon } from '@/types';
 import { PokemonSprite } from '@/components/common/PokemonSprite';
 import { getPokemonData } from '@/lib/pokemon/data-service';
@@ -15,6 +16,7 @@ interface TeamSummaryProps {
 interface PokemonCardProps {
   pokemon: Pokemon;
   index: number;
+  isMobile: boolean;
 }
 
 const TYPE_COLORS: Record<string, string> = {
@@ -38,19 +40,33 @@ const TYPE_COLORS: Record<string, string> = {
   Fairy: '#EE99AC',
 };
 
-function PokemonCard({ pokemon, index }: PokemonCardProps) {
+function PokemonCard({ pokemon, index, isMobile }: PokemonCardProps) {
   const data = getPokemonData(pokemon.species);
   
   if (!pokemon.species) {
     return (
-      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: '100%', minHeight: 80 }}>
+      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: '100%', minHeight: isMobile ? 60 : 80 }}>
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-          <Text size="xs" c="dimmed">Empty Slot</Text>
+          <Text size="xs" c="dimmed">Empty</Text>
         </Box>
       </Paper>
     );
   }
   
+  if (isMobile) {
+    return (
+      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: '100%' }}>
+        <Stack gap={4} align="center">
+          <PokemonSprite 
+            species={pokemon.species} 
+            className="w-10 h-10"
+          />
+        </Stack>
+      </Paper>
+    );
+  }
+  
+  // Desktop layout - full info
   return (
     <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: '100%' }}>
       <Group gap="xs" wrap="nowrap">
@@ -90,6 +106,7 @@ function PokemonCard({ pokemon, index }: PokemonCardProps) {
 }
 
 export function TeamSummary({ team, format, onEdit, onExport }: TeamSummaryProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const validPokemon = team.pokemon.filter(p => p.species).length;
   
   // Ensure we always have 6 slots
@@ -107,47 +124,73 @@ export function TeamSummary({ team, format, onEdit, onExport }: TeamSummaryProps
   }
   
   return (
-    <Paper shadow="sm" p="md" radius="md" withBorder>
-      <Group justify="space-between" mb="sm">
-        <Group>
-          <Text fw={600} size="lg">Team Overview</Text>
-          <Badge size="lg" variant="filled">
-            {validPokemon}/6 Pokemon
-          </Badge>
-        </Group>
-        <Group gap="xs">
-          {onEdit && (
-            <Tooltip label="Edit in Builder">
-              <ActionIcon variant="light" onClick={onEdit}>
-                <IconEdit size={16} />
-              </ActionIcon>
-            </Tooltip>
-          )}
-          {onExport && (
-            <Tooltip label="Export Team">
-              <ActionIcon variant="light" onClick={onExport}>
-                <IconCopy size={16} />
-              </ActionIcon>
-            </Tooltip>
-          )}
-          <Badge size="sm" variant="light">
-            {FORMATS[format].name}
-          </Badge>
-        </Group>
-      </Group>
-      
-      <SimpleGrid 
-        cols={{ base: 2, sm: 3 }} 
-        spacing="xs"
-      >
-        {displayTeam.slice(0, 6).map((pokemon, index) => (
-          <PokemonCard 
-            key={index} 
-            pokemon={pokemon} 
-            index={index} 
-          />
-        ))}
-      </SimpleGrid>
+    <Paper shadow="sm" p={isMobile ? "sm" : "md"} radius="md" withBorder>
+      <Stack gap="sm">
+        {/* Header */}
+        {isMobile ? (
+          <>
+            <Group justify="space-between">
+              <Text fw={600} size="lg">Team Overview</Text>
+              <Group gap="xs">
+                {onEdit && (
+                  <ActionIcon variant="light" onClick={onEdit}>
+                    <IconEdit size={16} />
+                  </ActionIcon>
+                )}
+                {onExport && (
+                  <ActionIcon variant="light" onClick={onExport}>
+                    <IconCopy size={16} />
+                  </ActionIcon>
+                )}
+              </Group>
+            </Group>
+            <Center>
+              <Badge size="lg" variant="filled">
+                {FORMATS[format].name}
+              </Badge>              
+
+            </Center>
+          </>
+        ) : (
+          <Group justify="space-between">
+            <Text fw={600} size="lg">Team Overview</Text>
+            <Badge size="lg" variant="filled">
+              {FORMATS[format].name}
+            </Badge>
+            <Group gap="xs">
+              {onEdit && (
+                <Tooltip label="Edit in Builder">
+                  <ActionIcon variant="light" onClick={onEdit}>
+                    <IconEdit size={16} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+              {onExport && (
+                <Tooltip label="Export Team">
+                  <ActionIcon variant="light" onClick={onExport}>
+                    <IconCopy size={16} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </Group>
+          </Group>
+        )}
+        
+        {/* Pokemon Grid */}
+        <SimpleGrid 
+          cols={{ base: 3, sm: 3 }} 
+          spacing="xs"
+        >
+          {displayTeam.slice(0, 6).map((pokemon, index) => (
+            <PokemonCard 
+              key={index} 
+              pokemon={pokemon} 
+              index={index}
+              isMobile={isMobile}
+            />
+          ))}
+        </SimpleGrid>
+      </Stack>
     </Paper>
   );
 }

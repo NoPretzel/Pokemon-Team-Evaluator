@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Paper, 
   Tabs, 
@@ -27,14 +27,35 @@ interface TeamImporterProps {
   onFormatChange: (format: FormatId) => void;
   onTeamImport: (team: Team) => void;
   onEvaluate?: () => void;
+  onExport?: (team: Team) => void;
+  editTeamText?: string;
+  onEditComplete?: () => void;
 }
 
-export function TeamImporter({ format, onFormatChange, onTeamImport, onEvaluate }: TeamImporterProps) {
+export function TeamImporter({ 
+  format, 
+  onFormatChange, 
+  onTeamImport, 
+  onEvaluate, 
+  onExport,
+  editTeamText,
+  onEditComplete
+}: TeamImporterProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isSmallScreen = useMediaQuery('(max-height: 700px)');
   const [importText, setImportText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [buildingTeam, setBuildingTeam] = useState<Team | undefined>(undefined);
+
+  useEffect(() => {
+    if (editTeamText) {
+      setImportText(editTeamText);
+      // Clear the edit text after using it
+      if (onEditComplete) {
+        onEditComplete();
+      }
+    }
+  }, [editTeamText, onEditComplete]);
   
   const formatOptions = Object.entries(FORMATS).map(([id, format]) => ({
     value: id,
@@ -262,6 +283,7 @@ IVs: 0 Atk
                 format={format}
                 initialTeam={buildingTeam}
                 onTeamUpdate={handleTeamUpdate}
+                onExport={onExport}
               />
               {buildingTeam && buildingTeam.pokemon.some(p => p.species) && onEvaluate && (
                 <Group justify="flex-end">
