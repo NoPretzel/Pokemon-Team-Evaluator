@@ -29,6 +29,9 @@ export default function Home() {
   const [loaderPosition, setLoaderPosition] = useState({ top: '50%' });
   const [hasEvaluated, setHasEvaluated] = useState(false);
   const [editTeamText, setEditTeamText] = useState('');
+  const [extraScrollPadding, setExtraScrollPadding] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+  const needsExtraScrollRef = useRef(false);
   
   const battleSimRef = useRef<HTMLDivElement>(null);
   const importerRef = useRef<HTMLDivElement>(null);
@@ -43,24 +46,10 @@ export default function Home() {
     }
   }, [team, hasEvaluated]);
 
-  useEffect(() => {
-    if (isEvaluating && importerRef.current) {
-      const importerRect = importerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const importerBottom = importerRect.bottom;
-      
-      const middlePosition = importerBottom + (viewportHeight - importerBottom) / 2;
-      
-      setLoaderPosition({
-        top: `${middlePosition}px`
-      });
-    }
-  }, [isEvaluating]);
-
   const smoothScrollTo = (element: HTMLElement | null, duration: number = 1500, offset: number = 0) => {
     if (!element) return;
     
-    const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
+    const targetPosition = element.getBoundingClientRect().top + window.pageYOffset + offset;
     const startPosition = window.pageYOffset;
     const distance = targetPosition - startPosition;
     let startTime: number | null = null;
@@ -88,14 +77,68 @@ export default function Home() {
   const handleEvaluateTeam = () => {
     setIsEvaluating(true);
     setHasEvaluated(true);
+    setShowLoader(false);
+    needsExtraScrollRef.current = false;
+    
+    // Calculate loader position and check available space
+    setTimeout(() => {
+      if (importerRef.current) {
+        const importerRect = importerRef.current.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const importerBottom = importerRect.bottom + scrollTop;
+        const viewportHeight = window.innerHeight;
+        
+        // Calculate remaining space below the importer/builder in current viewport
+        const remainingSpaceInViewport = viewportHeight - importerRect.bottom;
+        
+        const minRequiredSpace = 100;
+        
+        if (remainingSpaceInViewport < minRequiredSpace) {
+          // Not enough space, add minimal padding and remember we need extra scroll
+          setExtraScrollPadding(true);
+          needsExtraScrollRef.current = true;
+          
+          // Wait for padding to render
+          setTimeout(() => {
+            // Scroll down by just 30px
+            window.scrollTo({
+              top: scrollTop + 30,
+              behavior: 'smooth'
+            });
+            
+            // Wait for scroll to complete, then calculate position and show loader
+            setTimeout(() => {
+              const newImporterRect = importerRef.current!.getBoundingClientRect();
+              const newScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+              const newImporterBottom = newImporterRect.bottom + newScrollTop;
+              const newRemainingSpace = viewportHeight - newImporterRect.bottom;
+              
+              // Position loader in middle of new remaining space
+              const loaderPos = newImporterBottom + (newRemainingSpace / 2);
+              setLoaderPosition({ top: `${loaderPos}px` });
+              setShowLoader(true);
+            }, 300);
+          }, 50);
+        } else {
+          // Enough space exists, position loader in middle of remaining space
+          const middleOfRemainingSpace = importerBottom + (remainingSpaceInViewport / 2);
+          setLoaderPosition({ top: `${middleOfRemainingSpace}px` });
+          setShowLoader(true);
+        }
+      }
+    }, 0);
     
     // Simulate evaluation time
     setTimeout(() => {
       setIsEvaluating(false);
-      // Small delay to ensure content is rendered
+      setShowLoader(false);
+      
+      // Wait for content to fully render before scrolling
       setTimeout(() => {
-        smoothScrollTo(archetypeRef.current, 1500, 20);
-      }, 100);
+        setExtraScrollPadding(false);
+        const scrollOffset = needsExtraScrollRef.current ? -50 : -20;
+        smoothScrollTo(archetypeRef.current, 1500, scrollOffset);
+      }, 200);
     }, 2000);
   };
 
@@ -110,7 +153,7 @@ export default function Home() {
     }
     
     // Scroll back to the importer/builder
-    smoothScrollTo(importerRef.current, 1000, 0);
+    smoothScrollTo(importerRef.current, 1500, 0);
   };
 
   const handleExportTeam = () => {
@@ -118,7 +161,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <Box style={{ position: 'relative', minHeight: '100vh' }}>
       <Box 
         style={{ 
           minHeight: '100vh',
@@ -160,15 +203,21 @@ export default function Home() {
         </Container>
       </Box>
 
+      {/* Extra padding when evaluating from builder */}
+      {extraScrollPadding && (
+        <Box style={{ height: '30px' }} />
+      )}
+
       {/* Loader */}
-      {isEvaluating && (
+      {isEvaluating && showLoader && (
         <Box 
           style={{ 
-            position: 'fixed',
+            position: 'absolute',
             top: loaderPosition.top,
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            zIndex: 100
+            zIndex: 100,
+            pointerEvents: 'none'
           }}
         >
           <Box
@@ -184,7 +233,15 @@ export default function Home() {
       )}
       
       {team && teamAnalysis && hasEvaluated && (
-        <Container size="xl" py="xl">
+        <Container 
+          size="xl" 
+          py="xl"
+          style={{ 
+            opacity: isEvaluating ? 0 : 1,
+            pointerEvents: isEvaluating ? 'none' : 'auto',
+            transition: 'opacity 0.3s ease-in-out'
+          }}
+        >
           <Stack gap="xl">
             <TeamSummary 
               team={team} 
@@ -277,6 +334,6 @@ export default function Home() {
           </Stack>
         </Modal>
       )}
-    </>
+    </Box>
   );
 }
