@@ -13,8 +13,6 @@ import {
   Paper,
   Box,
   Center,
-  Modal,
-  Textarea,
   SimpleGrid,
   NumberInput,
   Flex
@@ -35,8 +33,6 @@ import { PokemonSprite } from '@/components/common/PokemonSprite';
 import { StatsTable } from '@smogon/calc';
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
-import { exportShowdownTeam } from '@/lib/pokemon/team-parser';
-import { useDisclosure } from '@mantine/hooks';
 
 const dex = Dex;
 const gens = new Generations(Dex);
@@ -46,6 +42,7 @@ interface TeamBuilderProps {
   format: FormatId;
   initialTeam?: Team;
   onTeamUpdate: (team: Team) => void;
+  onExport?: (team: Team) => void;
 }
 
 interface PokemonBuilderProps {
@@ -220,14 +217,16 @@ async function getMovesForRandomization(targetSpecies: string): Promise<string[]
     
     if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
       const learnset = (learnsetData as any).learnset;
-      const moveIds = Object.keys(learnset);
-      
-      learnableMoves = moveIds.map(moveId => {
-        const move = dex.moves.get(moveId);
-        if (!move || !move.exists || move.isNonstandard) return null;
-        if (move.isZ || move.isMax) return null;
-        return move.name;
-      }).filter(Boolean) as string[];
+      if (learnset && typeof learnset === 'object') {
+        const moveIds = Object.keys(learnset);
+        
+        learnableMoves = moveIds.map(moveId => {
+          const move = dex.moves.get(moveId);
+          if (!move || !move.exists || move.isNonstandard) return null;
+          if (move.isZ || move.isMax) return null;
+          return move.name;
+        }).filter(Boolean) as string[];
+      }
     }
     
     if (learnableMoves.length === 0 && targetPokemonData) {
@@ -652,12 +651,10 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
   );
 }
 
-export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderProps) {
+export function TeamBuilder({ format, initialTeam, onTeamUpdate, onExport }: TeamBuilderProps) {
   const [team, setTeam] = useState<Team>(
     initialTeam || { format, pokemon: [getDefaultPokemon()] }
   );
-  const [showExportModal, { open: openExportModal, close: closeExportModal }] = useDisclosure(false);
-  const [copiedExport, setCopiedExport] = useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const updatePokemon = (index: number, pokemon: Pokemon) => {
@@ -774,172 +771,103 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate }: TeamBuilderPr
     onTeamUpdate(newTeam);
   };
 
-  const exportTeam = () => {
-    return exportShowdownTeam(team);
+  const handleExport = () => {
+    if (onExport) {
+      onExport(team);
+    }
   };
 
   const validPokemon = team.pokemon.filter(p => p.species).length;
 
   return (
-    <>
-      <Stack gap="md">
-        {/* Team Controls */}
-        <Paper withBorder p="sm">
-          {!isMobile ? (
-            <Group justify="space-between">
-              <Group>
-                <Text fw={600} size="sm">Team Builder</Text>
-                <Badge size="sm" variant="filled">
-                  {validPokemon}/6 Pokemon
-                </Badge>
-              </Group>
-              <Group gap="xs">
-                <Button
-                  size="xs"
-                  variant="light"
-                  leftSection={<IconDice3 size={14} />}
-                  onClick={randomizeTeam}
-                >
-                  Random
-                </Button>
-                <Button
-                  size="xs"
-                  leftSection={<IconFileExport size={14} />}
-                  onClick={openExportModal}
-                  disabled={validPokemon === 0}
-                >
-                  Export
-                </Button>
-              </Group>
+    <Stack gap="md">
+      {/* Team Controls */}
+      <Paper withBorder p="sm">
+        {!isMobile ? (
+          <Group justify="space-between">
+            <Group>
+              <Text fw={600} size="sm">Team Builder</Text>
+              <Badge size="sm" variant="filled">
+                {validPokemon}/6 Pokemon
+              </Badge>
             </Group>
-          ) : (
-            <Stack gap="xs" align="center" style={{ width: '100%' }}>
-              <Group gap="xs" position="center" style={{ width: '100%', justifyContent: 'center' }}>
-                <Text fw={600} size="sm">Team Builder</Text>
-                <Badge size="sm" variant="filled">
-                  {validPokemon}/6 Pokemon
-                </Badge>
-              </Group>
-              <Group gap="xs" position="center" style={{ width: '100%', justifyContent: 'center' }}>
-                <Button
-                  size="xs"
-                  variant="light"
-                  leftSection={<IconDice3 size={14} />}
-                  onClick={randomizeTeam}
-                >
-                  Random
-                </Button>
-                <Button
-                  size="xs"
-                  leftSection={<IconFileExport size={14} />}
-                  onClick={openExportModal}
-                  disabled={validPokemon === 0}
-                >
-                  Export
-                </Button>
-              </Group>
-            </Stack>
-          )}
-        </Paper>
-
-        {/* Pokemon List */}
-        <Stack gap="sm">
-          {team.pokemon.map((pokemon, index) => (
-            <PokemonBuilder
-              key={index}
-              pokemon={pokemon}
-              index={index}
-              format={format}
-              onUpdate={(p) => updatePokemon(index, p)}
-              onRemove={() => removePokemon(index)}
-              onDuplicate={() => duplicatePokemon(index)}
-            />
-          ))}
-        </Stack>
-
-        {/* Add Pokemon Button */}
-        {team.pokemon.length < 6 && (
-          <Center>
-            <Button
-              size="sm"
-              variant="light"
-              leftSection={<IconPlus size={16} />}
-              onClick={addPokemon}
-            >
-              Add Pokemon
-            </Button>
-          </Center>
+            <Group gap="xs">
+              <Button
+                size="xs"
+                variant="light"
+                leftSection={<IconDice3 size={14} />}
+                onClick={randomizeTeam}
+              >
+                Random
+              </Button>
+              <Button
+                size="xs"
+                leftSection={<IconFileExport size={14} />}
+                onClick={handleExport}
+                disabled={validPokemon === 0}
+              >
+                Export
+              </Button>
+            </Group>
+          </Group>
+        ) : (
+          <Stack gap="xs" align="center" style={{ width: '100%' }}>
+            <Group gap="xs" position="center" style={{ width: '100%', justifyContent: 'center' }}>
+              <Text fw={600} size="sm">Team Builder</Text>
+              <Badge size="sm" variant="filled">
+                {validPokemon}/6 Pokemon
+              </Badge>
+            </Group>
+            <Group gap="xs" position="center" style={{ width: '100%', justifyContent: 'center' }}>
+              <Button
+                size="xs"
+                variant="light"
+                leftSection={<IconDice3 size={14} />}
+                onClick={randomizeTeam}
+              >
+                Random
+              </Button>
+              <Button
+                size="xs"
+                leftSection={<IconFileExport size={14} />}
+                onClick={handleExport}
+                disabled={validPokemon === 0}
+              >
+                Export
+              </Button>
+            </Group>
+          </Stack>
         )}
+      </Paper>
+
+      {/* Pokemon List */}
+      <Stack gap="sm">
+        {team.pokemon.map((pokemon, index) => (
+          <PokemonBuilder
+            key={index}
+            pokemon={pokemon}
+            index={index}
+            format={format}
+            onUpdate={(p) => updatePokemon(index, p)}
+            onRemove={() => removePokemon(index)}
+            onDuplicate={() => duplicatePokemon(index)}
+          />
+        ))}
       </Stack>
 
-      {/* Export Modal */}
-      <Modal
-        opened={showExportModal}
-        onClose={() => {
-          closeExportModal();
-          setCopiedExport(false);
-        }}
-        title="Export Team"
-        size={isMobile ? "100%" : "md"}
-        fullScreen={isMobile}
-        styles={{
-          body: { 
-            display: 'flex', 
-            flexDirection: 'column',
-            height: isMobile ? 'calc(100% - 60px)' : '80vh',
-            minHeight: '500px',
-            padding: isMobile ? '16px' : '24px'
-          },
-          content: {
-            height: isMobile ? '100%' : '90vh',
-            maxHeight: isMobile ? '100%' : '90vh'
-          }
-        }}
-      >
-        <Stack style={{ flex: 1, height: '100%' }} gap="md">
-          <Box style={{ flex: 1, minHeight: 0, display: 'flex', width: '100%' }}>
-            <Textarea
-              value={exportTeam()}
-              readOnly
-              styles={{
-                input: {
-                  fontFamily: 'monospace',
-                  fontSize: isMobile ? '11px' : '13px',
-                  lineHeight: '1.4',
-                  height: '100%',
-                  minHeight: '400px',
-                  width: '100%'
-                },
-                wrapper: {
-                  height: '100%',
-                  width: '100%'
-                },
-                root: {
-                  height: '100%',
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }
-              }}
-              style={{ width: '100%' }}
-              autosize={false}
-            />
-          </Box>
+      {/* Add Pokemon Button */}
+      {team.pokemon.length < 6 && (
+        <Center>
           <Button
-            fullWidth
-            leftSection={copiedExport ? <IconCheck size={16} /> : <IconCopy size={16} />}
-            color={copiedExport ? 'green' : 'blue'}
-            onClick={() => {
-              navigator.clipboard.writeText(exportTeam());
-              setCopiedExport(true);
-              setTimeout(() => setCopiedExport(false), 2000);
-            }}
-            style={{ flexShrink: 0 }}
+            size="sm"
+            variant="light"
+            leftSection={<IconPlus size={16} />}
+            onClick={addPokemon}
           >
-            {copiedExport ? 'Copied!' : 'Copy to Clipboard'}
+            Add Pokemon
           </Button>
-        </Stack>
-      </Modal>
-    </>
+        </Center>
+      )}
+    </Stack>
   );
 }
