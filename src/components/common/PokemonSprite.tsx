@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 interface PokemonSpriteProps {
   species: string;
@@ -13,6 +13,16 @@ export function PokemonSprite({
   className = ''
 }: PokemonSpriteProps) {
   const [spriteType, setSpriteType] = useState<'animated' | 'static' | 'home'>('animated');
+  
+  // Reset sprite type when species changes
+  useEffect(() => {
+    setSpriteType('animated');
+  }, [species]);
+  
+  // Reset sprite type when species changes
+  useMemo(() => {
+    setSpriteType('animated');
+  }, [species]);
   
   const spriteUrl = useMemo(() => {
     const baseUrl = 'https://play.pokemonshowdown.com/sprites';
@@ -31,6 +41,22 @@ export function PokemonSprite({
     const nameMap: Record<string, string> = {
       'fluttermane': 'fluttermane',
       'flutter-mane': 'fluttermane',
+      // Add Ting-Lu and other problematic names
+      'ting-lu': 'tinglu',
+      'chi-yu': 'chiyu',
+      'chien-pao': 'chienpao',
+      'wo-chien': 'wochien',
+      'ho-oh': 'hooh',
+      'porygon-z': 'porygonz',
+      'jangmo-o': 'jangmoo',
+      'hakamo-o': 'hakamoo',
+      'kommo-o': 'kommoo',
+      'type-null': 'typenull',
+      'mr-mime': 'mrmime',
+      'mr-rime': 'mrrime',
+      'mime-jr': 'mimejr',
+      "farfetch'd": 'farfetchd',
+      "sirfetch'd": 'sirfetchd',
     };
     
     if (nameMap[formattedSpecies]) {
@@ -66,9 +92,9 @@ export function PokemonSprite({
       height={96}
       onError={() => {
         if (spriteType === 'animated') {
-          setSpriteType('static');
-        } else if (spriteType === 'static') {
           setSpriteType('home');
+        } else if (spriteType === 'home') {
+          setSpriteType('static');
         } else {
           // All failed, will show substitute on next render
           setSpriteType('animated');
