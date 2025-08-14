@@ -5,7 +5,7 @@ import { Container, Stack, Title, Text, Center, Box, Modal, Textarea, Button, Gr
 import { useMediaQuery } from '@mantine/hooks';
 import { TeamImporter } from '@/components/TeamImporter';
 import { TeamSummary } from '@/components/TeamSummary';
-import { TeamArchetypeDisplay } from '@/components/TeamArchetypeDisplay';
+import { TeamArchetypeDisplay } from '@/components/TeamArchetype';
 import { Team } from '@/types';
 import { FormatId } from '@/lib/pokemon/formats';
 import { analyzeTeam } from '@/lib/analysis/archetype-analyzer';
@@ -39,12 +39,12 @@ export default function Home() {
 
   useEffect(() => {
     if (team && team.pokemon.length > 0 && hasEvaluated) {
-      const analysis = analyzeTeam(team);
+      const analysis = analyzeTeam(team, selectedFormat);
       setTeamAnalysis(analysis);
     } else if (!hasEvaluated) {
       setTeamAnalysis(null);
     }
-  }, [team, hasEvaluated]);
+  }, [team, hasEvaluated, selectedFormat]);
 
   const smoothScrollTo = (element: HTMLElement | null, duration: number = 1500, offset: number = 0) => {
     if (!element) return;
