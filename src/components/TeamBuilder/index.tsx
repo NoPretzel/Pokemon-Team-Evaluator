@@ -125,51 +125,38 @@ async function getAvailableMovesForSpecies(targetSpecies: string, searchQuery: s
       return currentMoveOption;
     }
     
-    const targetPokemonData = getPokemonData(targetSpecies);
-    
     let learnableMoves: { value: string; label: string }[] = [];
     
-    const speciesId = species.id;
-    const learnsetData = await gen.learnsets.get(speciesId as any);
+    let speciesId = species.id;
+    let learnsetData = await gen.learnsets.get(speciesId as any);
+    
+    if ((!learnsetData || !learnsetData.learnset) && species.baseSpecies && species.baseSpecies !== species.name) {
+      const baseSpecies = dex.species.get(species.baseSpecies);
+      if (baseSpecies && baseSpecies.exists) {
+        speciesId = baseSpecies.id;
+        learnsetData = await gen.learnsets.get(speciesId as any);
+      }
+    }
     
     if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
       const learnset = (learnsetData as any).learnset;
-      const moveIds = Object.keys(learnset);
       
-      learnableMoves = moveIds.map(moveId => {
-        const move = dex.moves.get(moveId);
-        if (!move || !move.exists || move.isNonstandard) return null;
-        if (move.isZ || move.isMax) return null;
+      if (learnset && typeof learnset === 'object') {
+        const moveIds = Object.keys(learnset);
         
-        return { value: move.name, label: move.name };
-      }).filter(Boolean) as { value: string; label: string }[];
-    }
-    
-    // Fallback if no learnset data
-    if (learnableMoves.length === 0) {
-      const allMoves = dex.moves.all()
-        .filter(m => m.exists && !m.isNonstandard && m.num > 0);
-      
-      learnableMoves = allMoves
-        .filter(move => {
-          if (move.isZ || move.isMax) return false;
-          if (move.type === 'Normal' || move.category === 'Status') return true;
-          if (targetPokemonData && targetPokemonData.types.includes(move.type)) return true;
+        learnableMoves = moveIds.map(moveId => {
+          const move = dex.moves.get(moveId);
+          if (!move || !move.exists || move.isNonstandard) return null;
+          if (move.isZ || move.isMax) return null;
           
-          const commonCoverage = ['Hidden Power', 'Return', 'Frustration', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk'];
-          if (commonCoverage.includes(move.name)) return true;
-          
-          return false;
-        })
-        .map(m => ({ value: m.name, label: m.name }));
-    }
-
-    const fallbackMoves = ['Protect', 'Substitute', 'Rest', 'Sleep Talk', 'Toxic', 'Return', 'Tackle', 'Facade'];
-    fallbackMoves.forEach(move => {
-      if (!learnableMoves.some(m => m.value === move)) {
-        learnableMoves.push({ value: move, label: move });
+          return { value: move.name, label: move.name };
+        }).filter(Boolean) as { value: string; label: string }[];
+      } else {
+        throw new Error(`No valid learnset data for ${targetSpecies}`);
       }
-    });
+    } else {
+      throw new Error(`No learnset data structure for ${targetSpecies}`);
+    }
 
     const sortedMoves = [...learnableMoves].sort((a, b) => a.label.localeCompare(b.label));
 
@@ -187,16 +174,8 @@ async function getAvailableMovesForSpecies(targetSpecies: string, searchQuery: s
 
     return filteredMoves.slice(0, 100);
   } catch (error) {
-    console.error('Error getting moves:', error);
-    const basicMoves = [
-      'Tackle', 'Scratch', 'Pound', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk',
-      'Return', 'Frustration', 'Hidden Power', 'Double Team', 'Swagger', 'Attract', 'Facade'
-    ].map(m => ({ value: m, label: m }));
-    
-    if (currentMove) {
-      return [{ value: currentMove, label: currentMove }, ...basicMoves];
-    }
-    return basicMoves;
+    console.error('Error getting moves for', targetSpecies, ':', error);
+    return currentMoveOption || [];
   }
 }
 
@@ -209,11 +188,18 @@ async function getMovesForRandomization(targetSpecies: string): Promise<string[]
       return [];
     }
     
-    const targetPokemonData = getPokemonData(targetSpecies);
     let learnableMoves: string[] = [];
     
-    const speciesId = species.id;
-    const learnsetData = await gen.learnsets.get(speciesId as any);
+    let speciesId = species.id;
+    let learnsetData = await gen.learnsets.get(speciesId as any);
+    
+    if ((!learnsetData || !learnsetData.learnset) && species.baseSpecies && species.baseSpecies !== species.name) {
+      const baseSpecies = dex.species.get(species.baseSpecies);
+      if (baseSpecies && baseSpecies.exists) {
+        speciesId = baseSpecies.id;
+        learnsetData = await gen.learnsets.get(speciesId as any);
+      }
+    }
     
     if (learnsetData && typeof learnsetData === 'object' && 'learnset' in learnsetData) {
       const learnset = (learnsetData as any).learnset;
@@ -226,34 +212,17 @@ async function getMovesForRandomization(targetSpecies: string): Promise<string[]
           if (move.isZ || move.isMax) return null;
           return move.name;
         }).filter(Boolean) as string[];
+      } else {
+        throw new Error(`No valid learnset data for ${targetSpecies}`);
       }
+    } else {
+      throw new Error(`No learnset data structure for ${targetSpecies}`);
     }
-    
-    if (learnableMoves.length === 0 && targetPokemonData) {
-      const allMoves = dex.moves.all()
-        .filter(m => m.exists && !m.isNonstandard && m.num > 0 && !m.isZ && !m.isMax);
-      
-      learnableMoves = allMoves
-        .filter(move => {
-          if (move.type === 'Normal' || move.category === 'Status') return true;
-          if (targetPokemonData.types.includes(move.type)) return true;
-          return false;
-        })
-        .map(m => m.name);
-    }
-
-    const universalMoves = ['Protect', 'Substitute', 'Rest', 'Sleep Talk', 'Toxic', 'Facade', 'Endure', 'Hidden Power'];
-    universalMoves.forEach(move => {
-      if (!learnableMoves.includes(move)) {
-        learnableMoves.push(move);
-      }
-    });
     
     return learnableMoves;
   } catch (error) {
-    console.error('Error getting moves for randomization:', error);
-    return ['Tackle', 'Scratch', 'Pound', 'Protect', 'Substitute', 'Toxic', 'Rest', 'Sleep Talk',
-            'Return', 'Frustration', 'Hidden Power', 'Facade', 'Endure'];
+    console.error('[Randomization] Error getting moves for', targetSpecies, ':', error);
+    return [];
   }
 }
 
@@ -305,7 +274,7 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
       results = [selected, ...results.filter(p => p.value !== pokemon.species)];
     }
 
-    return results.slice(0, 100);
+    return results;
   }, [searchQuery, pokemon.species]);
 
   const availableAbilities = useMemo(() => {
@@ -353,12 +322,41 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
   };
 
   const randomizePokemon = async () => {
-    const randomSpecies = dex.species.all()
-      .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 1)[0];
+    const allValidSpecies = dex.species.all()
+      .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal');
     
-    if (!randomSpecies) return;
+    let randomSpecies;
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    // Try to find a Pokemon with valid moves
+    while (attempts < maxAttempts) {
+      randomSpecies = allValidSpecies[Math.floor(Math.random() * allValidSpecies.length)];
+      
+      if (!randomSpecies) {
+        attempts++;
+        continue;
+      }
+
+      const speciesData = getPokemonData(randomSpecies.name);
+      if (!speciesData) {
+        attempts++;
+        continue;
+      }
+
+      const availableMoves = await getMovesForRandomization(randomSpecies.name);
+      if (availableMoves.length >= 4) {
+        break;
+      }
+      
+      console.warn(`Skipping ${randomSpecies.name} - only ${availableMoves.length} moves available`);
+      attempts++;
+    }
+    
+    if (!randomSpecies || attempts >= maxAttempts) {
+      console.error('Could not find a valid Pokemon with moves after', maxAttempts, 'attempts');
+      return;
+    }
 
     const speciesData = getPokemonData(randomSpecies.name);
     if (!speciesData) return;
@@ -386,12 +384,9 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
       }
     }
     
-    const commonMoves = ['Protect', 'Substitute', 'Rest', 'Sleep Talk', 'Toxic', 'Return', 'Tackle', 'Facade'];
-    while (randomMoves.length < 4) {
-      const fallbackMove = commonMoves[Math.floor(Math.random() * commonMoves.length)];
-      if (!randomMoves.includes(fallbackMove)) {
-        randomMoves.push(fallbackMove);
-      }
+    if (randomMoves.length < 4) {
+      console.error(`Only found ${randomMoves.length} moves for ${randomSpecies.name}`);
+      return;
     }
 
     const randomSpread = COMMON_SPREADS[Math.floor(Math.random() * COMMON_SPREADS.length)];
@@ -707,12 +702,42 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate, onExport }: Tea
       .filter(i => i.exists && !i.isNonstandard && !i.zMove && !i.megaStone)
       .map(i => i.name);
     
+    const allValidSpecies = dex.species.all()
+      .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal');
+    
     for (let i = 0; i < numToGenerate; i++) {
-      const randomSpecies = dex.species.all()
-        .filter(s => s.exists && !s.isNonstandard && s.tier !== 'Illegal')
-        .sort(() => Math.random() - 0.5)[0];
+      let randomSpecies;
+      let attempts = 0;
+      const maxAttempts = 10;
       
-      if (!randomSpecies) continue;
+      // Try to find a Pokemon with valid moves
+      while (attempts < maxAttempts) {
+        randomSpecies = allValidSpecies[Math.floor(Math.random() * allValidSpecies.length)];
+        
+        if (!randomSpecies) {
+          attempts++;
+          continue;
+        }
+
+        const speciesData = getPokemonData(randomSpecies.name);
+        if (!speciesData) {
+          attempts++;
+          continue;
+        }
+
+        const availableMoves = await getMovesForRandomization(randomSpecies.name);
+        if (availableMoves.length >= 4) {
+          break;
+        }
+        
+        console.warn(`Skipping ${randomSpecies.name} for team - only ${availableMoves.length} moves available`);
+        attempts++;
+      }
+      
+      if (!randomSpecies || attempts >= maxAttempts) {
+        console.error('Could not find valid Pokemon for slot', i + 1);
+        continue;
+      }
 
       const speciesData = getPokemonData(randomSpecies.name);
       if (!speciesData) continue;
@@ -732,12 +757,9 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate, onExport }: Tea
         }
       }
       
-      const fallbackMoves = ['Tackle', 'Protect', 'Substitute', 'Rest'];
-      while (randomMoves.length < 4) {
-        const fallback = fallbackMoves[randomMoves.length];
-        if (!randomMoves.includes(fallback)) {
-          randomMoves.push(fallback);
-        }
+      if (randomMoves.length < 4) {
+        console.error(`Only found ${randomMoves.length} moves for ${randomSpecies.name} in team generation`);
+        continue;
       }
 
       const randomSpread = COMMON_SPREADS[Math.floor(Math.random() * COMMON_SPREADS.length)];
