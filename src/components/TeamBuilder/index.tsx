@@ -230,8 +230,10 @@ function PokemonBuilder({ pokemon, index, format, onUpdate, onRemove, onDuplicat
   const [searchQuery, setSearchQuery] = useState('');
   const [moveSearchQueries, setMoveSearchQueries] = useState(['', '', '', '']);
   const [availableMovesList, setAvailableMovesList] = useState<{ value: string; label: string }[][]>([[], [], [], []]);
-  const isMobile = useMediaQuery('(max-width: 768px)');
-
+  const isMobile = useMediaQuery('(max-width: 768px)', undefined, {
+    getInitialValueInEffect: true,
+  });
+  
   const pokemonData = useMemo(() => {
     if (!pokemon.species) return null;
     return getPokemonData(pokemon.species);
@@ -650,7 +652,9 @@ export function TeamBuilder({ format, initialTeam, onTeamUpdate, onExport }: Tea
   const [team, setTeam] = useState<Team>(
     initialTeam || { format, pokemon: [getDefaultPokemon()] }
   );
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery('(max-width: 768px)', undefined, {
+    getInitialValueInEffect: true,
+  });
 
   const updatePokemon = (index: number, pokemon: Pokemon) => {
     const newTeam = {
