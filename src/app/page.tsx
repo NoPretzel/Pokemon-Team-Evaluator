@@ -19,7 +19,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconCheck, IconCopy } from '@tabler/icons-react';
 
 export default function Home() {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery('(max-width: 768px)', undefined, {
+    getInitialValueInEffect: true,
+  });
   const [selectedFormat, setSelectedFormat] = useState<FormatId>('gen9ou');
   const [team, setTeam] = useState<Team | null>(null);
   const [teamAnalysis, setTeamAnalysis] = useState<TeamAnalysis | null>(null);

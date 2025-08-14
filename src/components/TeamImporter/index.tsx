@@ -41,8 +41,12 @@ export function TeamImporter({
   editTeamText,
   onEditComplete
 }: TeamImporterProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const isSmallScreen = useMediaQuery('(max-height: 700px)');
+  const isMobile = useMediaQuery('(max-width: 768px)', undefined, {
+    getInitialValueInEffect: true,
+  });
+  const isSmallScreen = useMediaQuery('(max-height: 700px)', undefined, {
+    getInitialValueInEffect: true,
+  });
   const [importText, setImportText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [buildingTeam, setBuildingTeam] = useState<Team | undefined>(undefined);
