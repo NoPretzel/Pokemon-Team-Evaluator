@@ -98,3 +98,19 @@ html, body {
     height: -webkit-fill-available;
   }
 }
+
+.vh-100 {
+  min-height: 100vh;
+}
+
+@supports (height: 100svh) {
+  .vh-100 { min-height: 100svh; }
+}
+
+@supports (height: 100dvh) {
+  .vh-100 { min-height: 100dvh; }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .vh-100 { min-height: -webkit-fill-available; }
+}

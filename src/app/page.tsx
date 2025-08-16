@@ -163,10 +163,10 @@ export default function Home() {
   };
 
   return (
-    <Box style={{ position: 'relative', minHeight: '100vh' }}>
+    <Box className="vh-100" style={{ position: 'relative' }}>
       <Box 
+        className="vh-100"
         style={{ 
-          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
