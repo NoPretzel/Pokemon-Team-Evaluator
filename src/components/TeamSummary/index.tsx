@@ -45,7 +45,7 @@ function PokemonCard({ pokemon, index, isMobile }: PokemonCardProps) {
   
   if (!pokemon.species) {
     return (
-      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: '100%', minHeight: isMobile ? 60 : 80 }}>
+      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: 'auto', minHeight: isMobile ? 80 : 100, overflow: 'hidden' }}>
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
           <Text size="xs" c="dimmed">Empty</Text>
         </Box>
@@ -55,7 +55,7 @@ function PokemonCard({ pokemon, index, isMobile }: PokemonCardProps) {
   
   if (isMobile) {
     return (
-      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: '100%' }}>
+      <Paper shadow="xs" p="xs" radius="md" withBorder style={{ height: 'auto', minHeight: isMobile ? 80 : 100, overflow: 'hidden' }}>
         <Stack gap={4} align="center">
           <PokemonSprite 
             species={pokemon.species} 
