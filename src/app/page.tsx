@@ -165,23 +165,22 @@ export default function Home() {
   return (
     <Box className="vh-100" style={{ position: 'relative' }}>
       <Box 
-        className="vh-100"
+        className="vh-100 initial-viewport"
         style={{ 
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          padding: isMobile ? '16px' : '24px'
+          justifyContent: 'center'
         }}
       >
         <Container size="sm" style={{ width: '100%' }}>
           <Stack gap="xl">
             <Center>
               <Stack gap="xs" align="center">
-                <Title order={1} ta="center" size={isMobile ? 'h2' : 'h1'}>
+                <Title order={1} ta="center" className="responsive-title">
                   Pokemon Team Evaluator
                 </Title>
-                <Text ta="center" c="dimmed" size={isMobile ? 'sm' : 'lg'}>
+                <Text ta="center" c="dimmed" className="responsive-subtitle">
                   Evaluate and optimize your Pokemon Showdown teams
                 </Text>
               </Stack>

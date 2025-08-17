@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
   box-sizing: border-box;
 }
@@ -63,33 +59,57 @@ html, body {
   }
 }
 
-/* Mobile tab underlines */
-@media (max-width: 768px) {
-  .mantine-Tabs-tab {
-    border-bottom: 2px solid var(--mantine-color-gray-3) !important;
-  }
-  
-  .mantine-Tabs-tab[data-active="true"] {
-    border-bottom-color: var(--mantine-color-blue-6) !important;
-  }
+/* Tab styling */
+.team-tabs-list {
+  position: relative;
 }
 
-@media (max-width: 768px) {
-  /* Ensure Mantine containers don't overflow */
-  .mantine-Container-root {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+.team-tabs-list .mantine-Tabs-tab {
+  position: relative;
+  border-bottom: none;
+}
+
+.team-tabs-list .mantine-Tabs-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--mantine-color-gray-3);
+}
+
+.team-tabs-list .mantine-Tabs-tab[data-active="true"]::after {
+  background-color: var(--mantine-color-blue-6);
+}
+
+/* Tab styling for desktop */
+@media (min-width: 769px) {
+  .team-tabs-list {
+    position: relative;
+    overflow: hidden;
   }
   
-  /* Prevent horizontal scroll on small screens */
-  .mantine-Paper-root {
-    max-width: 100%;
+  .team-tabs-list .mantine-Tabs-tab {
+    margin-bottom: 0;
+    padding-bottom: 12px;
+    position: relative;
   }
   
-  /* Adjust modal for mobile */
-  .mantine-Modal-content {
-    margin: 0 !important;
-    max-height: 100vh !important;
+  .team-tabs-list .mantine-Tabs-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--mantine-color-gray-3);
+    z-index: 1;
+  }
+  
+  .team-tabs-list .mantine-Tabs-tab[data-active="true"]::after {
+    background-color: var(--mantine-color-blue-6);
+    z-index: 10;
   }
 }
 
@@ -113,4 +133,182 @@ html, body {
 
 @supports (-webkit-touch-callout: none) {
   .vh-100 { min-height: -webkit-fill-available; }
+}
+
+/* Initial viewport responsive styles */
+.initial-viewport {
+  padding: 24px;
+}
+
+.responsive-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.responsive-subtitle {
+  font-size: 1rem;
+}
+
+.team-importer-paper {
+  padding: 1rem;
+}
+
+.team-importer-stack {
+  gap: 0.75rem;
+}
+
+.responsive-format-title {
+  font-size: 1.25rem;
+}
+
+.team-tabs-list {
+  width: auto;
+}
+
+.team-tabs-list .team-tab {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.team-import-textarea {
+  width: 100%;
+  max-width: 450px;
+}
+
+.team-import-textarea textarea {
+  font-size: 12px;
+  min-height: 360px;
+  resize: vertical;
+}
+
+.import-error-alert {
+  width: 100%;
+  max-width: 450px;
+}
+
+.import-button-group {
+  width: 100%;
+  max-width: 450px;
+}
+
+.evaluate-button {
+  font-size: 1rem;
+}
+
+/* Mobile overrides */
+@media (max-width: 768px) {
+  .initial-viewport {
+    padding: 16px;
+  }
+  
+  .responsive-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  .responsive-subtitle {
+    font-size: 0.875rem;
+  }
+  
+  .team-importer-paper {
+    padding: 0.75rem;
+  }
+  
+  .team-importer-stack {
+    gap: 0.5rem;
+  }
+  
+  .responsive-format-title {
+    font-size: 1.125rem;
+  }
+  
+  /* Override md size to match sm size on mobile */
+  .format-select .mantine-Select-input {
+    height: 36px !important;
+    min-height: 36px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    font-size: 0.875rem !important;
+  }
+  
+  .format-select .mantine-Select-section {
+    height: 36px !important;
+    width: 32px !important;
+  }
+  
+  .format-select .mantine-Select-wrapper {
+    height: 36px !important;
+  }
+  
+  .mantine-Select-dropdown .mantine-Select-option {
+    font-size: 0.875rem !important;
+    padding: 8px 12px !important;
+  }
+  
+  .team-tabs-list {
+    width: 100%;
+  }
+  
+  .team-tabs-list .team-tab {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .team-import-textarea {
+    max-width: 100%;
+  }
+  
+  .team-import-textarea textarea {
+    font-size: 11px;
+    min-height: 200px;
+    height: auto !important;
+  }
+  
+  .import-error-alert {
+    max-width: 100%;
+  }
+  
+  .import-button-group {
+    max-width: 100%;
+  }
+  
+  .evaluate-button {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-height: 700px) {
+  .team-import-textarea textarea {
+    min-height: 180px;
+  }
+  
+  @media (max-width: 768px) {
+    .team-import-textarea textarea {
+      min-height: 160px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .team-tabs-list .mantine-Tabs-tab {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .mantine-Container-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  .mantine-Paper-root {
+    max-width: 100%;
+  }
+  
+  .mantine-Modal-content {
+    margin: 0 !important;
+    max-height: 100vh !important;
+  }
 }
