@@ -172,23 +172,19 @@ IVs: 0 Atk
 - Dazzling Gleam
 - Thunderbolt`;
 
-  const getTextareaRows = () => {
-    if (isSmallScreen) return isMobile ? 12 : 16;
-    if (isMobile) return 16;
-    return 20;
-  };
 
   return (
-    <Paper shadow="sm" radius="md" p={isMobile ? "sm" : "md"}>
-      <Stack gap={isMobile ? "xs" : "sm"}>
+    <Paper shadow="sm" radius="md" className="team-importer-paper">
+      <Stack className="team-importer-stack">
         {/* Format selector */}
         <Stack gap="xs" align="center">
-          <Title order={4} size={isMobile ? 'h5' : 'h4'}>Select Format</Title>
+          <Title order={4} className="responsive-format-title">Select Format</Title>
           <Select
             value={format}
             onChange={(val) => val && onFormatChange(val as FormatId)}
             data={formatOptions}
-            size={isMobile ? "sm" : "md"}
+            size="md"
+            className="format-select"
             style={{ width: '100%', maxWidth: '250px' }}
           />
         </Stack>
@@ -196,18 +192,18 @@ IVs: 0 Atk
         {/* Team import tabs */}
         <Tabs defaultValue="paste">
           <Center>
-            <Tabs.List grow={isMobile} style={{ width: isMobile ? '100%' : 'auto' }}>
+            <Tabs.List className="team-tabs-list" grow={isMobile}>
               <Tabs.Tab 
                 value="paste" 
                 leftSection={<IconFileImport size={14} />}
-                px={isMobile ? "xs" : "sm"}
+                className="team-tab"
               >
                 Paste from Showdown
               </Tabs.Tab>
               <Tabs.Tab 
                 value="build" 
                 leftSection={<IconPokeball size={14} />}
-                px={isMobile ? "xs" : "sm"}
+                className="team-tab"
               >
                 Build Team
               </Tabs.Tab>
@@ -221,17 +217,12 @@ IVs: 0 Atk
                   placeholder="Paste your Pokemon Showdown team here..."
                   value={importText}
                   onChange={(e) => setImportText(e.currentTarget.value)}
-                  rows={getTextareaRows()}
+                  className="team-import-textarea"
                   styles={{
                     input: { 
                       fontFamily: 'monospace',
-                      fontSize: isMobile ? '11px' : '12px',
                       lineHeight: '1.3',
                     }
-                  }}
-                  style={{ 
-                    width: '100%', 
-                    maxWidth: isMobile ? '100%' : '450px' 
                   }}
                 />
               </Center>
@@ -241,10 +232,7 @@ IVs: 0 Atk
                   <Alert 
                     color="red" 
                     title="Import Error" 
-                    style={{ 
-                      width: '100%', 
-                      maxWidth: isMobile ? '100%' : '450px' 
-                    }}
+                    className="import-error-alert"
                   >
                     {error}
                   </Alert>
@@ -254,10 +242,7 @@ IVs: 0 Atk
               <Center>
                 <Group 
                   justify="space-between" 
-                  style={{ 
-                    width: '100%', 
-                    maxWidth: isMobile ? '100%' : '450px' 
-                  }}
+                  className="import-button-group"
                 >
                   <Button
                     variant="subtle"
@@ -272,7 +257,7 @@ IVs: 0 Atk
                     onClick={handleImport}
                     disabled={!importText.trim()}
                     variant="filled"
-                    size={isMobile ? "sm" : "md"}
+                    className="evaluate-button"
                   >
                     Evaluate
                   </Button>
@@ -295,7 +280,7 @@ IVs: 0 Atk
                     leftSection={<IconSparkles size={16} />}
                     onClick={onEvaluate}
                     variant="filled"
-                    size={isMobile ? "sm" : "md"}
+                    className="evaluate-button"
                   >
                     Evaluate
                   </Button>
