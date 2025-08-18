@@ -157,7 +157,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
       const species = gen.species.get(pokemonId as any);
       if (!species) continue;
       
-      const opponentPokemon = new CalcPokemon(gen, pokemonId as any, {
+      const opponentPokemon = new CalcPokemon(gen, species.name, {
         level: 100,
         ability: topAbility || species.abilities?.[0] || '',
         item: topItem || '',
@@ -421,7 +421,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
 
                   <Stack gap={4} style={{ minHeight: 80 }}>
                     <Group gap="xs" wrap="nowrap" align="flex-start">
-                      <Box style={{ flexShrink: 0 }}>
+                      <Box style={{ flexShrink: 0, paddingTop: 1 }}>
                         <IconSword 
                           size={16} 
                           color={result.benchmarks.offensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
@@ -436,7 +436,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
                     </Group>
 
                     <Group gap="xs" wrap="nowrap" align="flex-start">
-                      <Box style={{ flexShrink: 0 }}>
+                      <Box style={{ flexShrink: 0, paddingTop: 1 }}>
                         <IconShield 
                           size={16} 
                           color={result.benchmarks.defensive.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}
@@ -451,7 +451,7 @@ export function MetaCoverage({ team, format }: MetaCoverageProps) {
                     </Group>
 
                     <Group gap="xs" wrap="nowrap" align="flex-start">
-                      <Box style={{ flexShrink: 0 }}>
+                      <Box style={{ flexShrink: 0, paddingTop: 1 }}>
                         <IconBolt 
                           size={16} 
                           color={result.benchmarks.speed.passed ? 'var(--mantine-color-green-6)' : 'var(--mantine-color-red-6)'}

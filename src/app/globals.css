@@ -113,6 +113,25 @@ html, body {
   }
 }
 
+.type-coverage-tabs .mantine-Tabs-tab {
+  position: relative;
+  border-bottom: none;
+}
+
+.type-coverage-tabs .mantine-Tabs-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--mantine-color-gray-3);
+}
+
+.type-coverage-tabs .mantine-Tabs-tab[data-active="true"]::after {
+  background-color: var(--mantine-color-blue-6);
+}
+
 @supports (-webkit-touch-callout: none) {
   .vh-fix {
     height: -webkit-fill-available;
@@ -310,5 +329,12 @@ html, body {
   .mantine-Modal-content {
     margin: 0 !important;
     max-height: 100vh !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .type-coverage-tabs .mantine-Tabs-tab {
+    margin-bottom: 0;
+    padding-bottom: 12px;
   }
 }

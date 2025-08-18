@@ -202,7 +202,7 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
     <Card shadow="sm" radius="md" withBorder>
       <Stack>
         <Group justify="space-between" align="center">
-          <Text fw={600} size="lg">Type Coverage Analysis</Text>
+          <Text fw={600} size="lg" style={{ flexShrink: 1, minWidth: 0 }}>Type Coverage</Text>
           {(() => {
             // Calculate overall score
             const offensiveCovered = 18 - coverage.offensive.uncovered.length;
@@ -222,7 +222,7 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
             );
           })()}
         </Group>        
-        <Tabs value={activeTab} onChange={setActiveTab}>
+        <Tabs value={activeTab} onChange={setActiveTab} classNames={{ list: 'type-coverage-tabs' }}>
           <Tabs.List grow>
             <Tabs.Tab value="offensive" leftSection={<IconSword size={16} />}>
               Offensive Coverage
