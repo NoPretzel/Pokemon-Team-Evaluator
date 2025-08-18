@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.2
+    image: traefik:v3.5.0
     container_name: traefik
     restart: unless-stopped
     ports:
@@ -10,11 +10,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik-certificates:/letsencrypt
     command:
-      - "--log.level=DEBUG"
+      - "--log.level=INFO"
       - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=docker_web"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
@@ -33,12 +34,18 @@ services:
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     networks:
-      - web
-      - internal
+      web:
+        aliases:
+          - pokemon-app
+      internal:
+        aliases:
+          - pokemon-app
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=docker_web"
       - "traefik.http.routers.app.entrypoints=web"
       - "traefik.http.routers.app.rule=Host(`pokemon.emad.work`)"
       - "traefik.http.routers.app.middlewares=redirect-to-https"
@@ -48,6 +55,12 @@ services:
       - "traefik.http.routers.app-secure.tls=true"
       - "traefik.http.routers.app-secure.tls.certresolver=letsencrypt"
       - "traefik.http.services.app.loadbalancer.server.port=3000"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   redis:
     image: redis:8-alpine
@@ -70,6 +83,7 @@ networks:
     driver: bridge
   internal:
     driver: bridge
+    internal: true
 
 volumes:
   redis-data:
