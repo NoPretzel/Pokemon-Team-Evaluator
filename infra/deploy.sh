@@ -57,7 +57,7 @@ docker network rm pokemon-team-evaluator_web pokemon-team-evaluator_internal 2>/
 
 # Build and start services
 step 5 "Building and starting services..."
-log "This may take several minutes on first run..."
+log "Building from scratch..."
 docker-compose -f infra/Docker/docker-compose.prod.yml build --no-cache
 docker-compose -f infra/Docker/docker-compose.prod.yml up -d
 
@@ -80,9 +80,6 @@ log "All services are ready!"
 
 # Update Pokemon stats
 step 7 "Updating Pokemon usage stats..."
-# Install tsconfig-paths locally if not already installed
-docker-compose -f infra/Docker/docker-compose.prod.yml exec -T app sh -c "[ -d node_modules/tsconfig-paths ] || npm install tsconfig-paths" || true
-# Run the stats update
 docker-compose -f infra/Docker/docker-compose.prod.yml exec -T app npm run update-stats || log "Stats update failed, continuing..."
 
 # Show status
