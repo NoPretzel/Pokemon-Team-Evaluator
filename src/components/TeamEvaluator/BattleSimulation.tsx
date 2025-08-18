@@ -9,6 +9,7 @@ import { PokemonSprite } from '@/components/common/PokemonSprite';
 import { FormatId } from '@/lib/pokemon/formats';
 import { ARCHETYPE_CONFIG } from '@/lib/pokemon/archetype-config';
 import { TeamArchetype } from '@/types/analysis';
+import { exportShowdownTeam } from '@/lib/pokemon/team-parser';
 
 interface BattleSimulationProps {
   team: Team;
@@ -24,8 +25,9 @@ interface BattleResultWithTeam {
 
 export function BattleSimulation({ team, format }: BattleSimulationProps) {
   const [results, setResults] = useState<BattleResultWithTeam[] | null>(null);
-  const hasRun = useRef(false);
-  const currentTeamId = JSON.stringify(team.pokemon.map(p => p.species + p.item));
+  const prevTeamIdRef = useRef<string>('');
+  
+  const currentTeamId = exportShowdownTeam(team);
 
   // Normalize team to level 100
   const normalizedTeam = {
@@ -37,11 +39,13 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
   };
 
   useEffect(() => {
-    if (!hasRun.current) {
-      hasRun.current = true;
+    // Only run simulations if the team has changed
+    if (prevTeamIdRef.current !== currentTeamId) {
+      prevTeamIdRef.current = currentTeamId;
+      setResults(null);
       runSimulations();
     }
-  }, []);
+  }, [currentTeamId]);
 
   const preloadTeamSprites = async (teams: TeamWithArchetype[]) => {
     const spritesToLoad: string[] = [];

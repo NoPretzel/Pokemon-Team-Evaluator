@@ -21,7 +21,7 @@ export const ARCHETYPE_CONFIG: Record<TeamArchetype, {
   'Offense': {
     icon: <IconSword size={24} />,
     color: 'orange',
-    description: 'Fast paced teams that maintain constant pressure and momentum"'
+    description: 'Fast paced teams that maintain constant pressure and momentum'
   },
   'Bulky Offense': {
     icon: <IconShieldCheck size={24} />,
