@@ -6,7 +6,7 @@ A web app for evaluating and optimizing Pokemon Showdown teams.
 
 ## Features
 
-- **Team Import & Builder**: Import teams from Pokemon Showdown or build them directly in the app
+- **Team Import & Builder**: Paste teams from Pokemon Showdown or build them directly in the app
 - **Archetype Detection**: Automatically classifies teams (Hyper Offense, Balance, Stall, etc.)
 - **Battle Simulation**: Tests your team against Smogon sample teams
 - **Type Coverage Analysis**: Comprehensive offensive and defensive type coverage ratings
