@@ -1,0 +1,76 @@
+services:
+  traefik:
+    image: traefik:v3.2
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-certificates:/letsencrypt
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    networks:
+      - web
+
+  app:
+    build:
+      context: ../..
+      dockerfile: infra/Docker/Dockerfile.prod
+    container_name: pokemon-app
+    restart: unless-stopped
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+    depends_on:
+      - redis
+    networks:
+      - web
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.routers.app.rule=Host(`pokemon.emad.work`)"
+      - "traefik.http.routers.app.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.app-secure.entrypoints=websecure"
+      - "traefik.http.routers.app-secure.rule=Host(`pokemon.emad.work`)"
+      - "traefik.http.routers.app-secure.tls=true"
+      - "traefik.http.routers.app-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+
+  redis:
+    image: redis:8-alpine
+    container_name: pokemon-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+networks:
+  web:
+    driver: bridge
+  internal:
+    driver: bridge
+
+volumes:
+  redis-data:
+  traefik-certificates:
