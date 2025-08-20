@@ -7,6 +7,15 @@ html, body {
   overflow-x: hidden;
 }
 
+body {
+  background-color: #3B70A2;
+}
+
+.top-level-card {
+  box-shadow: none;
+  border: none;
+}
+
 /* Pokemon type colors */
 .type-normal { background-color: #A8A878; }
 .type-fire { background-color: #F08030; }
@@ -56,6 +65,20 @@ html, body {
   50% { 
     transform: scale(1.5); 
     opacity: 1; 
+  }
+}
+
+
+@keyframes ripple-loader {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0.7;
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
   }
 }
 

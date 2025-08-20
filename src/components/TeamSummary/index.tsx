@@ -124,7 +124,7 @@ export function TeamSummary({ team, format, onEdit, onExport }: TeamSummaryProps
   }
   
   return (
-    <Paper shadow="sm" p={isMobile ? "sm" : "md"} radius="md" withBorder>
+    <Paper shadow="sm" p={isMobile ? "sm" : "md"} radius="md" withBorder className="top-level-card">
       <Stack gap="sm">
         {/* Header */}
         {isMobile ? (

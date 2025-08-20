@@ -16,6 +16,7 @@ export function TeamArchetypeDisplay({ archetype }: TeamArchetypeDisplayProps) {
         radius="md" 
         withBorder 
         p="md"
+        className="top-level-card"
         style={{
           background: `linear-gradient(135deg, 
             var(--mantine-color-${config.color}-0) 0%, 

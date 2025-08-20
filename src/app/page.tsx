@@ -131,6 +131,7 @@ export default function Home() {
     }, 0);
     
     // Simulate evaluation time
+    const loadingTime = 2200 + Math.random() * 1000;
     setTimeout(() => {
       setIsEvaluating(false);
       setShowLoader(false);
@@ -141,7 +142,7 @@ export default function Home() {
         const scrollOffset = needsExtraScrollRef.current ? -50 : -20;
         smoothScrollTo(archetypeRef.current, 1500, scrollOffset);
       }, 200);
-    }, 2000);
+    }, loadingTime);
   };
 
   const handleEditTeam = () => {
@@ -177,10 +178,10 @@ export default function Home() {
           <Stack gap="xl">
             <Center>
               <Stack gap="xs" align="center">
-                <Title order={1} ta="center" className="responsive-title">
+                <Title order={1} ta="center" className="responsive-title" style={{ color: 'white' }}>
                   Pokemon Team Evaluator
                 </Title>
-                <Text ta="center" c="dimmed" className="responsive-subtitle">
+                <Text ta="center" className="responsive-subtitle" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                   Evaluate and optimize your Pokemon Showdown teams
                 </Text>
               </Stack>
@@ -225,9 +226,9 @@ export default function Home() {
             style={{
               width: '12px',
               height: '12px',
+              backgroundColor: 'white',
               borderRadius: '50%',
-              backgroundColor: 'var(--mantine-color-blue-6)',
-              animation: 'pulse 1.2s ease-in-out infinite'
+              animation: 'ripple-loader 1.5s ease-out infinite',
             }}
           />
         </Box>

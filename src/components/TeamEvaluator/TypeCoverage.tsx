@@ -16,7 +16,7 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
   
   if (activeTeamMembers.length === 0) {
     return (
-      <Card shadow="sm" radius="md" withBorder>
+      <Card shadow="sm" radius="md" withBorder className="top-level-card">
         <Text c="dimmed" ta="center">Add Pokemon to see type coverage analysis</Text>
       </Card>
     );
@@ -199,7 +199,7 @@ export function TypeCoverage({ team }: TypeCoverageProps) {
   );
   
   return (
-    <Card shadow="sm" radius="md" withBorder>
+    <Card shadow="sm" radius="md" withBorder className="top-level-card">
       <Stack>
         <Group justify="space-between" align="center">
           <Text fw={600} size="lg" style={{ flexShrink: 1, minWidth: 0 }}>Type Coverage</Text>
