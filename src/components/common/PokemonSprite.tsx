@@ -32,9 +32,11 @@ export function PokemonSprite({
       .toLowerCase()
       .replace(/[^a-z0-9-]+/g, '');
     
-    // Special handling for Urshifu forms
-    if (formattedSpecies === 'urshifu-rapid-strike' || formattedSpecies === 'urshifurapidstrike') {
-      formattedSpecies = 'urshifu-rapidstrike';
+    // Special handling for forms with multiple hyphens
+    const parts = formattedSpecies.split('-');
+    if (parts.length > 2) {
+      // Keep first hyphen
+      formattedSpecies = parts[0] + '-' + parts.slice(1).join('');
     }
     
     // Fix other specific Pokemon names
