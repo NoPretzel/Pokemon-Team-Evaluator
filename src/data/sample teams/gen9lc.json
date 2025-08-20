@@ -1,0 +1,219 @@
+[
+  {
+    "format": "gen9lc",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Mienfoo",
+        "ability": "Regenerator",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 0, "def": 196, "spa": 0, "spd": 36, "spe": 236 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["High Jump Kick", "Knock Off", "U-turn", "Substitute"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Vullaby",
+        "ability": "Weak Armor",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 236, "def": 76, "spa": 0, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Brave Bird", "Knock Off", "Roost", "U-turn"],
+        "teraType": "Ghost",
+        "gender": "F"
+      },
+      {
+        "species": "Foongus",
+        "ability": "Regenerator",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Bold",
+        "evs": { "hp": 156, "atk": 0, "def": 156, "spa": 0, "spd": 156, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spore", "Giga Drain", "Sludge Bomb", "Synthesis"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Diglett-Alola",
+        "ability": "Tangling Hair",
+        "level": 5,
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "evs": { "hp": 36, "atk": 236, "def": 36, "spa": 0, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Earthquake", "Sucker Punch", "Rock Blast", "Iron Head"],
+        "teraType": "Stellar"
+      },
+      {
+        "species": "Glimmet",
+        "ability": "Toxic Debris",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Timid",
+        "evs": { "hp": 132, "atk": 0, "def": 100, "spa": 76, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Power Gem", "Sludge Bomb", "Mud Shot"],
+        "teraType": "Flying"
+      },
+      {
+        "species": "Shellder",
+        "ability": "Skill Link",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Adamant",
+        "evs": { "hp": 36, "atk": 236, "def": 36, "spa": 0, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Shell Smash", "Liquidation", "Rock Blast", "Icicle Spear"],
+        "teraType": "Ghost"
+      }
+    ]
+  },
+  {
+    "format": "gen9lc",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Mienfoo",
+        "ability": "Regenerator",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 0, "def": 196, "spa": 0, "spd": 36, "spe": 236 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["High Jump Kick", "Knock Off", "U-turn", "Fake Out"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Vullaby",
+        "ability": "Weak Armor",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Serious",
+        "evs": { "hp": 0, "atk": 236, "def": 76, "spa": 0, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Brave Bird", "Knock Off", "Roost", "Heat Wave"],
+        "teraType": "Dragon"
+      },
+      {
+        "species": "Foongus",
+        "ability": "Regenerator",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Bold",
+        "evs": { "hp": 124, "atk": 0, "def": 156, "spa": 0, "spd": 156, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spore", "Giga Drain", "Sludge Bomb", "Synthesis"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Glimmet",
+        "ability": "Toxic Debris",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Timid",
+        "evs": { "hp": 132, "atk": 0, "def": 100, "spa": 76, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Power Gem", "Mud Shot", "Sludge Wave"],
+        "teraType": "Flying"
+      },
+      {
+        "species": "Stunky",
+        "ability": "Aftermath",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Jolly",
+        "evs": { "hp": 12, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 244 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Knock Off", "Gunk Shot", "Sucker Punch", "Temper Flare"],
+        "teraType": "Dark"
+      },
+      {
+        "species": "Elekid",
+        "ability": "Vital Spirit",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 12, "def": 0, "spa": 236, "spd": 0, "spe": 236 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Focus Blast", "Psychic", "Knock Off", "Volt Switch"],
+        "teraType": "Psychic"
+      }
+    ]
+  },
+  {
+    "format": "gen9lc",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Mienfoo",
+        "ability": "Regenerator",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 0, "def": 196, "spa": 0, "spd": 36, "spe": 236 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["High Jump Kick", "Knock Off", "U-turn", "Fake Out"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Vullaby",
+        "ability": "Weak Armor",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Serious",
+        "evs": { "hp": 0, "atk": 236, "def": 76, "spa": 0, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Brave Bird", "Knock Off", "Roost", "Heat Wave"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Foongus",
+        "ability": "Regenerator",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Bold",
+        "evs": { "hp": 44, "atk": 0, "def": 236, "spa": 0, "spd": 156, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spore", "Giga Drain", "Sludge Bomb", "Synthesis"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Glimmet",
+        "ability": "Toxic Debris",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Timid",
+        "evs": { "hp": 132, "atk": 0, "def": 100, "spa": 76, "spd": 0, "spe": 196 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spikes", "Power Gem", "Mud Shot", "Sludge Bomb"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Mudbray",
+        "ability": "Stamina",
+        "level": 5,
+        "item": "Eviolite",
+        "nature": "Impish",
+        "evs": { "hp": 36, "atk": 196, "def": 196, "spa": 0, "spd": 0, "spe": 76 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Earthquake", "Stone Edge", "Close Combat"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Torchic",
+        "ability": "Speed Boost",
+        "level": 5,
+        "item": "Life Orb",
+        "nature": "Modest",
+        "evs": { "hp": 0, "atk": 0, "def": 36, "spa": 196, "spd": 36, "spe": 236 },
+        "ivs": { "hp": 9, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Fire Blast", "Tera Blast", "Protect", "Will-O-Wisp"],
+        "teraType": "Ground"
+      }
+    ]
+  }
+]

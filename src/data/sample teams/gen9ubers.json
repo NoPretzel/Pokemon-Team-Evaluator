@@ -1,0 +1,219 @@
+[
+  {
+    "format": "gen9ubers",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Kyogre",
+        "ability": "Drizzle",
+        "level": 100,
+        "item": "Choice Specs",
+        "nature": "Modest",
+        "evs": { "hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Water Spout", "Ice Beam", "Origin Pulse", "Thunder"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Eternatus",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Modest",
+        "evs": { "hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dynamax Cannon", "Fire Blast", "Sludge Bomb", "Recover"],
+        "teraType": "Dragon"
+      },
+      {
+        "species": "Giratina-Origin",
+        "ability": "Levitate",
+        "level": 100,
+        "item": "Griseous Core",
+        "nature": "Adamant",
+        "evs": { "hp": 200, "atk": 252, "def": 0, "spa": 0, "spd": 40, "spe": 16 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Poltergeist", "Dragon Tail", "Defog", "Shadow Sneak"],
+        "teraType": "Steel",
+        "shiny": true
+      },
+      {
+        "species": "Koraidon",
+        "ability": "Orichalcum Pulse",
+        "level": 100,
+        "item": "Choice Scarf",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Flare Blitz", "U-turn", "Low Kick", "Outrage"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Arceus-Fairy",
+        "ability": "Multitype",
+        "level": 100,
+        "item": "Pixie Plate",
+        "nature": "Bold",
+        "evs": { "hp": 248, "atk": 0, "def": 164, "spa": 0, "spd": 0, "spe": 96 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Judgment", "Recover", "Stealth Rock", "Roar"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Ting-Lu",
+        "ability": "Vessel of Ruin",
+        "level": 100,
+        "item": "Custap Berry",
+        "nature": "Sassy",
+        "evs": { "hp": 248, "atk": 0, "def": 8, "spa": 0, "spd": 252, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 9 },
+        "moves": ["Earthquake", "Ruination", "Whirlwind", "Spikes"],
+        "teraType": "Water"
+      }
+    ]
+  },
+  {
+    "format": "gen9ubers",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Deoxys-Speed",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "evs": { "hp": 248, "atk": 0, "def": 0, "spa": 8, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Thunder Wave", "Spikes", "Taunt", "Psycho Boost"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Kingambit",
+        "ability": "Supreme Overlord",
+        "level": 100,
+        "item": "Dread Plate",
+        "nature": "Adamant",
+        "evs": { "hp": 56, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 200 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Kowtow Cleave", "Iron Head", "Sucker Punch"],
+        "teraType": "Dark"
+      },
+      {
+        "species": "Zacian-Crowned",
+        "ability": "Intrepid Sword",
+        "level": 100,
+        "item": "Rusted Sword",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Behemoth Blade", "Close Combat", "Wild Charge"],
+        "teraType": "Flying"
+      },
+      {
+        "species": "Arceus-Fairy",
+        "ability": "Multitype",
+        "level": 100,
+        "item": "Pixie Plate",
+        "nature": "Bold",
+        "evs": { "hp": 248, "atk": 0, "def": 72, "spa": 0, "spd": 0, "spe": 188 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Judgment", "Taunt", "Recover"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Eternatus",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Power Herb",
+        "nature": "Modest",
+        "evs": { "hp": 124, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 132 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Agility", "Meteor Beam", "Dynamax Cannon", "Fire Blast"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Koraidon",
+        "ability": "Orichalcum Pulse",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "evs": { "hp": 8, "atk": 248, "def": 0, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Scale Shot", "Flame Charge", "Close Combat"],
+        "teraType": "Fire"
+      }
+    ]
+  },
+  {
+    "format": "gen9ubers",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Arceus",
+        "ability": "Multitype",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 180, "spa": 0, "spd": 0, "spe": 76 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Extreme Speed", "Foul Play", "Recover", "Will-O-Wisp"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Blissey",
+        "ability": "Natural Cure",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Calm",
+        "evs": { "hp": 4, "atk": 0, "def": 252, "spa": 0, "spd": 252, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Seismic Toss", "Soft-Boiled", "Stealth Rock", "Calm Mind"],
+        "teraType": "Grass"
+      },
+      {
+        "species": "Tyranitar",
+        "ability": "Sand Stream",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 96, "spa": 0, "spd": 160, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Knock Off", "Rest", "Sleep Talk", "Roar"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Dondozo",
+        "ability": "Unaware",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Impish",
+        "evs": { "hp": 248, "atk": 0, "def": 252, "spa": 0, "spd": 8, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Rest", "Sleep Talk", "Waterfall", "Curse"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Gliscor",
+        "ability": "Poison Heal",
+        "level": 100,
+        "item": "Toxic Orb",
+        "nature": "Impish",
+        "evs": { "hp": 244, "atk": 0, "def": 252, "spa": 0, "spd": 12, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Knock Off", "Protect", "Taunt", "Spikes"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Ho-Oh",
+        "ability": "Regenerator",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Impish",
+        "evs": { "hp": 248, "atk": 0, "def": 252, "spa": 0, "spd": 8, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Brave Bird", "Recover", "Sacred Fire", "Whirlwind"],
+        "teraType": "Dark"
+      }
+    ]
+  }
+]

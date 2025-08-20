@@ -1,0 +1,221 @@
+[
+  {
+    "format": "gen9nu",
+    "archetype": "Hyper Offense",
+    "pokemon": [
+      {
+        "species": "Diancie",
+        "ability": "Clear Body",
+        "level": 100,
+        "item": "Power Herb",
+        "nature": "Modest",
+        "evs": { "hp": 112, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 144 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Moonblast", "Meteor Beam", "Earth Power", "Stealth Rock"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Cinccino",
+        "ability": "Technician",
+        "level": 100,
+        "item": "Loaded Dice",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Tail Slap", "Knock Off", "Bullet Seed", "Tidy Up"],
+        "teraType": "Electric"
+      },
+      {
+        "species": "Torterra",
+        "ability": "Overgrow",
+        "level": 100,
+        "item": "Clear Amulet",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Grassy Glide", "Headlong Rush", "Tera Blast", "Shell Smash"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Thwackey",
+        "ability": "Grassy Surge",
+        "level": 100,
+        "item": "Terrain Extender",
+        "nature": "Adamant",
+        "evs": { "hp": 252, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Wood Hammer", "Grassy Glide", "U-turn", "Knock Off"],
+        "teraType": "Electric"
+      },
+      {
+        "species": "Articuno-Galar",
+        "ability": "Competitive",
+        "level": 100,
+        "item": "Grassy Seed",
+        "nature": "Timid",
+        "evs": { "hp": 248, "atk": 0, "def": 4, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stored Power", "Hurricane", "Calm Mind", "Recover"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Grafaiai",
+        "ability": "Unburden",
+        "level": 100,
+        "item": "Grassy Seed",
+        "nature": "Adamant",
+        "evs": { "hp": 196, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 60 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Gunk Shot", "Knock Off", "Encore"],
+        "teraType": "Dark"
+      }
+    ]
+  },
+  {
+    "format": "gen9nu",
+    "archetype": "Balance",
+    "pokemon": [
+      {
+        "species": "Flygon",
+        "ability": "Levitate",
+        "level": 100,
+        "item": "Loaded Dice",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Scale Shot", "Earthquake", "Fire Punch"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Tauros-Paldea-Aqua",
+        "ability": "Intimidate",
+        "level": 100,
+        "item": "Choice Band",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Wave Crash", "Close Combat", "Aqua Jet", "Zen Headbutt"],
+        "teraType": "Water",
+        "gender": "M"
+      },
+      {
+        "species": "Tsareena",
+        "ability": "Queenly Majesty",
+        "level": 100,
+        "item": "Covert Cloak",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 0, "spe": 4 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Power Whip", "Knock Off", "Rapid Spin", "Synthesis"],
+        "teraType": "Poison",
+        "gender": "F"
+      },
+      {
+        "species": "Dudunsparce",
+        "ability": "Rattled",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Bold",
+        "evs": { "hp": 248, "atk": 0, "def": 160, "spa": 0, "spd": 0, "spe": 100 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Boomburst", "Shadow Ball", "Roost"],
+        "teraType": "Poison"
+      },
+      {
+        "species": "Copperajah",
+        "ability": "Sheer Force",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Careful",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 228, "spe": 28 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Iron Head", "Knock Off", "Earthquake"],
+        "teraType": "Dragon"
+      },
+      {
+        "species": "Munkidori",
+        "ability": "Toxic Chain",
+        "level": 100,
+        "item": "Choice Scarf",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Sludge Bomb", "Psychic", "U-turn", "Trick"],
+        "teraType": "Psychic"
+      }
+    ]
+  },
+  {
+    "format": "gen9nu",
+    "archetype": "Stall",
+    "pokemon": [
+      {
+        "species": "Goodra",
+        "ability": "Sap Sipper",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Careful",
+        "evs": { "hp": 248, "atk": 0, "def": 44, "spa": 0, "spd": 216, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Rest", "Sleep Talk", "Dragon Tail", "Knock Off"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Bronzong",
+        "ability": "Levitate",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Sassy",
+        "evs": { "hp": 252, "atk": 0, "def": 128, "spa": 0, "spd": 128, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Iron Defense", "Body Press", "Psychic Noise"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Vaporeon",
+        "ability": "Water Absorb",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 216, "spa": 0, "spd": 40, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Scald", "Wish", "Protect", "Roar"],
+        "teraType": "Poison"
+      },
+      {
+        "species": "Houndstone",
+        "nickname": "Lumi The Dog",
+        "ability": "Fluffy",
+        "level": 100,
+        "item": "Red Card",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Night Shade", "Roar", "Rest", "Sleep Talk"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Incineroar",
+        "ability": "Intimidate",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Careful",
+        "evs": { "hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 216, "spe": 44 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Knock Off", "Rest", "Sleep Talk", "Bulk Up"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Gligar",
+        "ability": "Immunity",
+        "level": 100,
+        "item": "Eviolite",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spikes", "Earthquake", "Knock Off", "Toxic"],
+        "teraType": "Water"
+      }
+    ]
+  }
+]
