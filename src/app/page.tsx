@@ -222,15 +222,15 @@ export default function Home() {
             pointerEvents: 'none'
           }}
         >
-        <Box
-          style={{
-            width: '12px',
-            height: '12px',
-            backgroundColor: 'white',
-            borderRadius: '50%',
-            animation: 'ripple-loader 1.5s ease-out infinite',
-          }}
-        />
+          <Box
+            style={{
+              width: '12px',
+              height: '12px',
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              animation: 'ripple-loader 1.5s ease-out infinite',
+            }}
+          />
         </Box>
       )}
       
