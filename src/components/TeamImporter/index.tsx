@@ -13,10 +13,12 @@ import {
   Select,
   Title,
   Box,
-  Center
+  Center,
+  Tooltip,
+  ActionIcon
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconFileImport, IconPokeball, IconSparkles } from '@tabler/icons-react';
+import { IconFileImport, IconPokeball, IconSparkles, IconQuestionMark } from '@tabler/icons-react';
 import { Team } from '@/types';
 import { parseFullTeam, validateTeamSize } from '@/lib/pokemon/team-parser';
 import { FormatId, FORMATS } from '@/lib/pokemon/formats';
@@ -174,11 +176,32 @@ IVs: 0 Atk
 
 
   return (
-    <Paper shadow="sm" radius="md" className="team-importer-paper">
+    <Paper shadow="sm" radius="md" className="team-importer-paper top-level-card">
       <Stack className="team-importer-stack">
         {/* Format selector */}
         <Stack gap="xs" align="center">
-          <Title order={4} className="responsive-format-title">Select Format</Title>
+          <Group gap={6} align="center" wrap="nowrap">
+            <Title order={4} className="responsive-format-title" style={{ margin: 0 }}>Select Format</Title>
+            <Tooltip 
+              label="Only Gen 9 Singles are currently supported" 
+              position="top"
+              openDelay={0}
+              closeDelay={0}
+              events={{ hover: true, focus: true, touch: true }}
+            >
+              <Box style={{ display: 'flex', alignItems: 'center', height: '100%', marginTop: 2 }}>
+                <ActionIcon 
+                  variant="filled" 
+                  size={14}
+                  radius="xl"
+                  color="gray.6"
+                  style={{ width: 14, height: 14, minWidth: 14, minHeight: 14 }}
+                >
+                  <IconQuestionMark size={10} stroke={2.5} />
+                </ActionIcon>
+              </Box>
+            </Tooltip>
+          </Group>
           <Select
             value={format}
             onChange={(val) => val && onFormatChange(val as FormatId)}

@@ -226,7 +226,7 @@ export function TeamUtilities({ team }: TeamUtilitiesProps) {
   const activeTeam = team.pokemon.filter((p) => p.species);
   if (activeTeam.length === 0) {
     return (
-      <Card shadow='sm' radius='md' withBorder>
+      <Card shadow='sm' radius='md' withBorder className='top-level-card'>
         <Text c='dimmed' ta='center'>
           Add Pokemon to see team utilities analysis
         </Text>
@@ -254,7 +254,7 @@ export function TeamUtilities({ team }: TeamUtilitiesProps) {
   const score = Math.round((found.length / utilities.length) * 100);
 
   return (
-    <Card shadow='sm' radius='md' withBorder>
+    <Card shadow='sm' radius='md' withBorder className='top-level-card'>
       <Stack>
         <Group justify='space-between'>
           <Text fw={600} size='lg'>

@@ -127,7 +127,7 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
   // Render a card with minimum height to prevent layout shift
   if (results === null) {
     return (
-      <Card shadow="sm" radius="md" withBorder style={{ minHeight: '300px', opacity: 0 }}>
+      <Card shadow="sm" radius="md" withBorder className="top-level-card" style={{ minHeight: '300px', opacity: 0 }}>
         <Stack>
           <Group justify="space-between">
             <Text fw={600} size="lg">Battle Performance</Text>
@@ -149,7 +149,7 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
 
   if (results.length === 0) {
     return (
-      <Card shadow="sm" radius="md" withBorder>
+      <Card shadow="sm" radius="md" withBorder className="top-level-card">
         <Text ta="center" c="dimmed">No sample teams available for this format</Text>
       </Card>
     );
@@ -164,7 +164,7 @@ export function BattleSimulation({ team, format }: BattleSimulationProps) {
   };
 
   return (
-    <Card shadow="sm" radius="md" withBorder>
+    <Card shadow="sm" radius="md" withBorder className="top-level-card">
       <Stack>
         <Group justify="space-between">
           <Text fw={600} size="lg">Battle Performance</Text>
