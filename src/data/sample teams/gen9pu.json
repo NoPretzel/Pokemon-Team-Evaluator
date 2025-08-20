@@ -1,0 +1,220 @@
+[
+  {
+    "format": "gen9pu",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Avalugg-Hisui",
+        "ability": "Sturdy",
+        "level": 100,
+        "item": "Custap Berry",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Mountain Gale", "Rock Blast", "Rapid Spin"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Espeon",
+        "ability": "Magic Bounce",
+        "level": 100,
+        "item": "Mirror Herb",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Psyshock", "Shadow Ball", "Draining Kiss"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Salazzle",
+        "ability": "Corrosion",
+        "level": 100,
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Nasty Plot", "Flamethrower", "Sludge Bomb", "Tera Blast"],
+        "teraType": "Grass"
+      },
+      {
+        "species": "Sneasel",
+        "ability": "Inner Focus",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 4, "spa": 0, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Triple Axel", "Knock Off", "Ice Shard"],
+        "teraType": "Ice"
+      },
+      {
+        "species": "Alcremie",
+        "ability": "Aroma Veil",
+        "level": 100,
+        "item": "Kee Berry",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 192, "spa": 0, "spd": 0, "spe": 64 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Acid Armor", "Draining Kiss", "Stored Power"],
+        "teraType": "Poison",
+        "gender": "F"
+      },
+      {
+        "species": "Decidueye-Hisui",
+        "ability": "Scrappy",
+        "level": 100,
+        "item": "Roseli Berry",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Leaf Blade", "Triple Arrows", "Sucker Punch"],
+        "teraType": "Dark"
+      }
+    ]
+  },
+  {
+    "format": "gen9pu",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Espeon",
+        "ability": "Magic Bounce",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Timid",
+        "evs": { "hp": 40, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 216 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Morning Sun", "Psyshock", "Alluring Voice"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Sandslash-Alola",
+        "ability": "Slush Rush",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Adamant",
+        "evs": { "hp": 252, "atk": 132, "def": 0, "spa": 0, "spd": 0, "spe": 124 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Rapid Spin", "Knock Off", "Icicle Crash", "Earthquake"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Milotic",
+        "ability": "Competitive",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 208, "spa": 0, "spd": 0, "spe": 48 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Flip Turn", "Scald", "Haze", "Recover"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Qwilfish-Hisui",
+        "ability": "Poison Point",
+        "level": 100,
+        "item": "Eviolite",
+        "nature": "Careful",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 160, "spe": 96 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spikes", "Barb Barrage", "Throat Chop", "Pain Split"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Palossand",
+        "ability": "Water Compaction",
+        "level": 100,
+        "item": "Rocky Helmet",
+        "nature": "Bold",
+        "evs": { "hp": 252, "atk": 0, "def": 252, "spa": 4, "spd": 0, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Shore Up", "Shadow Ball", "Scorching Sands", "Stealth Rock"],
+        "teraType": "Water"
+      },
+      {
+        "species": "Electrode-Hisui",
+        "ability": "Soundproof",
+        "level": 100,
+        "item": "Choice Specs",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Volt Switch", "Thunderbolt", "Leaf Storm", "Tera Blast"],
+        "teraType": "Fire"
+      }
+    ]
+  },
+  {
+    "format": "gen9pu",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Milotic",
+        "ability": "Marvel Scale",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Bold",
+        "evs": { "hp": 248, "atk": 0, "def": 212, "spa": 0, "spd": 0, "spe": 48 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Scald", "Recover", "Haze", "Ice Beam"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Wo-Chien",
+        "ability": "Tablets of Ruin",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 240, "spa": 0, "spd": 0, "spe": 16 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Knock Off", "Leech Seed", "Ruination", "Protect"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Typhlosion-Hisui",
+        "ability": "Blaze",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Substitute", "Calm Mind", "Fire Blast", "Shadow Ball"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Orthworm",
+        "ability": "Earth Eater",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 16, "spa": 0, "spd": 240, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Spikes", "Coil", "Heavy Slam", "Body Press"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Rhydon",
+        "ability": "Lightning Rod",
+        "level": 100,
+        "item": "Eviolite",
+        "nature": "Adamant",
+        "evs": { "hp": 248, "atk": 16, "def": 0, "spa": 0, "spd": 200, "spe": 44 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Stealth Rock", "Earthquake", "Stone Edge", "Swords Dance"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Florges",
+        "ability": "Flower Veil",
+        "level": 100,
+        "item": "Choice Scarf",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Moonblast", "Synthesis", "Trick", "Calm Mind"],
+        "teraType": "Fairy",
+        "gender": "F"
+      }
+    ]
+  }
+]
