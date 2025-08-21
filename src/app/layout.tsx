@@ -19,6 +19,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
+        <script defer src="https://visitor.emad.work/script.js" data-website-id="b69ac1cd-a231-4e0d-88c5-735759771dff"></script>
       </head>
       <body suppressHydrationWarning>
         <MantineProvider theme={theme} defaultColorScheme="light">
