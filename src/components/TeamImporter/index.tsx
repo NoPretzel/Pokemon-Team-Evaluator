@@ -105,74 +105,70 @@ export function TeamImporter({
     }
   };
 
-  const sampleTeam = `Garchomp @ Loaded Dice
-Ability: Rough Skin
-Level: 100
-Tera Type: Steel
-EVs: 252 Atk / 4 SpD / 252 Spe
-Jolly Nature
-- Earthquake
-- Scale Shot
-- Iron Head
-- Protect
+  const sampleTeam = `
 
-Rillaboom @ Assault Vest
-Ability: Grassy Surge
-Level: 100
-Tera Type: Fire
-EVs: 252 HP / 252 Atk / 4 SpD
-Adamant Nature
-- Grassy Glide
-- Wood Hammer
-- U-turn
-- Knock Off
+Samurott-Hisui (F) @ Assault Vest  
+Ability: Sharpness  
+Tera Type: Poison  
+EVs: 160 HP / 76 Atk / 172 SpD / 100 Spe  
+Adamant Nature  
+- Ceaseless Edge  
+- Razor Shell  
+- Sucker Punch  
+- Knock Off  
 
-Amoonguss @ Sitrus Berry
-Ability: Regenerator
-Level: 100
-Tera Type: Water
-EVs: 252 HP / 116 Def / 140 SpD
-Calm Nature
-IVs: 0 Atk
-- Spore
-- Rage Powder
-- Pollen Puff
-- Protect
+Tornadus-Therian @ Life Orb  
+Ability: Regenerator  
+Tera Type: Steel  
+EVs: 16 Def / 252 SpA / 240 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Nasty Plot  
+- Bleakwind Storm  
+- Heat Wave  
+- Grass Knot  
 
-Gholdengo @ Choice Specs
-Ability: Good as Gold
-Level: 100
-Tera Type: Flying
-EVs: 252 HP / 252 SpA / 4 SpD
-Modest Nature
-IVs: 0 Atk
-- Shadow Ball
-- Make It Rain
-- Thunderbolt
-- Trick
+Pecharunt @ Heavy-Duty Boots  
+Ability: Poison Puppeteer  
+Tera Type: Dark  
+EVs: 252 HP / 212 Def / 12 SpD / 32 Spe  
+Bold Nature  
+IVs: 0 Atk  
+- Malignant Chain  
+- Foul Play  
+- Recover  
+- Parting Shot  
 
-Urshifu-Rapid-Strike @ Focus Sash
-Ability: Unseen Fist
-Level: 100
-Tera Type: Poison
-EVs: 252 Atk / 4 SpD / 252 Spe
-Jolly Nature
-- Surging Strikes
-- Close Combat
-- Aqua Jet
-- Protect
+Great Tusk @ Heavy-Duty Boots  
+Ability: Protosynthesis  
+Tera Type: Ground  
+EVs: 144 HP / 112 Atk / 252 Spe  
+Jolly Nature  
+- Stealth Rock  
+- Headlong Rush  
+- Knock Off  
+- Rapid Spin  
 
-Flutter Mane @ Choice Scarf
-Ability: Protosynthesis
-Level: 100
-Tera Type: Fairy
-EVs: 252 SpA / 4 SpD / 252 Spe
-Timid Nature
-IVs: 0 Atk
-- Moonblast
-- Shadow Ball
-- Dazzling Gleam
-- Thunderbolt`;
+Clefable @ Leftovers  
+Ability: Magic Guard  
+Tera Type: Water  
+EVs: 252 HP / 192 Def / 64 Spe  
+Bold Nature  
+IVs: 0 Atk  
+- Calm Mind  
+- Moonblast  
+- Flamethrower  
+- Moonlight  
+
+Zamazenta @ Assault Vest  
+Ability: Dauntless Shield  
+Tera Type: Steel  
+EVs: 252 Atk / 4 SpD / 252 Spe  
+Jolly Nature  
+- Close Combat  
+- Crunch  
+- Stone Edge  
+- Heavy Slam`;
 
 
   return (
