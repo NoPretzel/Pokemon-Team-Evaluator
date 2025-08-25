@@ -4,6 +4,8 @@ import { StatsTable } from '@smogon/calc';
 import { MOVE_CATEGORIES } from './move-categories';
 import { Generations } from '@pkmn/data';
 import { Dex } from '@pkmn/dex';
+import { FORMATS } from '@/lib/pokemon/formats';
+import { analyzeDoublesTeam } from '@/lib/analysis/doubles-archetype-analyzer';
 
 const gens = new Generations(Dex);
 const gen = gens.get(9);
@@ -317,6 +319,10 @@ function determineArchetype(team: Team, teamRoles: PokemonRole[], format?: strin
 }
 
 export function analyzeTeam(team: Team, format?: string): TeamAnalysis {
+  if (format && FORMATS[format as keyof typeof FORMATS]?.gameType === 'doubles') {
+    return analyzeDoublesTeam(team, format);
+  }
+
   const teamRoles: PokemonRole[] = team.pokemon.map(mon => ({
     pokemon: mon.species,
     roles: analyzeRoles(mon),

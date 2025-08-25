@@ -17,6 +17,9 @@ import { TeamUtilities } from '@/components/TeamEvaluator/TeamUtilities';
 import { exportShowdownTeam } from '@/lib/pokemon/team-parser';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCheck, IconCopy } from '@tabler/icons-react';
+import { DoublesUtilities } from '@/components/TeamEvaluator/DoublesUtilities';
+import { FORMATS } from '@/lib/pokemon/formats';
+
 
 export default function Home() {
   const isMobile = useMediaQuery('(max-width: 768px)', undefined, {
@@ -261,8 +264,14 @@ export default function Home() {
             </Box>
             
             <TypeCoverage team={team} />
-            <MetaCoverage team={team} format={selectedFormat} />
-            <TeamUtilities team={team} />
+            {FORMATS[selectedFormat]?.gameType === 'singles' && (
+              <MetaCoverage team={team} format={selectedFormat} />
+            )}
+            {FORMATS[selectedFormat]?.gameType === 'singles' ? (
+              <TeamUtilities team={team} />
+            ) : (
+              <DoublesUtilities team={team} />
+            )}
           </Stack>
         </Container>
       )}

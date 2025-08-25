@@ -1,7 +1,7 @@
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
 
-export class RulesBasedAI {
+export class ScoringAI {
   private stream: any;
   private playerSide: 'p1' | 'p2';
   private statBoosts: Record<string, any> = {};

@@ -2,8 +2,9 @@ import { BattleStreams, Teams } from '@pkmn/sim';
 import { BattleResult, BattleSimulation } from '@/types/battle';
 import { Team } from '@/types';
 import { exportShowdownTeam } from '@/lib/pokemon/team-parser';
-import { RulesBasedAI } from './ai';
-import { FormatId } from '@/lib/pokemon/formats';
+import { ScoringAI } from './ai';
+import { FormatId, FORMATS } from '@/lib/pokemon/formats';
+import { DoublesAI } from './doubles-ai';
 
 export class BattleSimulator {
   private formatId: FormatId;
@@ -43,8 +44,9 @@ export class BattleSimulator {
     };
     
     // Create AIs
-    const p1ai = new RulesBasedAI(streams.p1);
-    const p2ai = new RulesBasedAI(streams.p2);
+    const isDoubles = FORMATS[this.formatId]?.gameType === 'doubles';
+    const p1ai = isDoubles ? new DoublesAI(streams.p1) : new ScoringAI(streams.p1);
+    const p2ai = isDoubles ? new DoublesAI(streams.p2) : new ScoringAI(streams.p2);
     
     // Start AI processing
     const p1Promise = p1ai.start();
