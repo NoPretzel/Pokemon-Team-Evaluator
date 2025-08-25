@@ -1,0 +1,218 @@
+[
+  {
+    "format": "gen9doublesubers",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Giratina",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Impish",
+        "evs": { "hp": 252, "atk": 0, "def": 180, "spa": 0, "spd": 0, "spe": 76 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Defog", "Will-O-Wisp", "Dragon Tail", "Rest"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Gouging Fire",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Dragon Claw", "Flare Blitz", "Morning Sun"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Mewtwo",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Nasty Plot", "Psystrike", "Fire Blast", "Recover"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Arceus-Ice",
+        "ability": "Multitype",
+        "level": 100,
+        "item": "Icicle Plate",
+        "nature": "Timid",
+        "evs": { "hp": 248, "atk": 0, "def": 0, "spa": 8, "spd": 0, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Judgment", "Taunt", "Recover"],
+        "teraType": "Poison"
+      },
+      {
+        "species": "Landorus",
+        "ability": "Sheer Force",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Earth Power", "Psychic", "Stealth Rock", "Taunt"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Magearna",
+        "ability": "Soul-Heart",
+        "level": 100,
+        "item": "Mental Herb",
+        "nature": "Sassy",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 4, "spd": 252, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Thunder Wave", "Spikes", "Volt Switch", "Fleur Cannon"],
+        "teraType": "Flying"
+      }
+    ]
+  },
+  {
+    "format": "gen9doublesubers",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Araquanid",
+        "ability": "Water Bubble",
+        "level": 100,
+        "item": "Mental Herb",
+        "nature": "Impish",
+        "evs": { "hp": 248, "atk": 8, "def": 252, "spa": 0, "spd": 0, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Sticky Web", "Liquidation", "Scary Face", "Endeavor"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Annihilape",
+        "ability": "Defiant",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Jolly",
+        "evs": { "hp": 248, "atk": 52, "def": 0, "spa": 0, "spd": 0, "spe": 208 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Taunt", "Rage Fist", "Drain Punch", "Bulk Up"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Roaring Moon",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Booster Energy",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Earthquake", "Knock Off", "Outrage"],
+        "teraType": "Ground"
+      },
+      {
+        "species": "Landorus",
+        "ability": "Sheer Force",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Earth Power", "Psychic", "Nasty Plot", "Taunt"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Arceus-Electric",
+        "ability": "Multitype",
+        "level": 100,
+        "item": "Zap Plate",
+        "nature": "Modest",
+        "evs": { "hp": 24, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 232 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Calm Mind", "Judgment", "Ice Beam", "Recover"],
+        "teraType": "Fairy"
+      },
+      {
+        "species": "Mewtwo",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Nasty Plot", "Psystrike", "Fire Blast", "Recover"],
+        "teraType": "Fire"
+      }
+    ]
+  },
+  {
+    "format": "gen9doublesubers",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Samurott-Hisui",
+        "ability": "Sharpness",
+        "level": 100,
+        "item": "Focus Sash",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Ceaseless Edge", "Razor Shell", "Sucker Punch", "Encore"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Arceus-Poison",
+        "ability": "Multitype",
+        "level": 100,
+        "item": "Toxic Plate",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Gunk Shot", "Earthquake", "Flare Blitz"],
+        "teraType": "Fire"
+      },
+      {
+        "species": "Scizor",
+        "ability": "Technician",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Adamant",
+        "evs": { "hp": 224, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 32 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Swords Dance", "Bullet Punch", "Knock Off", "Close Combat"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Dragonite",
+        "ability": "Multiscale",
+        "level": 100,
+        "item": "Heavy-Duty Boots",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Extreme Speed", "Earthquake", "Outrage"],
+        "teraType": "Normal"
+      },
+      {
+        "species": "Roaring Moon",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Booster Energy",
+        "nature": "Adamant",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Dragon Dance", "Knock Off", "Outrage", "Earthquake"],
+        "teraType": "Ground"
+      },
+      {
+        "species": "Mewtwo",
+        "ability": "Pressure",
+        "level": 100,
+        "item": "Life Orb",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Nasty Plot", "Psystrike", "Fire Blast", "Ice Beam"],
+        "teraType": "Fire"
+      }
+    ]
+  }
+]

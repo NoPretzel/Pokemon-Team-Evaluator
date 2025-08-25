@@ -1,0 +1,219 @@
+[
+  {
+    "format": "gen9doublesuu",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Dragapult",
+        "ability": "Clear Body",
+        "level": 100,
+        "item": "Choice Band",
+        "nature": "Jolly",
+        "evs": { "hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["U-turn", "Dragon Darts", "Phantom Force", "Outrage"],
+        "teraType": "Dragon"
+      },
+      {
+        "species": "Mew",
+        "ability": "Synchronize",
+        "level": 100,
+        "item": "Safety Goggles",
+        "nature": "Calm",
+        "evs": { "hp": 252, "atk": 0, "def": 108, "spa": 0, "spd": 148, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Psychic Noise", "Pollen Puff", "Stealth Rock", "Trick Room"],
+        "teraType": "Dark"
+      },
+      {
+        "species": "Porygon2",
+        "ability": "Download",
+        "level": 100,
+        "item": "Eviolite",
+        "nature": "Modest",
+        "evs": { "hp": 252, "atk": 0, "def": 124, "spa": 24, "spd": 108, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 26 },
+        "moves": ["Tera Blast", "Ice Beam", "Recover", "Trick Room"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Scrafty",
+        "ability": "Intimidate",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Brave",
+        "evs": { "hp": 252, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Fake Out", "Knock Off", "Close Combat", "Dragon Tail"],
+        "teraType": "Poison"
+      },
+      {
+        "species": "Enamorus-Therian",
+        "ability": "Overcoat",
+        "level": 100,
+        "item": "Pixie Plate",
+        "nature": "Quiet",
+        "evs": { "hp": 248, "atk": 0, "def": 0, "spa": 252, "spd": 8, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Dazzling Gleam", "Moonblast", "Earth Power", "Protect"],
+        "teraType": "Steel"
+      },
+      {
+        "species": "Heatran",
+        "ability": "Flash Fire",
+        "level": 100,
+        "item": "Leftovers",
+        "nature": "Modest",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 176, "spd": 28, "spe": 52 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Substitute", "Heat Wave", "Earth Power", "Protect"],
+        "teraType": "Grass"
+      }
+    ]
+  },
+  {
+    "format": "gen9doublesuu",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Ability: Snow Warning",
+        "ability": "",
+        "level": 100,
+        "item": "",
+        "nature": "Quiet",
+        "evs": { "hp": 248, "atk": 0, "def": 76, "spa": 68, "spd": 116, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Blizzard", "Energy Ball", "Earth Power", "Aurora Veil"],
+        "teraType": "Water",
+        "shiny": true
+      },
+      {
+        "species": "Ability: Prism Armor",
+        "ability": "",
+        "level": 100,
+        "item": "",
+        "nature": "Modest",
+        "evs": { "hp": 252, "atk": 0, "def": 60, "spa": 116, "spd": 76, "spe": 4 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Trick Room", "Expanding Force", "Heat Wave", "Earth Power"],
+        "teraType": "Grass"
+      },
+      {
+        "species": "Ability: Flash Fire",
+        "ability": "",
+        "level": 100,
+        "item": "",
+        "nature": "Modest",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 30 },
+        "moves": ["Heat Wave", "Earth Power", "Flash Cannon", "Protect"],
+        "teraType": "Bug"
+      },
+      {
+        "species": "Ability: Quark Drive",
+        "ability": "",
+        "level": 100,
+        "item": "",
+        "nature": "Timid",
+        "evs": { "hp": 48, "atk": 0, "def": 0, "spa": 252, "spd": 0, "spe": 208 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Hydro Pump", "Blizzard", "Freeze-Dry", "U-turn"],
+        "teraType": "Ice"
+      },
+      {
+        "species": "Ability: Guard Dog",
+        "ability": "",
+        "level": 100,
+        "item": "",
+        "nature": "Adamant",
+        "evs": { "hp": 252, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Bulk Up", "Drain Punch", "Gunk Shot", "Protect"],
+        "teraType": "Dark"
+      },
+      {
+        "species": "Ability: Psychic Surge",
+        "ability": "",
+        "level": 100,
+        "item": "",
+        "nature": "Timid",
+        "evs": { "hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Hyper Voice", "Expanding Force", "Dazzling Gleam", "Protect"],
+        "teraType": "Fairy"
+      }
+    ]
+  },
+  {
+    "format": "gen9doublesuu",
+    "archetype": "General",
+    "pokemon": [
+      {
+        "species": "Primarina",
+        "ability": "Liquid Voice",
+        "level": 100,
+        "item": "Throat Spray",
+        "nature": "Modest",
+        "evs": { "hp": 252, "atk": 0, "def": 0, "spa": 176, "spd": 0, "spe": 80 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Hyper Voice", "Moonblast", "Calm Mind", "Protect"],
+        "teraType": "Grass"
+      },
+      {
+        "species": "Tinkaton",
+        "ability": "Own Tempo",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Adamant",
+        "evs": { "hp": 248, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 8 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Fake Out", "Gigaton Hammer", "Play Rough", "Knock Off"],
+        "teraType": "Dragon"
+      },
+      {
+        "species": "Mew",
+        "ability": "Synchronize",
+        "level": 100,
+        "item": "Mental Herb",
+        "nature": "Calm",
+        "evs": { "hp": 252, "atk": 0, "def": 172, "spa": 0, "spd": 72, "spe": 12 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Coaching", "Pollen Puff", "Tailwind", "Will-O-Wisp"],
+        "teraType": "Dark"
+      },
+      {
+        "species": "Porygon2",
+        "ability": "Download",
+        "level": 100,
+        "item": "Eviolite",
+        "nature": "Relaxed",
+        "evs": { "hp": 252, "atk": 0, "def": 72, "spa": 80, "spd": 104, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Ice Beam", "Thunderbolt", "Trick Room", "Recover"],
+        "teraType": "Ghost"
+      },
+      {
+        "species": "Entei",
+        "ability": "Inner Focus",
+        "level": 100,
+        "item": "Assault Vest",
+        "nature": "Adamant",
+        "evs": { "hp": 248, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 8 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31 },
+        "moves": ["Sacred Fire", "Stomping Tantrum", "Extreme Speed", "Snarl"],
+        "teraType": "Grass"
+      },
+      {
+        "species": "Brute Bonnet",
+        "ability": "Protosynthesis",
+        "level": 100,
+        "item": "Sitrus Berry",
+        "nature": "Brave",
+        "evs": { "hp": 248, "atk": 252, "def": 0, "spa": 0, "spd": 8, "spe": 0 },
+        "ivs": { "hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 0 },
+        "moves": ["Seed Bomb", "Sucker Punch", "Rage Powder", "Spore"],
+        "teraType": "Fire"
+      }
+    ]
+  }
+]

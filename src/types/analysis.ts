@@ -7,7 +7,13 @@ export type TeamArchetype =
   | 'Bulky Offense' 
   | 'Balance' 
   | 'Semi-Stall'
-  | 'Stall';
+  | 'Stall'
+  // Doubles archetypes
+  | 'Trick Room'
+  | 'Tailwind'
+  | 'Weather'
+  | 'Hard Trick Room'
+  | 'Goodstuff';
 
 export interface TeamAnalysis {
   archetype: TeamArchetype;

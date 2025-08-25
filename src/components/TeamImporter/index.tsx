@@ -179,7 +179,7 @@ Jolly Nature
           <Group gap={6} align="center" wrap="nowrap">
             <Title order={4} className="responsive-format-title" style={{ margin: 0 }}>Select Format</Title>
             <Tooltip 
-              label="Only Gen 9 Singles are currently supported" 
+              label="Smogon Metagame format" 
               position="top"
               openDelay={0}
               closeDelay={0}
